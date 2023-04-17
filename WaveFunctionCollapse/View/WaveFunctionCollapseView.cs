@@ -161,7 +161,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         Game.GraphicsDevice.RestoreGraphicsDeviceAfterSpriteBatchDraw();
         Game.GraphicsDevice.SetRenderTargets(oldRenderTargets);
 
-        _mapEntity.Transform.ChangeTranslation(new Vector3(0, 0, -Game.GraphicsDevice.Viewport.Height * Game.GraphicsDevice.Viewport.AspectRatio / 2f));
+        _mapEntity.Transform.ChangeTranslation(new Vector3(0, 0, -Game.CustomGraphicsDeviceManager.PreferredBackBufferHeight / 2f));
 
         // _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
         // _spriteBatch.Draw(_renderTarget, _renderTarget.Bounds, Color.White);
