@@ -17,14 +17,14 @@ public class WaveFunctionCollapseGenerator
     public TileResult[] CurrentState { get; private set; }
     public List<TileChoice> Tiles => _tiles;
 
-    public void CreateTiles(ContentManager contentManager)
+    public void CreateTiles(ContentManager contentManager, string contentPath)
     {
         var assetsList = contentManager.Load<string[]>("Content");
-        var tileAttributes = contentManager.Load<TileAttributes>("WaveFunctionCollapse/SimpleBlocks/TileAttributes.json",
+        var tileAttributes = contentManager.Load<TileAttributes>($"{contentPath}/TileAttributes.json",
             new JsonContentLoader());
 
         var textures = assetsList
-            .Where(a => a.StartsWith("WaveFunctionCollapse/SimpleBlocks") && !a.EndsWith(".json"))
+            .Where(a => a.StartsWith(contentPath) && !a.EndsWith(".json"))
             .ToDictionary(
                 a => a.Split("/").Last().Replace(".png", ""),
                 a => contentManager.Load<Texture2D>(a));
