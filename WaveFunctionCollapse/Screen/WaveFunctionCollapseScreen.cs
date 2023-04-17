@@ -16,8 +16,6 @@ public class WaveFunctionCollapseScreen : Screen
     {
         _waveFunctionCollapseView.LoadWaveFunctionCollapse();
 
-        //TODO remove this if not needed UserInterface.ShowScreen(this);
-
         Show();
     }
 }
