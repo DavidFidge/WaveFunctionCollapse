@@ -17,10 +17,39 @@
     <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FrigidRogue.WaveFunctionCollapse\FrigidRogue.WaveFunctionCollapse.csproj" />
+    <ProjectReference Include="..\..\FrigidRogue\FrigidRogue.Monogame.Core.View\FrigidRogue.Monogame.Core.View.csproj" />
+    <ProjectReference Include="..\..\GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Remove="appsettings.Development.json" />
+    <Content Include="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Remove="appsettings.Production.json" />
+    <Content Include="appsettings.Production.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Update="Content\WaveFunctionCollapse\SimpleBlocks\TileAttributes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="Delete Content" BeforeTargets="BeforeBuild">
+    <ItemGroup>
+      <ContentToDelete Include="Content\bin\Windows\Content\Content.xnb" />
+    </ItemGroup>
+    <Delete Files="@(ContentToDelete)" />
+  </Target>
 </Project>

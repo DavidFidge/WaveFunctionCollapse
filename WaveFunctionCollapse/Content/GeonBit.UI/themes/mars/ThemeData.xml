@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:ns="Microsoft.Xna.Framework">
+  <Asset Type="GeonBit.UI.DataTypes.ThemeSettings">
+    <ThemeName>Mars</ThemeName>
+    <AuthorName>David Fidge</AuthorName>
+    <Description>A red, mars-like theme.</Description>
+    <Credits>Made by David Fidge</Credits>
+    <Version>1.0.0</Version>
+    <RepoUrl></RepoUrl>
+	<License>MIT</License>
+  </Asset>
+</XnaContent>
