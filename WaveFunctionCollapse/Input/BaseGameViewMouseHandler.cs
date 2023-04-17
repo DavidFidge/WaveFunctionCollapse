@@ -37,7 +37,7 @@ namespace WaveFunctionCollapse.Input;
                 var xDisplacement = mouseState.X - _halvedWindowX;
                 var yDisplacement = mouseState.Y - _halvedWindowY;
 
-                Mediator.Send(new MoveViewRequest(xDisplacement * 0.05f, yDisplacement * 0.05f));
+                Mediator.Send(new MoveViewRequest(xDisplacement * 0.5f, yDisplacement * 0.5f));
             }
 
             Mouse.SetPosition(_halvedWindowX, _halvedWindowY);

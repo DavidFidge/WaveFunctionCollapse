@@ -1,5 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using FrigidRogue.MonoGame.Core.Extensions;
+using FrigidRogue.MonoGame.Core.Graphics.Camera;
+using FrigidRogue.MonoGame.Core.Graphics.Map;
 using FrigidRogue.MonoGame.Core.Interfaces.Services;
 using FrigidRogue.MonoGame.Core.Messages;
 using FrigidRogue.MonoGame.Core.View;
@@ -21,13 +24,22 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     IRequestHandler<PlayContinuouslyRequest>,
     IRequestHandler<PlayUntilCompleteRequest>
 {
+    private readonly IGameCamera _gameCamera;
+    private readonly MapEntity _mapEntity;
+    private RenderTarget2D _renderTarget;
+    private SpriteBatch _spriteBatch;
     private readonly IGameTimeService _gameTimeService;
     private Panel _leftPanel;
     private Panel _mapPanel;
-    private SpriteBatch _spriteBatch;
+
     private WaveFunctionCollapseGenerator _waveFunctionCollapse;
+
     private int _mapHeight;
     private int _mapWidth;
+    private int _tileWidth;
+    private int _tileHeight;
+    private Vector2 _tileSize => new Vector2(_tileWidth, _tileHeight);
+
     private bool _playUntilComplete;
     private bool _playContinuously;
     private TimeSpan? _dateTimeFinished;
@@ -35,10 +47,14 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
     public WaveFunctionCollapseView(
         WaveFunctionCollapseViewModel waveFunctionCollapseViewModel,
-        IGameTimeService gameTimeService)
+        IGameTimeService gameTimeService,
+        IGameCamera gameCamera,
+        MapEntity mapEntity)
         : base(waveFunctionCollapseViewModel)
     {
         _gameTimeService = gameTimeService;
+        _gameCamera = gameCamera;
+        _mapEntity = mapEntity;
     }
 
     protected override void InitializeInternal()
@@ -79,6 +95,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         RootPanel.AddChild(_leftPanel);
         RootPanel.AddChild(_mapPanel);
+
+        CreateRenderTarget();
     }
 
     private void ResetPlayContinuously()
@@ -101,14 +119,18 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         _mapWidth = 30;
         _mapHeight = 30;
+        _tileWidth = 60;
+        _tileHeight = 60;
 
         _waveFunctionCollapse.Reset(_mapWidth, _mapHeight);
     }
 
     public override void Draw()
     {
-        var tileSize = new Vector2(60, 60);
-        var drawOrigin = new Vector2(1000, 100) + tileSize;
+        var oldRenderTargets = Game.GraphicsDevice.GetRenderTargets();
+
+        Game.GraphicsDevice.SetRenderTarget(_renderTarget);
+        Game.GraphicsDevice.Clear(Color.DarkGray);
 
         _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
 
@@ -118,24 +140,34 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         {
             if (tile.IsCollapsed)
             {
-                var offset = tileSize * new Vector2(tile.Point.X, tile.Point.Y);
-                var drawLocation = drawOrigin + offset;
-                var rotateOrigin = tile.TileChoice.Texture.Bounds.Size.ToVector2() / 2;
-
-                var destinationRectangle = new Rectangle((int)drawLocation.X, (int)drawLocation.Y, (int)tileSize.X, (int)tileSize.Y);
+                var offset = _tileSize * new Vector2(tile.Point.X, tile.Point.Y);
+                var rotateOrigin = tile.TileChoice.Texture.Bounds.Size.ToVector2() / 2f;
+                var position = (_tileSize / 2f) + offset;
 
                 _spriteBatch.Draw(tile.TileChoice.Texture,
-                    destinationRectangle,
+                    position,
                     tile.TileChoice.Texture.Bounds,
                     Color.White,
                     tile.TileChoice.Rotation,
                     rotateOrigin,
+                    (float)_tileWidth / tile.TileChoice.Texture.Width,
                     SpriteEffects.None,
                     0);
             }
         }
 
         _spriteBatch.End();
+
+        Game.GraphicsDevice.RestoreGraphicsDeviceAfterSpriteBatchDraw();
+        Game.GraphicsDevice.SetRenderTargets(oldRenderTargets);
+
+        _mapEntity.Transform.ChangeTranslation(new Vector3(0, 0, -Game.GraphicsDevice.Viewport.Height * Game.GraphicsDevice.Viewport.AspectRatio / 2f));
+
+        // _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
+        // _spriteBatch.Draw(_renderTarget, _renderTarget.Bounds, Color.White);
+        // _spriteBatch.End();
+        // The "Bleeding"/anti-aliasing of texture edges seems to only happen when the texture is drawn on the quad as the above commented code has no bleeding
+        _mapEntity.Draw(_gameCamera.View, _gameCamera.Projection, _mapEntity.Transform.Transform);
     }
 
     public Task<Unit> Handle(NextStepRequest request, CancellationToken cancellationToken)
@@ -201,6 +233,26 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             }
         }
 
+        _gameCamera.Update();
+
         base.Update();
+    }
+
+    protected void CreateRenderTarget()
+    {
+        _renderTarget = new RenderTarget2D(
+            Game.GraphicsDevice,
+            _tileWidth * _mapWidth,
+            _tileHeight * _mapHeight,
+            false,
+            Game.GraphicsDevice.PresentationParameters.BackBufferFormat,
+            Game.GraphicsDevice.PresentationParameters.DepthStencilFormat,
+            0,
+            RenderTargetUsage.PreserveContents
+        );
+
+        _mapEntity.Initialize(Game.GraphicsDevice.Viewport.Height / _mapHeight, Game.GraphicsDevice.Viewport.Height / _mapHeight);
+        _mapEntity.LoadContent(_mapWidth, _mapHeight);
+        _mapEntity.SetMapTexture(_renderTarget);
     }
 }

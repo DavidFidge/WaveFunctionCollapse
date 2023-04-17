@@ -102,9 +102,9 @@ public class WaveFunctionCollapseGame : Game, IGame
 
         _gameCamera.RenderResolution = RenderResolution.RenderResolutions
             .FirstOrDefault(r => r.Name == renderResolution) ?? RenderResolution.Default;
-        _gameCamera.ContinuousMoveSensitivity = 0.5f;
-        _gameCamera.ContinuousRotateSensitivity = 0.01f;
-        _gameCamera.ZoomSensitivity = 0.01f;
+        _gameCamera.ContinuousMoveSensitivity = 2f;
+        _gameCamera.ContinuousRotateSensitivity = 2f;
+        _gameCamera.ZoomSensitivity = 0.1f;
 
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -242,8 +242,6 @@ public class WaveFunctionCollapseGame : Game, IGame
 
     public Task<Unit> Handle(QuitToDesktopRequest request, CancellationToken cancellationToken)
     {
-        var videoOptions = _gameOptionsStore.GetFromStore<VideoOptions>()?.State;
-
         _isExiting = true;
         return Unit.Task;
     }
