@@ -11,11 +11,14 @@ namespace FrigidRogue.WaveFunctionCollapse;
 
 public class WaveFunctionCollapseGenerator
 {
-    private readonly List<TileChoice> _tiles = new();
+    private List<TileChoice> _tiles;
     private int _mapWidth;
     private int _mapHeight;
     public TileResult[] CurrentState { get; private set; }
     public List<TileChoice> Tiles => _tiles;
+
+    private Dictionary<Point, List<TileChoice>> _tileChoicesPerPoint = new();
+    private List<TileContent> _tileContent = new();
 
     public void CreateTiles(ContentManager contentManager, string contentPath)
     {
@@ -36,21 +39,26 @@ public class WaveFunctionCollapseGenerator
     {
         foreach (var texture in textures)
         {
-            var tile = new TileContent
+            var tileContent = new TileContent
             {
                 Name = texture.Key,
                 Texture = texture.Value,
                 Attributes = tileAttributes.Tiles[texture.Key]
             };
 
-            _tiles.AddRange(tile.CreateTiles());
+            _tileContent.Add(tileContent);
+
+            tileContent.CreateTiles();
         }
+
+        _tiles = _tileContent.SelectMany(t => t.TileChoices).ToList();
     }
 
     public void Reset(int mapWidth, int mapHeight)
     {
         _mapHeight = mapHeight;
         _mapWidth = mapWidth;
+        _tileChoicesPerPoint.Clear();
 
         CurrentState = new TileResult[mapWidth * mapHeight];
 
@@ -67,6 +75,22 @@ public class WaveFunctionCollapseGenerator
         foreach (var tileResult in CurrentState)
         {
             tileResult.SetNeighbours(CurrentState, _mapWidth, _mapHeight);
+
+            var initialisationSelection = _tileContent
+                .Where(t => t.IsWithinInitialisationRule(tileResult.Point, _mapWidth, _mapHeight))
+                .SelectMany(t => t.TileChoices)
+                .ToList();
+
+            if (initialisationSelection.Any())
+            {
+                // By reducing entropy the tile will be among the first to be processed and thus initialised with
+                // the tile choice as given by the initialisation rule
+                // Reducing by 5 as tiles can normally be reduced by 4 (4 neighbours), so reducing by 5 ensure it is always
+                // processed before non-initialised tiles.
+                tileResult.Entropy -= 5;
+
+                _tileChoicesPerPoint.Add(tileResult.Point, initialisationSelection);
+            }
         }
     }
 
@@ -85,6 +109,9 @@ public class WaveFunctionCollapseGenerator
         var chosenTile = entropy[GlobalRandom.DefaultRNG.RandomIndex(entropy)];
 
         var validTiles = _tiles.ToList();
+
+        if (_tileChoicesPerPoint.TryGetValue(chosenTile.Point, out var value))
+            validTiles = value;
 
         foreach (var neighbour in chosenTile.Neighbours)
         {

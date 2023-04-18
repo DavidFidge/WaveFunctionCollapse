@@ -3,7 +3,8 @@
     "Floor": {
       "Symmetry": "X",
       "Weight": 8,
-      "Adapters": "AAA,AAA,AAA,AAA"
+      "Adapters": "AAA,AAA,AAA,AAA",
+      "InitialisationRule": "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
     },
     "Corner": {
       "Symmetry": "^",

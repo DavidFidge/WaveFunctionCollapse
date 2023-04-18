@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using NCalc;
 using SadRogue.Primitives;
 
 namespace FrigidRogue.WaveFunctionCollapse;
@@ -8,10 +9,11 @@ public class TileContent
     public string Name { get; set; }
     public TileAttribute Attributes { get; set; }
     public Texture2D Texture { get; set; }
+    public List<TileChoice> TileChoices { get; set; }
 
-    public List<TileChoice> CreateTiles()
+    public void CreateTiles()
     {
-        var tiles = new List<TileChoice>();
+        TileChoices = new List<TileChoice>();
         var adapterStrings = Attributes.Adapters.Split(",").Select(a => a.Trim()).ToList();
 
         var directions = new List<Direction>
@@ -28,7 +30,7 @@ public class TileContent
                 .Select((d, index) => new { Direction = d, Index = index })
                 .ToDictionary(d => d.Direction, d => (Adapter)adapterStrings[d.Index]);
 
-            tiles.Add(new TileChoice(this, adapters));
+            TileChoices.Add(new TileChoice(this, adapters));
         }
         else if (Attributes.Symmetry == "^")
         {
@@ -46,7 +48,7 @@ public class TileContent
                     _ => 0f
                 };
 
-                tiles.Add(new TileChoice(this, adapters, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, rotation: rotation));
             }
         }
         else if (Attributes.Symmetry == "I")
@@ -55,15 +57,30 @@ public class TileContent
                 .Select((d, i) => new { Direction = d, Index = i})
                 .ToDictionary(d => d.Direction, d => (Adapter)adapterStrings[d.Index]);
 
-            tiles.Add(new TileChoice(this, adapters));
+            TileChoices.Add(new TileChoice(this, adapters));
 
             adapters = directions
                 .Select((d, i) => new { Direction = d, Index = i})
                 .ToDictionary(d => d.Direction, d => (Adapter)adapterStrings[GoRogue.MathHelpers.WrapAround(d.Index - 1,directions.Count)]);
 
-            tiles.Add(new TileChoice(this, adapters, rotation: (float)Math.PI / 2));
+            TileChoices.Add(new TileChoice(this, adapters, rotation: (float)Math.PI / 2));
         }
+    }
 
-        return tiles;
+    public bool IsWithinInitialisationRule(Point point, int mapWidth, int mapHeight)
+    {
+        if (String.IsNullOrEmpty(Attributes.InitialisationRule))
+            return false;
+
+        var expression = new Expression(Attributes.InitialisationRule);
+
+        expression.Parameters["X"] = point.X;
+        expression.Parameters["Y"] = point.Y;
+        expression.Parameters["MaxX"] = mapWidth - 1;
+        expression.Parameters["MaxY"] = mapHeight - 1;
+
+        var isPointWithinEvaluationRule = (bool)expression.Evaluate();
+
+        return isPointWithinEvaluationRule;
     }
 }

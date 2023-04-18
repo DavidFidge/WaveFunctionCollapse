@@ -13,6 +13,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
     private Texture2D _lineTexture;
     private Texture2D _cornerTexture;
     private TileAttributes _tileAttributes;
+    private TileAttributes _tileAttributesWithInitialisation;
 
     [TestInitialize]
     public override void Setup()
@@ -55,6 +56,38 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                },
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "I",
+                        Weight = 1,
+                        Adapters = "ABA,CCC,ABA,CCC"
+                    }
+                },
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "^",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,ABA,ABA"
+                    }
+                }
+            }
+        };
+
+        _tileAttributesWithInitialisation = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        InitialisationRule = "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
                     }
                 },
                 {
@@ -148,7 +181,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
     }
 
     [TestMethod]
-    public void Should_Initialise()
+    public void Should_Reset()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -178,6 +211,42 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                     .Select(p => waveFunctionCollapse.CurrentState.First(t => t.Point == p))
                     .ToArray(),
                 int.MaxValue,
+                false);
+        }
+    }
+
+    [TestMethod]
+    public void Tiles_To_Be_Initialised_Should_Have_Reduced_Entropy_So_They_Are_Processed_First()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Line", _lineTexture },
+            { "Corner", _cornerTexture },
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, _tileAttributesWithInitialisation);
+
+        // Act
+        waveFunctionCollapse.Reset(3, 3);
+
+        // Assert
+        Assert.AreEqual(9, waveFunctionCollapse.CurrentState.Length);
+        var midPoint = new Point(1, 1);
+        
+        foreach (var tile in waveFunctionCollapse.CurrentState)
+        {
+            AssertTileResult(
+                tile,
+                null,
+                tile.Point
+                    .Neighbours(2, 2, AdjacencyRule.Types.Cardinals)
+                    .Select(p => waveFunctionCollapse.CurrentState.First(t => t.Point == p))
+                    .ToArray(),
+                tile.Point == midPoint ? int.MaxValue : int.MaxValue - 5,
                 false);
         }
     }
@@ -334,6 +403,47 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         var otherTiles = waveFunctionCollapse.CurrentState.Except(tileResults).ToList();
 
         Assert.AreEqual(0, otherTiles.Count);
+    }
+
+
+    [TestMethod]
+    public void Should_Set_Initialised_Tiles_With_Rule_For_That_Tile()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, _tileAttributesWithInitialisation);
+        waveFunctionCollapse.Reset(3, 3);
+
+        // Act
+        waveFunctionCollapse.NextStep();
+        waveFunctionCollapse.NextStep();
+        waveFunctionCollapse.NextStep();
+        waveFunctionCollapse.NextStep();
+        waveFunctionCollapse.NextStep();
+        waveFunctionCollapse.NextStep();
+        waveFunctionCollapse.NextStep();
+        var result = waveFunctionCollapse.NextStep();
+
+        // Assert
+        Assert.AreEqual(9, waveFunctionCollapse.CurrentState.Length);
+        Assert.IsFalse(result.IsComplete);
+        Assert.IsFalse(result.IsFailed);
+
+        var tileResults = waveFunctionCollapse.CurrentState
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(8, tileResults.Count);
+
+        var midPoint = new Point(1, 1);
+        Assert.IsFalse(waveFunctionCollapse.CurrentState.Single(t => t.Point == midPoint).IsCollapsed);
+        Assert.IsTrue(tileResults.All(t => t.TileChoice == waveFunctionCollapse.Tiles[0]));
     }
 
     [TestMethod]
