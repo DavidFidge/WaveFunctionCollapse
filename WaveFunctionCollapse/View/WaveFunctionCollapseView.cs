@@ -122,7 +122,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _tileWidth = 60;
         _tileHeight = 60;
 
-        _waveFunctionCollapse.Reset(_mapWidth, _mapHeight);
+        _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight));
     }
 
     public override void Draw()
@@ -206,7 +206,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _playUntilComplete = false;
         _dateTimeFinished = null;
 
-        _waveFunctionCollapse.Reset(_mapWidth, _mapHeight);
+        _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight));
 
         return Unit.Task;
     }
@@ -229,7 +229,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             if (_gameTimeService.GameTime.TotalGameTime - _dateTimeFinished > _secondsForNextIteration)
             {
                 _dateTimeFinished = null;
-                _waveFunctionCollapse.Reset(_mapWidth, _mapHeight);
+                _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight));
             }
         }
 
