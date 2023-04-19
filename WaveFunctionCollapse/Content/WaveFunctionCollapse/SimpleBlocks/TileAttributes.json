@@ -2,9 +2,8 @@
   "Tiles": {
     "Floor": {
       "Symmetry": "X",
-      "Weight": 20,
-      "Adapters": "AAA,AAA,AAA,AAA",
-      "InitialisationRule": "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
+      "Weight": 10,
+      "Adapters": "AAA,AAA,AAA,AAA"
     },
     "Corner": {
       "Symmetry": "^",
@@ -13,7 +12,7 @@
     },
     "Wall": {
       "Symmetry": "I",
-      "Weight": 20,
+      "Weight": 10,
       "Adapters": "ABA,AAA,ABA,AAA"
     }
   }

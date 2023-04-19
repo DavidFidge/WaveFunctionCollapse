@@ -76,6 +76,7 @@ public class WaveFunctionCollapseGenerator
 
     public void Reset(WaveFunctionCollapseGeneratorOptions options)
     {
+        _entropy.Clear();
         _options = options.Clone();
         _tileChoicesPerPoint.Clear();
         _tileLimits.Clear();
@@ -176,15 +177,25 @@ public class WaveFunctionCollapseGenerator
 
     private List<TileChoice> RemoveTileChoicesWhereLimitsReached(List<TileChoice> possibleTileChoices)
     {
+        var possibleReAdds = new List<TileChoice>();
+
         foreach (var tile in _tileLimits.Keys)
         {
-            if (_tileLimits[tile] == 0 && !tile.Attributes.CanExceedLimitIfOnlyValidTile)
+            if (_tileLimits[tile] == 0)
             {
+                if (tile.Attributes.CanExceedLimitIfOnlyValidTile)
+                {
+                    possibleReAdds.AddRange(possibleTileChoices.Where(t => t.TileContent == tile));
+                }
+
                 possibleTileChoices = possibleTileChoices.Where(t => t.TileContent != tile).ToList();
             }
         }
 
-        return possibleTileChoices;
+        if (possibleTileChoices.Any())
+            return possibleTileChoices;
+
+        return possibleReAdds;
     }
 
     private static TileResult GetNextUncollapsedTile(List<TileResult> entropy)

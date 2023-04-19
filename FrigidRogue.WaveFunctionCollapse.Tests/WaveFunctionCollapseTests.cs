@@ -12,8 +12,6 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
     private Texture2D _floorTexture;
     private Texture2D _lineTexture;
     private Texture2D _cornerTexture;
-    private TileAttributes _tileAttributes;
-    private TileAttributes _tileAttributesWithInitialisation;
 
     [TestInitialize]
     public override void Setup()
@@ -45,8 +43,137 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         _floorTexture.SetData(floorTextureData);
         _lineTexture.SetData(lineTextureData);
         _cornerTexture.SetData(cornerTextureData);
+    }
 
-        _tileAttributes = new TileAttributes
+    [TestMethod]
+    public void L_Shaped_Symmetry_Should_Process_Into_Four_Tiles()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Corner", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "^",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,ABA,ABA"
+                    }
+                }
+            }
+        };
+
+        // Act
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        // Assert
+        var tiles = waveFunctionCollapse.Tiles;
+
+        Assert.AreEqual(4, tiles.Count);
+
+        AssertTile(tiles[0], "AAA,AAA,ABA,ABA", _floorTexture);
+        AssertTile(tiles[1], "ABA,AAA,AAA,ABA", _floorTexture, expectedRotation: (float)Math.PI / 2);
+        AssertTile(tiles[2], "ABA,ABA,AAA,AAA", _floorTexture, expectedRotation: (float)Math.PI);
+        AssertTile(tiles[3], "AAA,ABA,ABA,AAA", _floorTexture, expectedRotation: (float)-Math.PI / 2);
+    }
+
+    [TestMethod]
+    public void I_Shaped_Symmetry_Should_Process_Into_Two_Tiles()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+            {
+                { "Line", _floorTexture }
+            };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "I",
+                        Weight = 1,
+                        Adapters = "ABA,CCC,ABA,CCC"
+                    }
+                }
+            }
+        };
+
+        // Act
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        // Assert
+        var tiles = waveFunctionCollapse.Tiles;
+
+        Assert.AreEqual(2, tiles.Count);
+
+        AssertTile(tiles[0], "ABA,CCC,ABA,CCC", _floorTexture);
+        AssertTile(tiles[1], "CCC,ABA,CCC,ABA", _floorTexture, expectedRotation: (float)Math.PI / 2);
+    }
+
+    [TestMethod]
+    public void X_Shaped_Symmetry_Should_Process_Into_One_Tile()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        // Act
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        // Assert
+        var tiles = waveFunctionCollapse.Tiles;
+
+        Assert.AreEqual(1, tiles.Count);
+
+        AssertTile(tiles[0], "AAA,AAA,AAA,AAA", _floorTexture);
+    }
+
+    [TestMethod]
+    public void Should_Reset()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Line", _lineTexture },
+            { "Corner", _cornerTexture },
+        };
+
+        var tileAttributes = new TileAttributes
         {
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -77,123 +204,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             }
         };
 
-        _tileAttributesWithInitialisation = new TileAttributes
-        {
-            Tiles = new Dictionary<string, TileAttribute>
-            {
-                {
-                    "Floor", new TileAttribute
-                    {
-                        Symmetry = "X",
-                        Weight = 1,
-                        Adapters = "AAA,AAA,AAA,AAA",
-                        InitialisationRule = "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
-                    }
-                },
-                {
-                    "Line", new TileAttribute
-                    {
-                        Symmetry = "I",
-                        Weight = 1,
-                        Adapters = "ABA,CCC,ABA,CCC"
-                    }
-                },
-                {
-                    "Corner", new TileAttribute
-                    {
-                        Symmetry = "^",
-                        Weight = 1,
-                        Adapters = "AAA,AAA,ABA,ABA"
-                    }
-                }
-            }
-        };
-    }
-
-    [TestMethod]
-    public void L_Shaped_Symmetry_Should_Process_Into_Four_Tiles()
-    {
-        // Arrange
-        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
-
-        var textures = new Dictionary<string, Texture2D>
-        {
-            { "Corner", _floorTexture }
-        };
-
-        // Act
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
-
-        // Assert
-        var tiles = waveFunctionCollapse.Tiles;
-
-        Assert.AreEqual(4, tiles.Count);
-
-        AssertTile(tiles[0], "AAA,AAA,ABA,ABA", _floorTexture);
-        AssertTile(tiles[1], "ABA,AAA,AAA,ABA", _floorTexture, expectedRotation: (float)Math.PI / 2);
-        AssertTile(tiles[2], "ABA,ABA,AAA,AAA", _floorTexture, expectedRotation: (float)Math.PI);
-        AssertTile(tiles[3], "AAA,ABA,ABA,AAA", _floorTexture, expectedRotation: (float)-Math.PI / 2);
-    }
-
-    [TestMethod]
-    public void I_Shaped_Symmetry_Should_Process_Into_Two_Tiles()
-    {
-        // Arrange
-        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
-
-        var textures = new Dictionary<string, Texture2D>
-            {
-                { "Line", _floorTexture }
-            };
-
-        // Act
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
-
-        // Assert
-        var tiles = waveFunctionCollapse.Tiles;
-
-        Assert.AreEqual(2, tiles.Count);
-
-        AssertTile(tiles[0], "ABA,CCC,ABA,CCC", _floorTexture);
-        AssertTile(tiles[1], "CCC,ABA,CCC,ABA", _floorTexture, expectedRotation: (float)Math.PI / 2);
-    }
-
-    [TestMethod]
-    public void X_Shaped_Symmetry_Should_Process_Into_One_Tile()
-    {
-        // Arrange
-        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
-
-        var textures = new Dictionary<string, Texture2D>
-        {
-            { "Floor", _floorTexture }
-        };
-
-        // Act
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
-
-        // Assert
-        var tiles = waveFunctionCollapse.Tiles;
-
-        Assert.AreEqual(1, tiles.Count);
-
-        AssertTile(tiles[0], "AAA,AAA,AAA,AAA", _floorTexture);
-    }
-
-    [TestMethod]
-    public void Should_Reset()
-    {
-        // Arrange
-        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
-
-        var textures = new Dictionary<string, Texture2D>
-        {
-            { "Floor", _floorTexture },
-            { "Line", _lineTexture },
-            { "Corner", _cornerTexture },
-        };
-
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
 
         // Act
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
@@ -228,7 +239,39 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Corner", _cornerTexture },
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributesWithInitialisation);
+        var tileAttributesWithInitialisation = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        InitialisationRule = "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
+                    }
+                },
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "I",
+                        Weight = 1,
+                        Adapters = "ABA,CCC,ABA,CCC"
+                    }
+                },
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "^",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,ABA,ABA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
 
         // Act
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(3, 3));
@@ -262,7 +305,22 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
 
         // Act
@@ -300,7 +358,22 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
 
         // Act
@@ -337,7 +410,22 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
 
         // Act
@@ -376,7 +464,22 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
 
         // Act
@@ -416,7 +519,22 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
 
         // Act
@@ -453,7 +571,23 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributesWithInitialisation);
+        var tileAttributesWithInitialisation = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        InitialisationRule = "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(3, 3));
 
         // Act
@@ -493,7 +627,22 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
 
         // Act
@@ -672,7 +821,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        _tileAttributesWithInitialisation = new TileAttributes
+        var tileAttributesWithInitialisation = new TileAttributes
         {
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -688,7 +837,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributesWithInitialisation);
+        waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 3) { FallbackAttempts = 0 });
 
         // Act
@@ -709,7 +858,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
     }
 
     [TestMethod]
-    public void Limited_Tiles_Should_Only_Place_Up_To_Their_Limit_With_Retries()
+    public void Limited_Tiles_Should_Only_Place_Up_To_Their_Limit_After_Reset()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -719,7 +868,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        _tileAttributesWithInitialisation = new TileAttributes
+        var tileAttributesWithInitialisation = new TileAttributes
         {
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -735,7 +884,67 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributesWithInitialisation);
+        waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0 });
+        waveFunctionCollapse.ExecuteNextStep();
+        var result = waveFunctionCollapse.ExecuteNextStep();
+
+        Assert.AreEqual(2, waveFunctionCollapse.CurrentState.Length);
+        Assert.IsFalse(result.IsComplete);
+        Assert.IsTrue(result.IsFailed);
+
+        var tileResults = waveFunctionCollapse.CurrentState
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(1, tileResults.Count);
+
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0 });
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        result = waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        Assert.AreEqual(2, waveFunctionCollapse.CurrentState.Length);
+        Assert.IsFalse(result.IsComplete);
+        Assert.IsTrue(result.IsFailed);
+
+        tileResults = waveFunctionCollapse.CurrentState
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(1, tileResults.Count);
+    }
+
+    [TestMethod]
+    public void Limited_Tiles_Should_Only_Place_Up_To_Their_Limit_With_Retries()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributesWithInitialisation = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        Limit = 1
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 1 });
 
         // Act
@@ -767,7 +976,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        _tileAttributesWithInitialisation = new TileAttributes
+        var tileAttributesWithInitialisation = new TileAttributes
         {
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -784,7 +993,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributesWithInitialisation);
+        waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
 
         // Act
         var exception = Assert.ThrowsException<Exception>(() => waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 3)));
@@ -804,7 +1013,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        _tileAttributesWithInitialisation = new TileAttributes
+        var tileAttributes = new TileAttributes
         {
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -821,7 +1030,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 3));
 
         // Act
@@ -850,7 +1059,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "Floor", _floorTexture }
         };
 
-        _tileAttributesWithInitialisation = new TileAttributes
+        var tileAttributes = new TileAttributes
         {
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -867,7 +1076,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, _tileAttributes);
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
         waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 3));
 
         // Act
