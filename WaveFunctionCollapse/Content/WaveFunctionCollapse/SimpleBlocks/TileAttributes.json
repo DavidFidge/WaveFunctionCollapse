@@ -2,7 +2,7 @@
   "Tiles": {
     "Floor": {
       "Symmetry": "X",
-      "Weight": 8,
+      "Weight": 20,
       "Adapters": "AAA,AAA,AAA,AAA",
       "InitialisationRule": "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
     },
@@ -13,7 +13,7 @@
     },
     "Wall": {
       "Symmetry": "I",
-      "Weight": 4,
+      "Weight": 20,
       "Adapters": "ABA,AAA,ABA,AAA"
     }
   }

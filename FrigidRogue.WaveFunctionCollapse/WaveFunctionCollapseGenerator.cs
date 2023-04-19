@@ -21,8 +21,23 @@ public class WaveFunctionCollapseGenerator
     private List<TileContent> _tileContent = new();
     private WaveFunctionCollapseGeneratorOptions _options;
 
+    public void CreateTiles(ContentManager contentManager, string contentPath, List<string> tileNames)
+    {
+        var tileAttributes = contentManager.Load<TileAttributes>($"{contentPath}/TileAttributes.json",
+            new JsonContentLoader());
+
+        var textures = tileNames
+            .ToDictionary(
+                a => a.Replace(".png", ""),
+                a => contentManager.Load<Texture2D>($"{contentPath}/{a}"));
+
+        CreateTiles(textures, tileAttributes);
+    }
+
     public void CreateTiles(ContentManager contentManager, string contentPath)
     {
+        // Assumes you have a resource in your content called "Content" which is a list of the items in your Content.mgcb file.  Refer to
+        // "Content.npl" item at https://github.com/Martenfur/NoPipeline for an idea on how to do this if you want to use this constructor.
         var assetsList = contentManager.Load<string[]>("Content");
         var tileAttributes = contentManager.Load<TileAttributes>($"{contentPath}/TileAttributes.json",
             new JsonContentLoader());
