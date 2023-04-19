@@ -62,10 +62,14 @@ Code defined configuration mirrors the json-defined configuration - you pass in 
 ### Step 2 - Reset
 Next, call Reset, passing in a WaveFunctionCollapseGeneratorOptions object.  This contains properties for the wave function collapse algorithm behaviour.
 
-int MapWidth: required.  Width of map to create. 
+int MapWidth: required.  Width of map to create.
+
 int MapHeight: required.  Height of map to create.
+
 int FallbackAttempts: defaults to 5.  Total amount of retries to perform if a collapse fails at any stage.  This is a total number, not local to any particular failure point, as are the other Fallback-properties below.
+
 int FallbackRadius: defaults to 1.  If a tile cannot be placed in a spot due to there being no valid tile that matches the existing neighbours then any assigned tiles in a radius of FallbackRadius are cleared (and entropy is set to ensure all these tiles are collapsed next).
+
 int FallbackRadiusIncrement: defaults to 1.  After a failure, the FallbackRadius is incremented by this figure, meaning a bigger area is cleared each time.
 
 ### Step 3 - NextStep
