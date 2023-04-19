@@ -227,6 +227,99 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
     }
 
     [TestMethod]
+    public void Adapters_Should_Be_Defined_In_Clockwise_Order()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "ABC,CCC,CBA,CCC"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0});
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        var result = waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        Assert.AreEqual(2, waveFunctionCollapse.CurrentState.Length);
+        Assert.IsTrue(result.IsComplete);
+        Assert.IsFalse(result.IsFailed);
+
+        var tileResults = waveFunctionCollapse.CurrentState
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(2, tileResults.Count);
+    }
+
+
+    [TestMethod]
+    public void Adapters_Should_Fail_If_Not_Defined_In_Clockwise_Order()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "ABC,CCC,ABC,CCC"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0});
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        var result = waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        Assert.AreEqual(2, waveFunctionCollapse.CurrentState.Length);
+        Assert.IsFalse(result.IsComplete);
+        Assert.IsTrue(result.IsFailed);
+
+        var tileResults = waveFunctionCollapse.CurrentState
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(1, tileResults.Count);
+    }
+
+    [TestMethod]
     public void Tiles_To_Be_Initialised_Should_Have_Reduced_Entropy_So_They_Are_Processed_First()
     {
         // Arrange

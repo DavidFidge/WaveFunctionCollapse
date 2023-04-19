@@ -1525,6 +1525,36 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/SimpleBlocks/Wall.png
 
+#begin WaveFunctionCollapse/SimpleBlocks/GateLeft.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateLeft.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateMiddle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateMiddle.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateRight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateRight.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateUpperLeft.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateUpperLeft.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateUpperMiddle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateUpperMiddle.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateUpperRight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateUpperRight.png
+
 # add new tiles automatically using tools\create_tilecontent.ps1
 # Note - when adding new tiles, must delete Content.xnb file as noted below.
 

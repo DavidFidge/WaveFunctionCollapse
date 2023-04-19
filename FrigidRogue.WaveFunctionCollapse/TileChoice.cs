@@ -32,6 +32,6 @@ public class TileChoice
         var secondAdapter = neighbourTile.TileChoice.Adapters[direction.Opposite()];
 
         // Ensure patterns are defined in a clockwise order
-        return Equals(firstAdapter.Pattern, secondAdapter.Pattern);
+        return Equals(firstAdapter.Pattern, new string(secondAdapter.Pattern.Reverse().ToArray()));
     }
 }
