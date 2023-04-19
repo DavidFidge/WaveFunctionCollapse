@@ -174,7 +174,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     {
         ResetPlayContinuously();
 
-        _waveFunctionCollapse.NextStep();
+        _waveFunctionCollapse.ExecuteNextStep();
         return Unit.Task;
     }
 
@@ -215,7 +215,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     {
         if (!_dateTimeFinished.HasValue && (_playUntilComplete || _playContinuously))
         {
-            var result = _waveFunctionCollapse.NextStep();
+            var result = _waveFunctionCollapse.ExecuteNextStep();
 
             if (result.IsComplete)
                 _playUntilComplete = false;

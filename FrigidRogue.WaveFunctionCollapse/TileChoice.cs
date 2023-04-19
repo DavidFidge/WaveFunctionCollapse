@@ -7,11 +7,13 @@ namespace FrigidRogue.WaveFunctionCollapse;
 public class TileChoice
 {
     private TileContent _tileContent;
+
+    public TileContent TileContent => _tileContent;
     public int Weight => _tileContent.Attributes.Weight;
     public Texture2D Texture => _tileContent.Texture;
 
     public SpriteEffects SpriteEffects;
-    public float Rotation; 
+    public float Rotation;
     public Dictionary<Direction, Adapter> Adapters { get; set; }
 
     public TileChoice(TileContent tileContent, Dictionary<Direction, Adapter> adapters, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)

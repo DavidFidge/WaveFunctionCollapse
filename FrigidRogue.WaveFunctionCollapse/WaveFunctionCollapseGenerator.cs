@@ -16,11 +16,11 @@ public class WaveFunctionCollapseGenerator
     private List<TileChoice> _tiles = new();
     public TileResult[] CurrentState { get; private set; }
     public List<TileChoice> Tiles => _tiles;
-
     private Dictionary<Point, List<TileChoice>> _tileChoicesPerPoint = new();
     private List<TileContent> _tileContent = new();
     private WaveFunctionCollapseGeneratorOptions _options;
     private List<TileResult> _entropy = new();
+    private Dictionary<TileContent, int> _tileLimits = new();
 
     public void CreateTiles(ContentManager contentManager, string contentPath, List<string> tileNames)
     {
@@ -56,13 +56,13 @@ public class WaveFunctionCollapseGenerator
     {
         _tileContent.Clear();
 
-        foreach (var texture in textures)
+        foreach (var tile in tileAttributes.Tiles.Keys)
         {
             var tileContent = new TileContent
             {
-                Name = texture.Key,
-                Texture = texture.Value,
-                Attributes = tileAttributes.Tiles[texture.Key]
+                Name = tile,
+                Texture = textures[tile],
+                Attributes = tileAttributes.Tiles[tile]
             };
 
             _tileContent.Add(tileContent);
@@ -78,6 +78,7 @@ public class WaveFunctionCollapseGenerator
     {
         _options = options.Clone();
         _tileChoicesPerPoint.Clear();
+        _tileLimits.Clear();
 
         CurrentState = new TileResult[options.MapWidth * options.MapHeight];
         
@@ -112,14 +113,40 @@ public class WaveFunctionCollapseGenerator
 
                 _tileChoicesPerPoint.Add(tileResult.Point, initialisationSelection);
             }
+            else
+            {
+                _tileChoicesPerPoint.Add(tileResult.Point, _tiles.ToList());
+            }
+        }
+
+        foreach (var item in _tileContent.Where(t => t.Attributes.Limit >= 0))
+        {
+            if (item.Attributes.Limit == 0 && !item.Attributes.CanExceedLimitIfOnlyValidTile)
+            {
+                throw new Exception($"Tile {item.Name} is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.");
+            }
+
+            _tileLimits.Add(item, item.Attributes.Limit);
         }
     }
 
-    public NextStepResult NextStep()
+    public NextStepResult Execute()
+    {
+        var result = NextStepResult.Continue();
+
+        while (result.IsContinue)
+        {
+            result = ExecuteNextStep();
+        }
+
+        return result;
+    }
+
+    public NextStepResult ExecuteNextStep()
     {
         if (!_entropy.Any())
-            return NextStepResult.Complete(); 
-        
+            return NextStepResult.Complete();
+
         _entropy.Sort((a, b) => a.Entropy - b.Entropy );
 
         var nextUncollapsedTile = GetNextUncollapsedTile(_entropy);
@@ -141,7 +168,23 @@ public class WaveFunctionCollapseGenerator
         nextUncollapsedTile.SetTile(chosenTile);
         _entropy.Remove(nextUncollapsedTile);
 
+        if (!_entropy.Any())
+            return NextStepResult.Complete();
+
         return NextStepResult.Continue();
+    }
+
+    private List<TileChoice> RemoveTileChoicesWhereLimitsReached(List<TileChoice> possibleTileChoices)
+    {
+        foreach (var tile in _tileLimits.Keys)
+        {
+            if (_tileLimits[tile] == 0 && !tile.Attributes.CanExceedLimitIfOnlyValidTile)
+            {
+                possibleTileChoices = possibleTileChoices.Where(t => t.TileContent != tile).ToList();
+            }
+        }
+
+        return possibleTileChoices;
     }
 
     private static TileResult GetNextUncollapsedTile(List<TileResult> entropy)
@@ -155,7 +198,7 @@ public class WaveFunctionCollapseGenerator
         return nextUncollapsedTile;
     }
 
-    private static TileChoice ChooseTile(List<TileChoice> possibleTileChoices)
+    private TileChoice ChooseTile(List<TileChoice> possibleTileChoices)
     {
         var sumWeights = possibleTileChoices.Sum(t => t.Weight);
 
@@ -173,6 +216,13 @@ public class WaveFunctionCollapseGenerator
         }
 
         var chosenTile = possibleTileChoices[i];
+
+        if (_tileLimits.ContainsKey(chosenTile.TileContent))
+        {
+            if (_tileLimits[chosenTile.TileContent] > 0)
+                _tileLimits[chosenTile.TileContent]--;
+        }
+
         return chosenTile;
     }
 
@@ -189,6 +239,11 @@ public class WaveFunctionCollapseGenerator
 
             if (retryTile.IsCollapsed)
             {
+                if (_tileLimits.ContainsKey(retryTile.TileChoice.TileContent))
+                {
+                    _tileLimits[retryTile.TileChoice.TileContent]++;
+                }
+
                 retryTile.TileChoice = null;
 
                 // Set entropy to tiles being retried to lowest so that they get processed first.  The further out the tile
@@ -204,10 +259,10 @@ public class WaveFunctionCollapseGenerator
 
     private List<TileChoice> GetPossibleTileChoices(TileResult chosenTile)
     {
-        var validTiles = _tiles.ToList();
+        var validTiles = _tileChoicesPerPoint[chosenTile.Point];
 
-        if (_tileChoicesPerPoint.TryGetValue(chosenTile.Point, out var value))
-            validTiles = value;
+        if (!validTiles.Any())
+            return new List<TileChoice>();
 
         foreach (var neighbour in chosenTile.Neighbours)
         {
@@ -220,6 +275,8 @@ public class WaveFunctionCollapseGenerator
                 validTiles = validTiles.Where(t => t.CanAdaptTo(t, chosenTile.Point, neighbour)).ToList();
             }
         }
+
+        validTiles = RemoveTileChoicesWhereLimitsReached(validTiles);
 
         return validTiles;
     }
