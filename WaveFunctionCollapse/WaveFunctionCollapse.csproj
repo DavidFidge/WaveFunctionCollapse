@@ -44,6 +44,9 @@
     <None Update="Content\WaveFunctionCollapse\SimpleBlocks\TileAttributes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\WaveFunctionCollapse\Dancing\TileAttributes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="Delete Content" BeforeTargets="BeforeBuild">

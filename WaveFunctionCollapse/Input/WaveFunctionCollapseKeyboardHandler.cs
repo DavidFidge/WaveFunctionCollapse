@@ -19,4 +19,12 @@ public class WaveFunctionCollapseViewKeyboardHandler : BaseGameViewKeyboardHandl
         if (ActionMap.ActionIs<PlayUntilCompleteRequest>(keyInFocus, keyboardModifier))
             Mediator.Send(new PlayUntilCompleteRequest());
     }
+
+    public override void HandleKeyboardKeyRepeat(Keys repeatingKey, KeyboardModifier keyboardModifier)
+    {
+        base.HandleKeyboardKeyRepeat(repeatingKey, keyboardModifier);
+
+        if (ActionMap.ActionIs<NextStepRequest>(repeatingKey, keyboardModifier))
+            Mediator.Send(new NextStepRequest());
+    }
 }

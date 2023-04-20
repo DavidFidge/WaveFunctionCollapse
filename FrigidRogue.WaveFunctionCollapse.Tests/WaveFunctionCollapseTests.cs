@@ -65,7 +65,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                     {
                         Symmetry = "^",
                         Weight = 1,
-                        Adapters = "AAA,AAA,ABA,ABA"
+                        Adapters = "ABC,DEF,GHI,JKL"
                     }
                 }
             }
@@ -79,10 +79,10 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         Assert.AreEqual(4, tiles.Count);
 
-        AssertTile(tiles[0], "AAA,AAA,ABA,ABA", _floorTexture);
-        AssertTile(tiles[1], "ABA,AAA,AAA,ABA", _floorTexture, expectedRotation: (float)Math.PI / 2);
-        AssertTile(tiles[2], "ABA,ABA,AAA,AAA", _floorTexture, expectedRotation: (float)Math.PI);
-        AssertTile(tiles[3], "AAA,ABA,ABA,AAA", _floorTexture, expectedRotation: (float)-Math.PI / 2);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture);
+        AssertTile(tiles[1], "JKL,ABC,DEF,GHI", _floorTexture, expectedRotation: (float)Math.PI / 2);
+        AssertTile(tiles[2], "GHI,JKL,ABC,DEF", _floorTexture, expectedRotation: (float)Math.PI);
+        AssertTile(tiles[3], "DEF,GHI,JKL,ABC", _floorTexture, expectedRotation: (float)-Math.PI / 2);
     }
 
     [TestMethod]
@@ -105,7 +105,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                     {
                         Symmetry = "I",
                         Weight = 1,
-                        Adapters = "ABA,CCC,ABA,CCC"
+                        Adapters = "ABC,DEF,GHI,JKL"
                     }
                 }
             }
@@ -119,8 +119,46 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tiles.Count);
 
-        AssertTile(tiles[0], "ABA,CCC,ABA,CCC", _floorTexture);
-        AssertTile(tiles[1], "CCC,ABA,CCC,ABA", _floorTexture, expectedRotation: (float)Math.PI / 2);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture);
+        AssertTile(tiles[1], "JKL,ABC,DEF,GHI", _floorTexture, expectedRotation: (float)Math.PI / 2);
+    }
+
+    [TestMethod]
+    public void ForwardSlash_Shaped_Symmetry_Should_Process_Into_Two_Tiles()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Line", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "/",
+                        Weight = 1,
+                        Adapters = "ABC,DEF,GHI,JKL"
+                    }
+                }
+            }
+        };
+
+        // Act
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        // Assert
+        var tiles = waveFunctionCollapse.Tiles;
+
+        Assert.AreEqual(2, tiles.Count);
+
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture);
+        AssertTile(tiles[1], "GHI,JKL,ABC,DEF", _floorTexture, expectedRotation: (float)Math.PI);
     }
 
     [TestMethod]
@@ -271,7 +309,6 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tileResults.Count);
     }
-
 
     [TestMethod]
     public void Adapters_Should_Fail_If_Not_Defined_In_Clockwise_Order()
@@ -1215,3 +1252,120 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         Assert.AreEqual(expectedRotation, tileChoice.Rotation);
     }
 }
+
+    // Preserving the following code for possibly implementing flipping
+    // [TestMethod]
+    // public void L_Shaped_Symmetry_Should_Process_Into_Four_Tiles()
+    // {
+    //     // Arrange
+    //     var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+    //
+    //     var textures = new Dictionary<string, Texture2D>
+    //     {
+    //         { "Corner", _floorTexture }
+    //     };
+    //
+    //     var tileAttributes = new TileAttributes
+    //     {
+    //         Tiles = new Dictionary<string, TileAttribute>
+    //         {
+    //             {
+    //                 "Corner", new TileAttribute
+    //                 {
+    //                     Symmetry = "^",
+    //                     Weight = 1,
+    //                     Adapters = "ABC,DEF,GHI,JKL"
+    //                 }
+    //             }
+    //         }
+    //     };
+    //
+    //     // Act
+    //     waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+    //
+    //     // Assert
+    //     var tiles = waveFunctionCollapse.Tiles;
+    //
+    //     Assert.AreEqual(4, tiles.Count);
+    //
+    //     AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture);
+    //     AssertTile(tiles[1], "LKJ,ABC,FED,GHI", _floorTexture, expectedRotation: (float)Math.PI / 2);
+    //     AssertTile(tiles[2], "IHG,LKJ,CBA,FED", _floorTexture, expectedRotation: (float)Math.PI);
+    //     AssertTile(tiles[3], "DEF,IHG,JKL,CBA", _floorTexture, expectedRotation: (float)-Math.PI / 2);
+    // }
+    //
+    // [TestMethod]
+    // public void I_Shaped_Symmetry_Should_Process_Into_Two_Tiles()
+    // {
+    //     // Arrange
+    //     var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+    //
+    //     var textures = new Dictionary<string, Texture2D>
+    //         {
+    //             { "Line", _floorTexture }
+    //         };
+    //
+    //     var tileAttributes = new TileAttributes
+    //     {
+    //         Tiles = new Dictionary<string, TileAttribute>
+    //         {
+    //             {
+    //                 "Line", new TileAttribute
+    //                 {
+    //                     Symmetry = "I",
+    //                     Weight = 1,
+    //                     Adapters = "ABC,DEF,GHI,JKL"
+    //                 }
+    //             }
+    //         }
+    //     };
+    //
+    //     // Act
+    //     waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+    //
+    //     // Assert
+    //     var tiles = waveFunctionCollapse.Tiles;
+    //
+    //     Assert.AreEqual(2, tiles.Count);
+    //
+    //     AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture);
+    //     AssertTile(tiles[1], "LKJ,ABC,FED,GHI", _floorTexture, expectedRotation: (float)Math.PI / 2);
+    // }
+    //
+    // [TestMethod]
+    // public void ForwardSlash_Shaped_Symmetry_Should_Process_Into_Two_Tiles()
+    // {
+    //     // Arrange
+    //     var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+    //
+    //     var textures = new Dictionary<string, Texture2D>
+    //     {
+    //         { "Line", _floorTexture }
+    //     };
+    //
+    //     var tileAttributes = new TileAttributes
+    //     {
+    //         Tiles = new Dictionary<string, TileAttribute>
+    //         {
+    //             {
+    //                 "Line", new TileAttribute
+    //                 {
+    //                     Symmetry = "/",
+    //                     Weight = 1,
+    //                     Adapters = "ABC,DEF,GHI,JKL"
+    //                 }
+    //             }
+    //         }
+    //     };
+    //
+    //     // Act
+    //     waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+    //
+    //     // Assert
+    //     var tiles = waveFunctionCollapse.Tiles;
+    //
+    //     Assert.AreEqual(2, tiles.Count);
+    //
+    //     AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture);
+    //     AssertTile(tiles[1], "IHG,LKJ,CBA,FED", _floorTexture, expectedRotation: (float)Math.PI);
+    // }

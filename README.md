@@ -39,7 +39,7 @@ The TileAttributes.json file defines the properties and rules of each tile.  Her
 
 Tiles: defines a list of tiles.  The key is the name of the tile filename without extension or path, the value is a collection of properties.
 
-Symmetry: There are currently three symmetry types,  X, I and ^.  X is a fully symmetrical tile, I is a 2-way symmetric tile (i.e. the tile maps out to two distinct tiles, one normal and one rotated 90 degrees) ^ is a 4-way symmetric tile (i.e. the tile maps out to four distinct tiles, one normal and three rotated 90, 180 and 270 degrees).
+Symmetry: There are currently three symmetry types,  X, I and ^.  X is a fully symmetrical tile.  I is a 2-way symmetric tile (i.e. the tile maps out to two distinct tiles, one normal and one rotated 90 degrees). ^ is a 4-way symmetric tile (i.e. the tile maps out to four distinct tiles, one normal and three rotated 90, 180 and 270 degrees).  / is a 2-way symmetrical tile with the symmetry being a 180 degree rotation.
 
 Weight: The weight is the chance of the tile being chosen from the list of valid tiles.
 

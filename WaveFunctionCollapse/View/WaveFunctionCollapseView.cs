@@ -115,7 +115,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
         _waveFunctionCollapse = new WaveFunctionCollapseGenerator();
-        _waveFunctionCollapse.CreateTiles(GameProvider.Game.Content, "WaveFunctionCollapse/SimpleBlocks");
+        _waveFunctionCollapse.CreateTiles(GameProvider.Game.Content, "WaveFunctionCollapse/Dancing");
 
         _mapWidth = 30;
         _mapHeight = 30;

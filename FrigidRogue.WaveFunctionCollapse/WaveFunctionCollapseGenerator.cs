@@ -44,7 +44,7 @@ public class WaveFunctionCollapseGenerator
             new JsonContentLoader());
 
         var textures = assetsList
-            .Where(a => a.StartsWith(contentPath) && !a.EndsWith(".json"))
+            .Where(a => a.StartsWith($"{contentPath}/") && !a.EndsWith(".json"))
             .ToDictionary(
                 a => a.Split("/").Last().Replace(".png", ""),
                 a => contentManager.Load<Texture2D>(a));
