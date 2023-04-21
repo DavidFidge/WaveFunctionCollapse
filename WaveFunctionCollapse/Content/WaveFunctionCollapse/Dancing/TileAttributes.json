@@ -8,12 +8,14 @@
     "DanceFloorCorner1": {
       "Symmetry": "/",
       "Weight": 1,
-      "Adapters": "F,FB,AF,F"
+      "Adapters": "F,FB,AF,F",
+      "MandatoryAdapters": "FB,AF"
     },
     "DanceFloorCorner2": {
       "Symmetry": "/",
       "Weight": 1,
-      "Adapters": "F,F,FA,BF"
+      "Adapters": "F,F,FA,BF",
+      "MandatoryAdapters": "FA,BF"
     },
     "DanceFloorHorizontal": {
       "Symmetry": "/",

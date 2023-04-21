@@ -283,11 +283,35 @@ public class WaveFunctionCollapseGenerator
             }
             else
             {
-                validTiles = validTiles.Where(t => t.CanAdaptTo(t, chosenTile.Point, neighbour)).ToList();
+                validTiles = validTiles.Where(t => t.CanAdaptTo(chosenTile.Point, neighbour)).ToList();
             }
         }
 
         validTiles = RemoveTileChoicesWhereLimitsReached(validTiles);
+
+        var tilesContainingMandatoryAdapters = validTiles.Where(t => t.MandatoryAdapters.Any()).ToList();
+
+        if (tilesContainingMandatoryAdapters.Any())
+        {
+            var acceptedTilesContainingMandatoryAdapters = new List<TileChoice>(tilesContainingMandatoryAdapters.Count);
+
+            foreach (var tile in tilesContainingMandatoryAdapters)
+            {
+                // Look through the neighbours of the chosen tile and remove any that don't have a mandatory adapter.
+                foreach (var neighbour in chosenTile.Neighbours.Where(n => n.IsCollapsed))
+                {
+                    if (tile.IsAdapterMandatory(chosenTile.Point, neighbour))
+                    {
+                        acceptedTilesContainingMandatoryAdapters.Add(tile);
+                        break;
+                    }
+                }
+            }
+            
+            var tilesToRemove = tilesContainingMandatoryAdapters.Except(acceptedTilesContainingMandatoryAdapters).ToList();
+
+            tilesToRemove.ForEach(t => validTiles.Remove(t));
+        }
 
         return validTiles;
     }
