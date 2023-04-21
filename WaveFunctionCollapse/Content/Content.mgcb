@@ -12,6 +12,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Fonts/MapFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/MapFont.spritefont
+
 #begin GeonBit.UI/themes/mars/effects/disabled.fx
 /importer:EffectImporter
 /processor:EffectProcessor

@@ -1,4 +1,5 @@
-﻿using FrigidRogue.MonoGame.Core.Extensions;
+﻿using System.ComponentModel;
+using FrigidRogue.MonoGame.Core.Extensions;
 using GoRogue.Random;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,7 +20,7 @@ public class WaveFunctionCollapseGenerator
     private Dictionary<Point, List<TileChoice>> _tileChoicesPerPoint = new();
     private List<TileContent> _tileContent = new();
     private WaveFunctionCollapseGeneratorOptions _options;
-    private List<TileResult> _entropy = new();
+    private List<TileResult> _uncollapsedTilesSortedByEntropy = new();
     private Dictionary<TileContent, int> _tileLimits = new();
 
     public void CreateTiles(ContentManager contentManager, string contentPath, List<string> tileNames)
@@ -76,7 +77,7 @@ public class WaveFunctionCollapseGenerator
 
     public void Reset(WaveFunctionCollapseGeneratorOptions options)
     {
-        _entropy.Clear();
+        _uncollapsedTilesSortedByEntropy.Clear();
         _options = options.Clone();
         _tileChoicesPerPoint.Clear();
         _tileLimits.Clear();
@@ -91,7 +92,7 @@ public class WaveFunctionCollapseGenerator
 
                 var tileResult = new TileResult(point, options.MapWidth);
                 CurrentState[point.ToIndex(options.MapWidth)] = tileResult;
-                _entropy.Add(tileResult);
+                _uncollapsedTilesSortedByEntropy.Add(tileResult);
             }
         }
 
@@ -108,9 +109,8 @@ public class WaveFunctionCollapseGenerator
             {
                 // By reducing entropy the tile will be among the first to be processed and thus initialised with
                 // the tile choice as given by the initialisation rule
-                // Reducing by 5 as tiles can normally be reduced by 4 (4 neighbours), so reducing by 5 ensure it is always
-                // processed before non-initialised tiles.
-                tileResult.Entropy -= 5;
+                tileResult.Entropy -= Int32.MaxValue / 2;
+                tileResult.StartingEntropy = tileResult.Entropy;
 
                 _tileChoicesPerPoint.Add(tileResult.Point, initialisationSelection);
             }
@@ -145,12 +145,12 @@ public class WaveFunctionCollapseGenerator
 
     public NextStepResult ExecuteNextStep()
     {
-        if (!_entropy.Any())
+        if (!_uncollapsedTilesSortedByEntropy.Any())
             return NextStepResult.Complete();
 
-        _entropy.Sort((a, b) => a.Entropy - b.Entropy );
+        _uncollapsedTilesSortedByEntropy.Sort((a, b) => a.Entropy - b.Entropy );
 
-        var nextUncollapsedTile = GetNextUncollapsedTile(_entropy);
+        var nextUncollapsedTile = GetNextUncollapsedTile(_uncollapsedTilesSortedByEntropy);
 
         var possibleTileChoices = GetPossibleTileChoices(nextUncollapsedTile);
 
@@ -159,7 +159,7 @@ public class WaveFunctionCollapseGenerator
             if (_options.FallbackAttempts == 0)
                 return NextStepResult.Failed();
 
-            RevertTilesInRadius(nextUncollapsedTile, _entropy.First().Entropy);
+            RevertTilesInRadius(nextUncollapsedTile);
 
             return NextStepResult.Continue();
         }
@@ -167,12 +167,50 @@ public class WaveFunctionCollapseGenerator
         var chosenTile = ChooseTile(possibleTileChoices);
 
         nextUncollapsedTile.SetTile(chosenTile);
-        _entropy.Remove(nextUncollapsedTile);
+        _uncollapsedTilesSortedByEntropy.Remove(nextUncollapsedTile);
 
-        if (!_entropy.Any())
+        if (!_uncollapsedTilesSortedByEntropy.Any())
             return NextStepResult.Complete();
 
+        ReduceEntropy(nextUncollapsedTile);
+
         return NextStepResult.Continue();
+    }
+
+    private void ReduceEntropy(TileResult chosenTile)
+    {
+        foreach (var neighbour in chosenTile.Neighbours.Where(t => !t.IsCollapsed))
+        {
+            RecalculateEntropy(neighbour);
+        }
+    }
+
+    private void RecalculateEntropy(TileResult tileToRecalculate)
+    {
+        tileToRecalculate.Entropy = tileToRecalculate.StartingEntropy;
+        var collapsedNeighbours = tileToRecalculate.Neighbours.Where(t => t.IsCollapsed).ToList();
+
+        if (!collapsedNeighbours.Any())
+            return;
+
+        switch (_options.EntropyCalculationMethod)
+        {
+            case EntropyCalculationMethod.ReduceByCountOfNeighbours:
+                tileToRecalculate.Entropy -= collapsedNeighbours.Count;
+                break;
+            case EntropyCalculationMethod.ReduceByWeightOfNeighbours:
+                tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.TileChoice.Weight);
+                break;
+            case EntropyCalculationMethod.ReduceByCountAndMaxWeightOfNeighbours:
+                tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.TileChoice.Weight) - collapsedNeighbours.Count;
+                break;
+            case EntropyCalculationMethod.ReduceByCountOfAllTilesMinusPossibleTiles:
+                var tileChoices = GetPossibleTileChoices(tileToRecalculate);
+                tileToRecalculate.Entropy -= (_tiles.Count - tileChoices.Count);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private List<TileChoice> RemoveTileChoicesWhereLimitsReached(List<TileChoice> possibleTileChoices)
@@ -237,7 +275,7 @@ public class WaveFunctionCollapseGenerator
         return chosenTile;
     }
 
-    private void RevertTilesInRadius(TileResult chosenTile, int currentLowestEntropy)
+    private void RevertTilesInRadius(TileResult chosenTile)
     {
         var retryPoints = chosenTile.Point
             .NeighboursOutwardsFrom(_options.FallbackRadius, 0, _options.MapWidth - 1, 0, _options.MapHeight - 1)
@@ -257,12 +295,18 @@ public class WaveFunctionCollapseGenerator
 
                 retryTile.TileChoice = null;
 
-                // Set entropy to tiles being retried to lowest so that they get processed first.  The further out the tile
-                // the earlier it should be reprocessed.
-                retryTile.Entropy = currentLowestEntropy - (int)Distance.Manhattan.Calculate(retryPoint, chosenTile.Point);
-                _entropy.Add(retryTile);
+                _uncollapsedTilesSortedByEntropy.Add(retryTile);
             }
         }
+
+        foreach (var retryPoint in retryPoints)
+        {
+            var retryTile = CurrentState[retryPoint.ToIndex(_options.MapWidth)];
+
+            RecalculateEntropy(retryTile);
+        }
+
+        RecalculateEntropy(chosenTile);
 
         _options.FallbackAttempts--;
         _options.FallbackRadius += _options.FallbackRadiusIncrement;
@@ -275,16 +319,9 @@ public class WaveFunctionCollapseGenerator
         if (!validTiles.Any())
             return new List<TileChoice>();
 
-        foreach (var neighbour in chosenTile.Neighbours)
+        foreach (var neighbour in chosenTile.Neighbours.Where(t => t.IsCollapsed))
         {
-            if (!neighbour.IsCollapsed)
-            {
-                neighbour.Entropy--;
-            }
-            else
-            {
-                validTiles = validTiles.Where(t => t.CanAdaptTo(chosenTile.Point, neighbour)).ToList();
-            }
+            validTiles = validTiles.Where(t => t.CanAdaptTo(chosenTile.Point, neighbour)).ToList();
         }
 
         validTiles = RemoveTileChoicesWhereLimitsReached(validTiles);

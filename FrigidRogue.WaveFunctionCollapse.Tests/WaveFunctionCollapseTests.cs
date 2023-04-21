@@ -259,7 +259,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                     .Neighbours(1, 1, AdjacencyRule.Types.Cardinals)
                     .Select(p => waveFunctionCollapse.CurrentState.First(t => t.Point == p))
                     .ToArray(),
-                int.MaxValue,
+                0,
                 false);
         }
     }
@@ -419,7 +419,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                     .Neighbours(2, 2, AdjacencyRule.Types.Cardinals)
                     .Select(p => waveFunctionCollapse.CurrentState.First(t => t.Point == p))
                     .ToArray(),
-                tile.Point == midPoint ? int.MaxValue : int.MaxValue - 5,
+                tile.Point == midPoint ? 0 : (0 - (int.MaxValue / 2)),
                 false);
         }
     }
@@ -451,7 +451,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
 
         // Act
         var result = waveFunctionCollapse.ExecuteNextStep();
@@ -471,10 +471,10 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         var otherTiles = waveFunctionCollapse.CurrentState.Except(tileResults).ToList();
 
         Assert.AreEqual(3, otherTiles.Count);
-        Assert.AreEqual(2, otherTiles.Where(t => t.Entropy == Int32.MaxValue - 1).Count());
-        Assert.AreEqual(1, otherTiles.Where(t => t.Entropy == Int32.MaxValue).Count());
+        Assert.AreEqual(2, otherTiles.Count(t => t.Entropy == -1));
+        Assert.AreEqual(1, otherTiles.Count(t => t.Entropy == 0));
 
-        CollectionAssert.AreEquivalent(tileResults[0].Neighbours, otherTiles.Where(t => t.Entropy == Int32.MaxValue - 1).ToList());
+        CollectionAssert.AreEquivalent(tileResults[0].Neighbours, otherTiles.Where(t => t.Entropy == -1).ToList());
     }
 
     [TestMethod]
@@ -504,7 +504,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -526,7 +526,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         var otherTiles = waveFunctionCollapse.CurrentState.Except(tileResults).ToList();
 
         Assert.AreEqual(2, otherTiles.Count);
-        Assert.AreEqual(2, otherTiles.Where(t => t.Entropy == Int32.MaxValue - 1).Count());
+        Assert.AreEqual(2, otherTiles.Count(t => t.Entropy == -1));
     }
 
     [TestMethod]
@@ -556,7 +556,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -580,7 +580,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         var otherTiles = waveFunctionCollapse.CurrentState.Except(tileResults).ToList();
 
         Assert.AreEqual(1, otherTiles.Count);
-        Assert.AreEqual(1, otherTiles.Where(t => t.Entropy == Int32.MaxValue - 2).Count());
+        Assert.AreEqual(1, otherTiles.Count(t => t.Entropy == -2));
     }
 
     [TestMethod]
@@ -1347,6 +1347,174 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             .ToList();
 
         Assert.AreEqual(3, tileResults.Count);
+    }
+
+    [TestMethod]
+    public void Entropy_Should_ReduceByCountOfNeighbours()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 3,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var remainingTile = waveFunctionCollapse.CurrentState.Single(t => !t.IsCollapsed);
+
+        Assert.AreEqual(-2, remainingTile.Entropy);
+    }
+
+    [TestMethod]
+    public void Entropy_Should_ReduceByWeightOfNeighbours()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 3,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByWeightOfNeighbours});
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var remainingTile = waveFunctionCollapse.CurrentState.Single(t => !t.IsCollapsed);
+
+        Assert.AreEqual(-6, remainingTile.Entropy);
+    }
+
+    [TestMethod]
+    public void Entropy_Should_ReduceByCountAndMaxWeightOfNeighbours()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 3,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountAndMaxWeightOfNeighbours});
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var remainingTile = waveFunctionCollapse.CurrentState.Single(t => !t.IsCollapsed);
+
+        Assert.AreEqual(-5, remainingTile.Entropy);
+    }
+
+    [TestMethod]
+    public void Entropy_Should_ReduceByCountOfAllTilesMinusPossibleTiles()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Corner", _cornerTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "/",
+                        Weight = 3,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        InitialisationRule = "[Y] == 0"
+                    }
+                },
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "/",
+                        Weight = 3,
+                        Adapters = "BBB,BBB,BBB,BBB"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfAllTilesMinusPossibleTiles});
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var remainingTile = waveFunctionCollapse.CurrentState.Single(t => !t.IsCollapsed);
+
+        Assert.AreEqual(-2, remainingTile.Entropy);
     }
 
     private void AssertTileResult(TileResult tileResult, TileChoice expectedTileChoice, TileResult[] expectedNeighbours,

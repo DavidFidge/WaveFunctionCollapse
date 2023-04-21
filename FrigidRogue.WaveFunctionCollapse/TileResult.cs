@@ -10,7 +10,8 @@ public class TileResult
     public int Index { get; }
     public bool IsCollapsed => TileChoice != null;
     public TileChoice TileChoice { get; set; }
-    public int Entropy { get; set; } = Int32.MaxValue;
+    public int Entropy { get; set; }
+    public int StartingEntropy { get; set; }
 
     public TileResult(Point point, int maxWidth)
     {

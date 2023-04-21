@@ -44,6 +44,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private bool _playContinuously;
     private TimeSpan? _dateTimeFinished;
     private TimeSpan _secondsForNextIteration = TimeSpan.FromSeconds(2);
+    private SpriteFont _mapFont;
 
     public WaveFunctionCollapseView(
         WaveFunctionCollapseViewModel waveFunctionCollapseViewModel,
@@ -113,6 +114,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         ResetPlayContinuously();
 
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+        _mapFont = GameProvider.Game.Content.Load<SpriteFont>("Fonts/MapFont");
 
         _waveFunctionCollapse = new WaveFunctionCollapseGenerator();
         _waveFunctionCollapse.CreateTiles(GameProvider.Game.Content, "WaveFunctionCollapse/Dancing");
@@ -122,7 +124,13 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _tileWidth = 60;
         _tileHeight = 60;
 
-        _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight));
+        ResetWaveFunctionCollapse();
+    }
+
+    private void ResetWaveFunctionCollapse()
+    {
+        _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight)
+            { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountAndMaxWeightOfNeighbours, FallbackAttempts = 99, FallbackRadiusIncrement = 0, FallbackRadius = 3});
     }
 
     public override void Draw()
@@ -153,6 +161,15 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
                     (float)_tileWidth / tile.TileChoice.Texture.Width,
                     SpriteEffects.None,
                     0);
+            }
+            else
+            {
+                var position = _tileSize * new Vector2(tile.Point.X, tile.Point.Y);
+
+                position.X += _tileSize.X / 4f;
+                position.Y += _tileSize.Y / 2f;
+
+                _spriteBatch.DrawString(_mapFont, tile.Entropy.ToString(), position, Color.Black);
             }
         }
 
@@ -206,7 +223,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _playUntilComplete = false;
         _dateTimeFinished = null;
 
-        _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight));
+        ResetWaveFunctionCollapse();
 
         return Unit.Task;
     }
@@ -229,7 +246,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             if (_gameTimeService.GameTime.TotalGameTime - _dateTimeFinished > _secondsForNextIteration)
             {
                 _dateTimeFinished = null;
-                _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight));
+                ResetWaveFunctionCollapse();
             }
         }
 
