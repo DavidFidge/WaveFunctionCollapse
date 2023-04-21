@@ -1,6 +1,8 @@
 # WaveFunctionCollapse
 A C# Wave Function Collapse library for MonoGame plus a tool with samples.  This is designed for one of my games, thus it takes a dependency on DavidFidge/FrigidRogue (plus some of its dependencies like GoRogue, SadRogue.Primitives, MonoGame.Extended etc).
 
+The sample project is currently using my game's view engine however I'm planning on switching this out to a WPF UI.~~~~
+
 This implementation is a tiled implementation and uses reducing entropy values to determine the next tile to place.
 
 ## Instructions
