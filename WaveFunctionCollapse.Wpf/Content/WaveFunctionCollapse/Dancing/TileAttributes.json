@@ -1,0 +1,35 @@
+{
+  "Tiles": {
+    "DanceFloor": {
+      "Symmetry": "/",
+      "Weight": 70,
+      "Adapters": "A,B,A,B"
+    },
+    "DanceFloorCorner1": {
+      "Symmetry": "/",
+      "Weight": 1,
+      "Adapters": "F,FB,AF,F"
+    },
+    "DanceFloorCorner2": {
+      "Symmetry": "/",
+      "Weight": 1,
+      "Adapters": "F,F,FA,BF"
+    },
+    "DanceFloorHorizontal": {
+      "Symmetry": "/",
+      "Weight": 11,
+      "Adapters": "F,FB,A,BF"
+    },
+    "DanceFloorVertical": {
+      "Symmetry": "/",
+      "Weight": 11,
+      "Adapters": "AF,F,FA,B"
+    },
+    "Floor": {
+      "Symmetry": "X",
+      "Weight": 10,
+      "Adapters": "F,F,F,F",
+      "InitialisationRule": "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
+    }
+  }
+}

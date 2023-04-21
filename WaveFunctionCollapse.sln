@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrigidRogue.WaveFunctionCol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrigidRogue.WaveFunctionCollapse.Tests", "FrigidRogue.WaveFunctionCollapse.Tests\FrigidRogue.WaveFunctionCollapse.Tests.csproj", "{ED997071-EB4C-4335-AE41-AA6C4AD5E00A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveFunctionCollapse.Wpf", "WaveFunctionCollapse.Wpf\WaveFunctionCollapse.Wpf.csproj", "{97E4FC50-6E8F-4D30-871B-EF8C6325F191}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{ED997071-EB4C-4335-AE41-AA6C4AD5E00A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED997071-EB4C-4335-AE41-AA6C4AD5E00A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED997071-EB4C-4335-AE41-AA6C4AD5E00A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E4FC50-6E8F-4D30-871B-EF8C6325F191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E4FC50-6E8F-4D30-871B-EF8C6325F191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E4FC50-6E8F-4D30-871B-EF8C6325F191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E4FC50-6E8F-4D30-871B-EF8C6325F191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

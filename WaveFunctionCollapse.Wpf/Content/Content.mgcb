@@ -1,0 +1,135 @@
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+/reference:FrigidRogue.MonoGame.Core.ContentPipeline.dll
+
+#---------------------------------- Content ---------------------------------#
+
+#begin Fonts/MapFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/MapFont.spritefont
+
+#begin WaveFunctionCollapse/SimpleBlocks/Corner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/Corner.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/Floor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/Floor.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/Wall.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/Wall.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateLeft.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateLeft.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateMiddle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateMiddle.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateRight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateRight.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateUpperLeft.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateUpperLeft.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateUpperMiddle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateUpperMiddle.png
+
+#begin WaveFunctionCollapse/SimpleBlocks/GateUpperRight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/SimpleBlocks/GateUpperRight.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloor.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorCorner1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorCorner1.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorCorner2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorCorner2.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorHorizontal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorHorizontal.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorVertical.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorVertical.png
+
+#begin WaveFunctionCollapse/Dancing/Floor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/Floor.png
+
+#begin WaveFunctionCollapse/DancingDiagonals/DanceFloor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/DancingDiagonals/DanceFloor.png
+
+#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerLong.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerLong.png
+
+#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerShort.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerShort.png
+
+#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorHorizontal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorHorizontal.png
+
+#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorVertical.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorVertical.png
+
+#begin WaveFunctionCollapse/DancingDiagonals/Floor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/DancingDiagonals/Floor.png
+
+# add new tiles automatically using tools\create_tilecontent.ps1
+# Note - when adding new tiles, must delete Content.xnb file as noted below.
+
+# Since MonoGame 3.8, pipeline cannot import its own mgcb files as resources so we have to reference a dummy file instead.
+# The content importer then replaces the extension with .mgcb to read from Content.mgcb
+# Note - you have to delete the Content.xnb file in \Content\bin\Windows\Content for a new resources list to be built after
+# making changes to Content.mgcb
+/importer:ResourceInfoImporter
+/processor:PassThroughProcessor
+/build:Content.npl
