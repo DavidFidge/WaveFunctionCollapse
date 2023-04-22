@@ -1,19 +1,18 @@
 {
   "Tiles": {
     "DanceFloor": {
-      "Symmetry": "/",
-      "Weight": 70,
-      "Adapters": "A,B,A,B"
+      "Symmetry": "X",
+      "Weight": 50,
+      "Adapters": "A,B,A,B",
+      "FlipHorizontally": true,
+      "FlipVertically": true
     },
-    "DanceFloorCorner1": {
-      "Symmetry": "/",
+    "DanceFloorCorner": {
+      "Symmetry": "X",
       "Weight": 1,
-      "Adapters": "F,FB,AF,F"
-    },
-    "DanceFloorCorner2": {
-      "Symmetry": "/",
-      "Weight": 1,
-      "Adapters": "F,F,FA,BF"
+      "Adapters": "F,FB,AF,F",
+      "FlipHorizontally": true,
+      "FlipVertically": true
     },
     "DanceFloorHorizontal": {
       "Symmetry": "/",

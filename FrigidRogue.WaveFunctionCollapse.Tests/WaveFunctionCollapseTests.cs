@@ -1538,7 +1538,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        MirrorHorizontally = true
+                        FlipHorizontally = true
                     }
                 }
             }
@@ -1553,7 +1553,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         Assert.AreEqual(2, tiles.Count);
 
         AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture, SpriteEffects.None);
-        AssertTile(tiles[1], "CBA,DEF,IHG,JKL", _floorTexture, SpriteEffects.FlipHorizontally);
+        AssertTile(tiles[1], "CBA,LKJ,IHG,FED", _floorTexture, SpriteEffects.FlipHorizontally);
     }
 
     [TestMethod]
@@ -1577,7 +1577,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        MirrorVertically = true
+                        FlipVertically = true
                     }
                 }
             }
@@ -1592,7 +1592,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         Assert.AreEqual(2, tiles.Count);
 
         AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture, SpriteEffects.None);
-        AssertTile(tiles[1], "ABC,FED,GHI,LKJ", _floorTexture, SpriteEffects.FlipVertically);
+        AssertTile(tiles[1], "IHG,FED,CBA,LKJ", _floorTexture, SpriteEffects.FlipVertically);
     }
 
     [TestMethod]
@@ -1616,8 +1616,8 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        MirrorHorizontally = true,
-                        MirrorVertically = true
+                        FlipHorizontally = true,
+                        FlipVertically = true
                     }
                 }
             }
@@ -1632,9 +1632,9 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         Assert.AreEqual(4, tiles.Count);
 
         AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture, SpriteEffects.None);
-        AssertTile(tiles[1], "CBA,FED,IHG,LKJ", _floorTexture, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically);
-        AssertTile(tiles[2], "CBA,DEF,IHG,JKL", _floorTexture, SpriteEffects.FlipHorizontally);
-        AssertTile(tiles[3], "ABC,FED,GHI,LKJ", _floorTexture, SpriteEffects.FlipVertically);
+        AssertTile(tiles[1], "GHI,JKL,ABC,DEF", _floorTexture, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically);
+        AssertTile(tiles[2], "CBA,LKJ,IHG,FED", _floorTexture, SpriteEffects.FlipHorizontally);
+        AssertTile(tiles[3], "IHG,FED,CBA,LKJ", _floorTexture, SpriteEffects.FlipVertically);
     }
 
     private void AssertTileResult(TileResult tileResult, TileChoice expectedTileChoice, TileResult[] expectedNeighbours,

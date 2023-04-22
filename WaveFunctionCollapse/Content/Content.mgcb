@@ -1567,15 +1567,10 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Dancing/DanceFloor.png
 
-#begin WaveFunctionCollapse/Dancing/DanceFloorCorner1.png
+#begin WaveFunctionCollapse/Dancing/DanceFloorCorner.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:WaveFunctionCollapse/Dancing/DanceFloorCorner1.png
-
-#begin WaveFunctionCollapse/Dancing/DanceFloorCorner2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/Dancing/DanceFloorCorner2.png
+/build:WaveFunctionCollapse/Dancing/DanceFloorCorner.png
 
 #begin WaveFunctionCollapse/Dancing/DanceFloorHorizontal.png
 /importer:TextureImporter

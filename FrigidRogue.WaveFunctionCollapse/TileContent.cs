@@ -111,29 +111,35 @@ public class TileContent
 
         foreach (var tile in TileChoices.ToList())
         {
-            if (Attributes.MirrorHorizontally && Attributes.MirrorVertically)
+            if (Attributes.FlipHorizontally && Attributes.FlipVertically)
             {
                 var adapters = tile.Adapters.ToDictionary(d => d.Key, d => d.Value.Clone());
 
-                adapters[Direction.Up].Pattern = new String(adapters[Direction.Up].Pattern.Reverse().ToArray());
-                adapters[Direction.Down].Pattern = new String(adapters[Direction.Down].Pattern.Reverse().ToArray());
-                adapters[Direction.Left].Pattern = new String(adapters[Direction.Left].Pattern.Reverse().ToArray());
-                adapters[Direction.Right].Pattern = new String(adapters[Direction.Right].Pattern.Reverse().ToArray());
+                (adapters[Direction.Up].Pattern, adapters[Direction.Down].Pattern) = (adapters[Direction.Down].Pattern, adapters[Direction.Up].Pattern);
+                (adapters[Direction.Left].Pattern, adapters[Direction.Right].Pattern) = (adapters[Direction.Right].Pattern, adapters[Direction.Left].Pattern);
 
                 TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
             }
-            if (Attributes.MirrorHorizontally)
+            if (Attributes.FlipHorizontally)
             {
                 var adapters = tile.Adapters.ToDictionary(d => d.Key, d => d.Value.Clone());
 
                 adapters[Direction.Up].Pattern = new String(adapters[Direction.Up].Pattern.Reverse().ToArray());
                 adapters[Direction.Down].Pattern = new String(adapters[Direction.Down].Pattern.Reverse().ToArray());
 
+                var oldLeft = adapters[Direction.Left].Pattern;
+                adapters[Direction.Left].Pattern = new String(adapters[Direction.Right].Pattern.Reverse().ToArray());
+                adapters[Direction.Right].Pattern = new String(oldLeft.Reverse().ToArray());
+
                 TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipHorizontally));
             }
-            if (Attributes.MirrorVertically)
+            if (Attributes.FlipVertically)
             {
                 var adapters = tile.Adapters.ToDictionary(d => d.Key, d => d.Value.Clone());
+
+                var oldUp = adapters[Direction.Up].Pattern;
+                adapters[Direction.Up].Pattern = new String(adapters[Direction.Down].Pattern.Reverse().ToArray());
+                adapters[Direction.Down].Pattern = new String(oldUp.Reverse().ToArray());
 
                 adapters[Direction.Left].Pattern = new String(adapters[Direction.Left].Pattern.Reverse().ToArray());
                 adapters[Direction.Right].Pattern = new String(adapters[Direction.Right].Pattern.Reverse().ToArray());
