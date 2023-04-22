@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <Content Include=".config\dotnet-tools.json" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
