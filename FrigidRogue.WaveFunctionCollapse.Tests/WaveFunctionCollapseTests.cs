@@ -1517,6 +1517,126 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         Assert.AreEqual(-2, remainingTile.Entropy);
     }
 
+    [TestMethod]
+    public void Mirrored_Horizontally_Should_Process_Into_Two_Tiles()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "ABC,DEF,GHI,JKL",
+                        MirrorHorizontally = true
+                    }
+                }
+            }
+        };
+
+        // Act
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        // Assert
+        var tiles = waveFunctionCollapse.Tiles;
+
+        Assert.AreEqual(2, tiles.Count);
+
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[1], "CBA,DEF,IHG,JKL", _floorTexture, SpriteEffects.FlipHorizontally);
+    }
+
+    [TestMethod]
+    public void Mirrored_Vertically_Should_Process_Into_Two_Tiles()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "ABC,DEF,GHI,JKL",
+                        MirrorVertically = true
+                    }
+                }
+            }
+        };
+
+        // Act
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        // Assert
+        var tiles = waveFunctionCollapse.Tiles;
+
+        Assert.AreEqual(2, tiles.Count);
+
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[1], "ABC,FED,GHI,LKJ", _floorTexture, SpriteEffects.FlipVertically);
+    }
+
+    [TestMethod]
+    public void Mirrored_Vertically_And_Horizontally_Should_Process_Into_Two_Tiles()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "ABC,DEF,GHI,JKL",
+                        MirrorHorizontally = true,
+                        MirrorVertically = true
+                    }
+                }
+            }
+        };
+
+        // Act
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+
+        // Assert
+        var tiles = waveFunctionCollapse.Tiles;
+
+        Assert.AreEqual(4, tiles.Count);
+
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[1], "CBA,FED,IHG,LKJ", _floorTexture, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically);
+        AssertTile(tiles[2], "CBA,DEF,IHG,JKL", _floorTexture, SpriteEffects.FlipHorizontally);
+        AssertTile(tiles[3], "ABC,FED,GHI,LKJ", _floorTexture, SpriteEffects.FlipVertically);
+    }
+
     private void AssertTileResult(TileResult tileResult, TileChoice expectedTileChoice, TileResult[] expectedNeighbours,
         int expectedEntropy, bool expectedCollapsed)
     {

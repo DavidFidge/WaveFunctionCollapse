@@ -108,6 +108,39 @@ public class TileContent
                 TileChoices.Add(new TileChoice(this, adapters, rotation: rotation));
             }
         }
+
+        foreach (var tile in TileChoices.ToList())
+        {
+            if (Attributes.MirrorHorizontally && Attributes.MirrorVertically)
+            {
+                var adapters = tile.Adapters.ToDictionary(d => d.Key, d => d.Value.Clone());
+
+                adapters[Direction.Up].Pattern = new String(adapters[Direction.Up].Pattern.Reverse().ToArray());
+                adapters[Direction.Down].Pattern = new String(adapters[Direction.Down].Pattern.Reverse().ToArray());
+                adapters[Direction.Left].Pattern = new String(adapters[Direction.Left].Pattern.Reverse().ToArray());
+                adapters[Direction.Right].Pattern = new String(adapters[Direction.Right].Pattern.Reverse().ToArray());
+
+                TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
+            }
+            if (Attributes.MirrorHorizontally)
+            {
+                var adapters = tile.Adapters.ToDictionary(d => d.Key, d => d.Value.Clone());
+
+                adapters[Direction.Up].Pattern = new String(adapters[Direction.Up].Pattern.Reverse().ToArray());
+                adapters[Direction.Down].Pattern = new String(adapters[Direction.Down].Pattern.Reverse().ToArray());
+
+                TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipHorizontally));
+            }
+            if (Attributes.MirrorVertically)
+            {
+                var adapters = tile.Adapters.ToDictionary(d => d.Key, d => d.Value.Clone());
+
+                adapters[Direction.Left].Pattern = new String(adapters[Direction.Left].Pattern.Reverse().ToArray());
+                adapters[Direction.Right].Pattern = new String(adapters[Direction.Right].Pattern.Reverse().ToArray());
+
+                TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipVertically));
+            }
+        }
     }
 
     public bool IsWithinInitialisationRule(Point point, int mapWidth, int mapHeight)

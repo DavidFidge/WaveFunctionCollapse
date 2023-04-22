@@ -159,7 +159,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
                     tile.TileChoice.Rotation,
                     rotateOrigin,
                     (float)_tileWidth / tile.TileChoice.Texture.Width,
-                    SpriteEffects.None,
+                    tile.TileChoice.SpriteEffects,
                     0);
             }
             else
