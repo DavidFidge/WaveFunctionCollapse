@@ -119,10 +119,10 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _waveFunctionCollapse = new WaveFunctionCollapseGenerator();
         _waveFunctionCollapse.CreateTiles(GameProvider.Game.Content, "WaveFunctionCollapse/Dancing");
 
-        _mapWidth = 30;
-        _mapHeight = 30;
-        _tileWidth = 96;
-        _tileHeight = 96;
+        _mapWidth = 20;
+        _mapHeight = 20;
+        _tileWidth = 192;
+        _tileHeight = 192;
 
         ResetWaveFunctionCollapse();
     }
@@ -130,7 +130,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private void ResetWaveFunctionCollapse()
     {
         _waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(_mapWidth, _mapHeight)
-            { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountAndMaxWeightOfNeighbours, FallbackAttempts = 99, FallbackRadiusIncrement = 0, FallbackRadius = 3});
+            { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountAndMaxWeightOfNeighbours, FallbackAttempts = 999, FallbackRadiusIncrement = 0, FallbackRadius = 2});
     }
 
     public override void Draw()

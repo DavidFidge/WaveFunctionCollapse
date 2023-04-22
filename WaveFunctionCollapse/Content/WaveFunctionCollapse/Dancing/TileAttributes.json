@@ -6,6 +6,51 @@
       "Adapters": "A,B,A,B",
       "FlipHorizontally": true
     },
+    "Man1": {
+      "Symmetry": "X",
+      "Weight": 5,
+      "Adapters": "A,B,A,M",
+      "FlipHorizontally": true
+    },
+    "Man2": {
+      "Symmetry": "X",
+      "Weight": 10,
+      "Adapters": "A,B,A,M",
+      "FlipHorizontally": true
+    },
+    "Man3": {
+      "Symmetry": "X",
+      "Weight": 10,
+      "Adapters": "A,B,A,M",
+      "FlipHorizontally": true
+    },
+    "Woman1": {
+      "Symmetry": "X",
+      "Weight": 5,
+      "Adapters": "A,M,A,B",
+      "FlipHorizontally": true
+    },
+    "Woman2": {
+      "Symmetry": "X",
+      "Weight": 10,
+      "Adapters": "A,M,A,B",
+      "FlipHorizontally": true
+    },
+    "Woman3": {
+      "Symmetry": "X",
+      "Weight": 10,
+      "Adapters": "A,M,A,B",
+      "FlipHorizontally": true
+    },
+    "DanceFloorReverseCorner": {
+      "Symmetry": "X",
+      "Weight": 1,
+      "Adapters": "AF,FB,A,B",
+      "FlipHorizontally": true,
+      "FlipVertically": true,
+      "Limit": 0,
+      "CanExceedLimitIfOnlyValidTile": true
+    },
     "DanceFloorCorner1": {
       "Symmetry": "X",
       "Weight": 1,
@@ -35,6 +80,22 @@
       "Weight": 11,
       "Adapters": "AF,F,FA,B",
       "FlipHorizontally": true
+    },
+    "DanceFloorVerticalMan1": {
+      "Symmetry": "X",
+      "Weight": 1,
+      "Adapters": "AF,F,FA,M",
+      "FlipHorizontally": true,
+      "Limit": 0,
+      "CanExceedLimitIfOnlyValidTile": true
+    },
+    "DanceFloorVerticalWoman1": {
+      "Symmetry": "X",
+      "Weight": 1,
+      "Adapters": "AF,F,FA,M",
+      "FlipHorizontally": true,
+      "Limit": 0,
+      "CanExceedLimitIfOnlyValidTile": true
     },
     "Floor": {
       "Symmetry": "X",

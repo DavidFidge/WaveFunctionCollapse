@@ -1567,6 +1567,11 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Dancing/DanceFloor.png
 
+#begin WaveFunctionCollapse/Dancing/DanceFloorReverseCorner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorReverseCorner.png
+
 #begin WaveFunctionCollapse/Dancing/DanceFloorCorner1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1597,6 +1602,46 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Dancing/Floor.png
 
+#begin WaveFunctionCollapse/Dancing/Man1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/Man1.png
+
+#begin WaveFunctionCollapse/Dancing/Man2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/Man2.png
+
+#begin WaveFunctionCollapse/Dancing/Man3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/Man3.png
+
+#begin WaveFunctionCollapse/Dancing/Woman1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/Woman1.png
+
+#begin WaveFunctionCollapse/Dancing/Woman2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/Woman2.png
+
+#begin WaveFunctionCollapse/Dancing/Woman3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/Woman3.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorVerticalMan1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorVerticalMan1.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorVerticalWoman1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorVerticalWoman1.png
+
 #begin WaveFunctionCollapse/DancingDiagonals/DanceFloor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1621,11 +1666,6 @@
 /importer:TextureImporter
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/DancingDiagonals/DanceFloorVertical.png
-
-#begin WaveFunctionCollapse/DancingDiagonals/Floor.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/DancingDiagonals/Floor.png
 
 # add new tiles automatically using tools\create_tilecontent.ps1
 # Note - when adding new tiles, must delete Content.xnb file as noted below.
