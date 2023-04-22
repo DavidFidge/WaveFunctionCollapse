@@ -121,8 +121,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         _mapWidth = 30;
         _mapHeight = 30;
-        _tileWidth = 60;
-        _tileHeight = 60;
+        _tileWidth = 96;
+        _tileHeight = 96;
 
         ResetWaveFunctionCollapse();
     }

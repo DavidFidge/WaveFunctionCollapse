@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using FrigidRogue.MonoGame.Core.Extensions;
+﻿using FrigidRogue.MonoGame.Core.Extensions;
 using GoRogue.Random;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;

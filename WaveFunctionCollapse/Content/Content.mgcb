@@ -1567,15 +1567,25 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Dancing/DanceFloor.png
 
-#begin WaveFunctionCollapse/Dancing/DanceFloorCorner.png
+#begin WaveFunctionCollapse/Dancing/DanceFloorCorner1.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:WaveFunctionCollapse/Dancing/DanceFloorCorner.png
+/build:WaveFunctionCollapse/Dancing/DanceFloorCorner1.png
 
-#begin WaveFunctionCollapse/Dancing/DanceFloorHorizontal.png
+#begin WaveFunctionCollapse/Dancing/DanceFloorCorner2.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:WaveFunctionCollapse/Dancing/DanceFloorHorizontal.png
+/build:WaveFunctionCollapse/Dancing/DanceFloorCorner2.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorHorizontal1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorHorizontal1.png
+
+#begin WaveFunctionCollapse/Dancing/DanceFloorHorizontal2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Dancing/DanceFloorHorizontal2.png
 
 #begin WaveFunctionCollapse/Dancing/DanceFloorVertical.png
 /importer:TextureImporter

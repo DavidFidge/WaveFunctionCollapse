@@ -4,25 +4,37 @@
       "Symmetry": "X",
       "Weight": 50,
       "Adapters": "A,B,A,B",
-      "FlipHorizontally": true,
-      "FlipVertically": true
+      "FlipHorizontally": true
     },
-    "DanceFloorCorner": {
+    "DanceFloorCorner1": {
       "Symmetry": "X",
       "Weight": 1,
       "Adapters": "F,FB,AF,F",
-      "FlipHorizontally": true,
-      "FlipVertically": true
+      "FlipHorizontally": true
     },
-    "DanceFloorHorizontal": {
-      "Symmetry": "/",
+    "DanceFloorCorner2": {
+      "Symmetry": "X",
+      "Weight": 1,
+      "Adapters": "FA,BF,F,F",
+      "FlipHorizontally": true
+    },
+    "DanceFloorHorizontal1": {
+      "Symmetry": "X",
       "Weight": 11,
-      "Adapters": "F,FB,A,BF"
+      "Adapters": "F,FB,A,BF",
+      "FlipHorizontally": true
+    },
+    "DanceFloorHorizontal2": {
+      "Symmetry": "X",
+      "Weight": 11,
+      "Adapters": "A,BF,F,FB",
+      "FlipHorizontally": true
     },
     "DanceFloorVertical": {
-      "Symmetry": "/",
+      "Symmetry": "X",
       "Weight": 11,
-      "Adapters": "AF,F,FA,B"
+      "Adapters": "AF,F,FA,B",
+      "FlipHorizontally": true
     },
     "Floor": {
       "Symmetry": "X",
