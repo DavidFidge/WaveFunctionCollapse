@@ -14,7 +14,7 @@ public class WaveFunctionCollapseScreen : Screen
 
     public void ShowScreen()
     {
-        _waveFunctionCollapseView.LoadWaveFunctionCollapse();
+        _waveFunctionCollapseView.Initialise();
 
         Show();
     }

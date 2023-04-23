@@ -213,6 +213,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(2, 2),
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -245,7 +246,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
 
         // Act
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
+        waveFunctionCollapse.Reset();
 
         // Assert
         Assert.AreEqual(4, waveFunctionCollapse.CurrentState.Length);
@@ -277,6 +278,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -292,7 +294,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
 
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0});
+        waveFunctionCollapse.Reset();
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -323,6 +325,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -338,7 +341,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
 
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { FallbackAttempts = 0});
+        waveFunctionCollapse.Reset();
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -371,6 +374,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributesWithInitialisation = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(3, 3),
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -404,7 +408,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
 
         // Act
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(3, 3));
+        waveFunctionCollapse.Reset();
 
         // Assert
         Assert.AreEqual(9, waveFunctionCollapse.CurrentState.Length);
@@ -437,6 +441,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -451,7 +456,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
+        waveFunctionCollapse.Reset();
 
         // Act
         var result = waveFunctionCollapse.ExecuteNextStep();
@@ -490,6 +495,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -504,7 +510,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
+        waveFunctionCollapse.Reset();
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -542,6 +548,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -556,7 +563,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
+        waveFunctionCollapse.Reset();
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -596,6 +603,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(2, 2),
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -610,7 +618,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
+        waveFunctionCollapse.Reset();
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -651,6 +659,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(2, 2),
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -665,7 +674,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
+        waveFunctionCollapse.Reset();
 
         // Act
         var result = waveFunctionCollapse.Execute();
@@ -703,6 +712,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributesWithInitialisation = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(3, 3),
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -718,7 +728,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributesWithInitialisation);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(3, 3));
+        waveFunctionCollapse.Reset();
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -759,6 +769,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
 
         var tileAttributes = new TileAttributes
         {
+            Options = new WaveFunctionCollapseGeneratorOptions(2, 2),
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -773,7 +784,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2));
+        waveFunctionCollapse.Reset();
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -798,8 +809,12 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
             { "FailingTexture", failingTexture }
         };
 
+        var waveFunctionCollapseGeneratorOptions = new WaveFunctionCollapseGeneratorOptions(2, 1);
+        waveFunctionCollapseGeneratorOptions.FallbackAttempts = 0;
+
         var tileAttributes = new TileAttributes
         {
+            Options = waveFunctionCollapseGeneratorOptions,
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -814,10 +829,8 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        var waveFunctionCollapseGeneratorOptions = new WaveFunctionCollapseGeneratorOptions(2, 1);
-        waveFunctionCollapseGeneratorOptions.FallbackAttempts = 0;
 
-        waveFunctionCollapse.Reset(waveFunctionCollapseGeneratorOptions);
+        waveFunctionCollapse.Reset();
 
         // Act
         var result1 = waveFunctionCollapse.ExecuteNextStep();
@@ -1376,7 +1389,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfNeighbours});
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours});
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1416,7 +1429,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByWeightOfNeighbours});
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyHeuristic = EntropyHeuristic.ReduceByWeightOfNeighbours});
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1456,7 +1469,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountAndMaxWeightOfNeighbours});
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(2, 2) { EntropyHeuristic = EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours});
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1506,7 +1519,7 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, tileAttributes);
-        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfAllTilesMinusPossibleTiles});
+        waveFunctionCollapse.Reset(new WaveFunctionCollapseGeneratorOptions(1, 2) { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles});
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();

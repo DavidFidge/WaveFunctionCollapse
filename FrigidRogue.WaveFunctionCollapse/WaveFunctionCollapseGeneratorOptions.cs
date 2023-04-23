@@ -2,14 +2,18 @@
 
 public class WaveFunctionCollapseGeneratorOptions : ICloneable
 {
-    public int MapWidth { get; private set; }
-    public int MapHeight { get; private set; }
+    public int MapWidth = 30;
+    public int MapHeight = 30;
 
     public int FallbackAttempts = 5;
     public int FallbackRadius = 1;
     public int FallbackRadiusIncrement = 1;
-    public EntropyCalculationMethod EntropyCalculationMethod = EntropyCalculationMethod.ReduceByCountOfAllTilesMinusPossibleTiles;
+    public EntropyHeuristic EntropyHeuristic = EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles;
 
+    public WaveFunctionCollapseGeneratorOptions()
+    {
+    }
+    
     public WaveFunctionCollapseGeneratorOptions(int mapWidth, int mapHeight)
     {
         MapWidth = mapWidth;

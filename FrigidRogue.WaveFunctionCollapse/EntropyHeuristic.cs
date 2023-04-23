@@ -1,6 +1,6 @@
 ﻿namespace FrigidRogue.WaveFunctionCollapse;
 
-public enum EntropyCalculationMethod
+public enum EntropyHeuristic
 {
     ReduceByCountOfNeighbours,
     ReduceByWeightOfNeighbours,

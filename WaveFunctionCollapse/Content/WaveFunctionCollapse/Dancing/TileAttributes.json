@@ -1,4 +1,13 @@
 {
+  "Options":
+  {
+    "MapWidth": 30,
+    "MapHeight": 30,
+    "FallbackAttempts": 999,
+    "FallbackRadius": 2,
+    "FallbackRadiusIncrement": 0,
+    "EntropyHeuristic": "ReduceByCountAndMaxWeightOfNeighbours"
+  },
   "Tiles": {
     "DanceFloor": {
       "Symmetry": "X",

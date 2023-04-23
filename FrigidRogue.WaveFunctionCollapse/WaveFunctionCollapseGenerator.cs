@@ -21,7 +21,12 @@ public class WaveFunctionCollapseGenerator
     private WaveFunctionCollapseGeneratorOptions _options;
     private List<TileResult> _uncollapsedTilesSortedByEntropy = new();
     private Dictionary<TileContent, int> _tileLimits = new();
-
+    private TileAttributes _tileAttributes;
+    public int MapWidth => _tileAttributes.Options.MapWidth;
+    public int MapHeight => _tileAttributes.Options.MapHeight;
+    public int TileWidth => _tiles[0].Texture.Bounds.Width;
+    public int TileHeight => _tiles[0].Texture.Bounds.Height;
+    
     public void CreateTiles(ContentManager contentManager, string contentPath, List<string> tileNames)
     {
         var tileAttributes = contentManager.Load<TileAttributes>($"{contentPath}/TileAttributes.json",
@@ -42,7 +47,7 @@ public class WaveFunctionCollapseGenerator
         var assetsList = contentManager.Load<string[]>("Content");
         var tileAttributes = contentManager.Load<TileAttributes>($"{contentPath}/TileAttributes.json",
             new JsonContentLoader());
-
+        
         var textures = assetsList
             .Where(a => a.StartsWith($"{contentPath}/") && !a.EndsWith(".json"))
             .ToDictionary(
@@ -54,6 +59,8 @@ public class WaveFunctionCollapseGenerator
 
     public void CreateTiles(Dictionary<string, Texture2D> textures, TileAttributes tileAttributes)
     {
+        _tileAttributes = tileAttributes;
+        _options = tileAttributes.Options.Clone();
         _tileContent.Clear();
 
         foreach (var tile in tileAttributes.Tiles.Keys)
@@ -74,33 +81,33 @@ public class WaveFunctionCollapseGenerator
         _tiles.AddRange(_tileContent.SelectMany(t => t.TileChoices));
     }
 
-    public void Reset(WaveFunctionCollapseGeneratorOptions options)
+    public void Reset()
     {
+        _options = _tileAttributes.Options.Clone();
         _uncollapsedTilesSortedByEntropy.Clear();
-        _options = options.Clone();
         _tileChoicesPerPoint.Clear();
         _tileLimits.Clear();
 
-        CurrentState = new TileResult[options.MapWidth * options.MapHeight];
+        CurrentState = new TileResult[_options.MapWidth * _options.MapHeight];
         
-        for (var y = 0; y < options.MapHeight; y++)
+        for (var y = 0; y < _options.MapHeight; y++)
         {
-            for (var x = 0; x < options.MapWidth; x++)
+            for (var x = 0; x < _options.MapWidth; x++)
             {
                 var point = new Point(x, y);
 
-                var tileResult = new TileResult(point, options.MapWidth);
-                CurrentState[point.ToIndex(options.MapWidth)] = tileResult;
+                var tileResult = new TileResult(point, _options.MapWidth);
+                CurrentState[point.ToIndex(_options.MapWidth)] = tileResult;
                 _uncollapsedTilesSortedByEntropy.Add(tileResult);
             }
         }
 
         foreach (var tileResult in CurrentState)
         {
-            tileResult.SetNeighbours(CurrentState, options.MapWidth, options.MapHeight);
+            tileResult.SetNeighbours(CurrentState, _options.MapWidth, _options.MapHeight);
 
             var initialisationSelection = _tileContent
-                .Where(t => t.IsWithinInitialisationRule(tileResult.Point, options.MapWidth, options.MapHeight))
+                .Where(t => t.IsWithinInitialisationRule(tileResult.Point, _options.MapWidth, _options.MapHeight))
                 .SelectMany(t => t.TileChoices)
                 .ToList();
 
@@ -192,18 +199,18 @@ public class WaveFunctionCollapseGenerator
         if (!collapsedNeighbours.Any())
             return;
 
-        switch (_options.EntropyCalculationMethod)
+        switch (_options.EntropyHeuristic)
         {
-            case EntropyCalculationMethod.ReduceByCountOfNeighbours:
+            case EntropyHeuristic.ReduceByCountOfNeighbours:
                 tileToRecalculate.Entropy -= collapsedNeighbours.Count;
                 break;
-            case EntropyCalculationMethod.ReduceByWeightOfNeighbours:
+            case EntropyHeuristic.ReduceByWeightOfNeighbours:
                 tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.TileChoice.Weight);
                 break;
-            case EntropyCalculationMethod.ReduceByCountAndMaxWeightOfNeighbours:
+            case EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours:
                 tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.TileChoice.Weight) - collapsedNeighbours.Count;
                 break;
-            case EntropyCalculationMethod.ReduceByCountOfAllTilesMinusPossibleTiles:
+            case EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles:
                 var tileChoices = GetPossibleTileChoices(tileToRecalculate);
                 tileToRecalculate.Entropy -= (_tiles.Count - tileChoices.Count);
                 break;
