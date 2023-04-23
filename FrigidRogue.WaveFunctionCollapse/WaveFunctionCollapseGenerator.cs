@@ -24,8 +24,8 @@ public class WaveFunctionCollapseGenerator
     private TileAttributes _tileAttributes;
     public int MapWidth => _tileAttributes.Options.MapWidth;
     public int MapHeight => _tileAttributes.Options.MapHeight;
-    public int TileWidth => _tiles[0].Texture.Bounds.Width;
-    public int TileHeight => _tiles[0].Texture.Bounds.Height;
+    public int TileWidth => _tiles[0].Texture.Bounds.Width * 4;
+    public int TileHeight => _tiles[0].Texture.Bounds.Height * 4;
     
     public void CreateTiles(ContentManager contentManager, string contentPath, List<string> tileNames)
     {
@@ -60,7 +60,11 @@ public class WaveFunctionCollapseGenerator
     public void CreateTiles(Dictionary<string, Texture2D> textures, TileAttributes tileAttributes)
     {
         _tileAttributes = tileAttributes;
+        if (_tileAttributes.Options == null)
+            _tileAttributes.Options = new WaveFunctionCollapseGeneratorOptions();
+
         _options = tileAttributes.Options.Clone();
+
         _tileContent.Clear();
 
         foreach (var tile in tileAttributes.Tiles.Keys)
