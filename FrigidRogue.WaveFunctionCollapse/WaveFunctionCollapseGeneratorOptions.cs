@@ -8,6 +8,7 @@ public class WaveFunctionCollapseGeneratorOptions : ICloneable
     public int FallbackAttempts = 5;
     public int FallbackRadius = 1;
     public int FallbackRadiusIncrement = 1;
+    public int TileSizeMultiplier = 4;
     public EntropyHeuristic EntropyHeuristic = EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles;
 
     public WaveFunctionCollapseGeneratorOptions()

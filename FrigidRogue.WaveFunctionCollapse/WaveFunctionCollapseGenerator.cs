@@ -24,8 +24,8 @@ public class WaveFunctionCollapseGenerator
     private TileAttributes _tileAttributes;
     public int MapWidth => _tileAttributes.Options.MapWidth;
     public int MapHeight => _tileAttributes.Options.MapHeight;
-    public int TileWidth => _tiles[0].Texture.Bounds.Width * 4;
-    public int TileHeight => _tiles[0].Texture.Bounds.Height * 4;
+    public int TileWidth => _tiles[0].Texture.Bounds.Width * _tileAttributes.Options.TileSizeMultiplier;
+    public int TileHeight => _tiles[0].Texture.Bounds.Height * _tileAttributes.Options.TileSizeMultiplier;
     
     public void CreateTiles(ContentManager contentManager, string contentPath, List<string> tileNames)
     {
