@@ -51,21 +51,30 @@ The Rules.json file defines the properties and rules of each tile.  Here is an e
 }
 ```
 MapOptions: defines the width and height of the map to generate. 
-    MapWidth - width of map to create
-    MapHeight - height of map to create
-    TileSizeMultiplier - used for drawing code
 
+    MapWidth - width of map to create
+    
+    MapHeight - height of map to create
+    
+    TileSizeMultiplier - used for drawing code
+    
 Passes: defines a list of passes to perform.  Each pass runs its own wave function collapse process over the tiles.  Subsequent passes can have a mask defined which will only run the wave function collapse process over the tiles that match the mask.  This mask is defined as the pass number and a list of textures where those squares that have a texture in the list will be considered for the wave function collapse process.  If the mask is not defined then all tiles are considered.
 
 Options:
+
     FallbackAttempts - total amount of retries to perform if a collapse fails at any stage.  This is a total number, not local to any particular failure point, as are the other Fallback-properties below.
+    
     FallbackRadius - if a tile cannot be placed in a spot due to there being no valid tile that matches the existing neighbours then any assigned tiles in a radius of FallbackRadius are cleared (and entropy is set to ensure all these tiles are collapsed next).
+    
     FallbackRadiusIncrement - After a failure, the FallbackRadius is incremented by this figure, meaning a bigger area is cleared each time.
+    
     EntropyHeuristic - the heuristic to use to reduce entropy.  There are currently four options:
+    
         ReduceByCountOfNeighbours
         ReduceByWeightOfNeighbours
         ReduceByCountAndMaxWeightOfNeighbours
         ReduceByCountOfAllTilesMinusPossibleTiles
+        
     PassMask - the mask to use for this pass.  This is a list of tiles from previous passes which will allow that tile to be used in this pass.  If not defined then all tiles are considered.  Example:
 
         "PassMask": {
@@ -82,6 +91,7 @@ defines a list of tiles.  The key is the name of the tile filename without exten
 Symmetry: typically you don't want to create multiple different tile graphics if you can simply reuse the existing tile by rotating it in some way.  This setting allows you to do this. There are currently four symmetry types,  X, I, ^ and /.  X is a fully symmetrical tile.  I is a 2-way symmetric tile (i.e. the tile maps out to two distinct tiles, one normal and one rotated 90 degrees). ^ is a 4-way symmetric tile (i.e. the tile maps out to four distinct tiles, one normal and three rotated 90, 180 and 270 degrees).  / is a 2-way symmetrical tile with the symmetry being a 180 degree rotation.  Adapters are automatically recalculated for the tile variations.
 
 FlipHorizontally: Like the symmetry rules but allows a tile graphic to be flipped horizontally (different from rotating!).  Adapters are automatically recalculated for the tile variations.
+
 FlipVertically: as per flip horizontally but vertically instead.  Using both FlipHorizontally and FlipVertically will give you 4 new tiles - one flipped horizontally, one flipped vertically and one flipped horizontally then vertically.
 
 Weight: The weight is the chance of the tile being chosen from the list of valid tiles.
@@ -106,7 +116,6 @@ InitialisationRule: Initialisation rules are analysed across all tiles first.  T
 Limit: The maximum number of times this tile can be used in the map.  If not defined then there is no limit.
 
 CanExceedLimitIfOnlyValidTile: If true, then the limit can be exceeded if this tile is the only valid tile that can be placed.  Having a Limit of zero and CanExceedLimitIfOnlyValidTile = true is a useful way of constructing multi-tile objects that must be placed together.
-
 
 #### Code-defined configuration
 Code defined configuration mirrors the json-defined configuration - you pass in a dictionary of tile names to texture 2D objects and pass in a Rules object which contains all rules as defined above.
