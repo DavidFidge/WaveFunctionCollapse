@@ -1665,6 +1665,99 @@ public class WaveFunctionCollapseTests : BaseGraphicsTest
         AssertTile(tiles[3], "IHG,FED,CBA,LKJ", _floorTexture, SpriteEffects.FlipVertically);
     }
 
+    [TestMethod]
+    public void Should_Only_Place_Tiles_Within_PlacementRule_Successful_Placement()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Options = new WaveFunctionCollapseGeneratorOptions(1, 1) { FallbackAttempts = 0 },
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[X] == 0 && [Y] == 0"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+        waveFunctionCollapse.Reset();
+
+        // Act
+        var result = waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        Assert.AreEqual(1, waveFunctionCollapse.CurrentState.Length);
+        Assert.IsTrue(result.IsComplete);
+        Assert.IsFalse(result.IsFailed);
+
+        var tileResults = waveFunctionCollapse.CurrentState
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(1, tileResults.Count);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[0], tileResults[0].TileChoice);
+    }
+
+    [TestMethod]
+    public void Should_Only_Place_Tiles_Within_PlacementRule_Failed_Placement()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var tileAttributes = new TileAttributes
+        {
+            Options = new WaveFunctionCollapseGeneratorOptions(1, 1) { FallbackAttempts = 0 },
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[X] == 1 && [Y] == 0"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, tileAttributes);
+        waveFunctionCollapse.Reset();
+
+        // Act
+        var result = waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        Assert.AreEqual(1, waveFunctionCollapse.CurrentState.Length);
+        Assert.IsFalse(result.IsComplete);
+        Assert.IsTrue(result.IsFailed);
+
+        var tileResults = waveFunctionCollapse.CurrentState
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(0, tileResults.Count);
+    }
+
     private void AssertTileResult(TileResult tileResult, TileChoice expectedTileChoice, TileResult[] expectedNeighbours,
         int expectedEntropy, bool expectedCollapsed)
     {

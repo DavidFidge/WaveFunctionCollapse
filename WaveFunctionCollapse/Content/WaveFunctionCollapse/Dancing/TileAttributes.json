@@ -123,13 +123,15 @@
       "Symmetry": "X",
       "Weight": 5,
       "Adapters": "CCC,C,F,C",
-      "InitialisationRule": "([Y] == 0)"
+      "InitialisationRule": "[Y] == 0",
+      "PlacementRule": "[Y] == 0"
     },
     "DiscoBall": {
       "Symmetry": "X",
       "Weight": 1,
       "Adapters": "CCC,C,F,C",
-      "InitialisationRule": "([Y] == 0)"
+      "InitialisationRule": "[Y] == 0",
+      "PlacementRule": "[Y] == 0"
     }
   }
 }

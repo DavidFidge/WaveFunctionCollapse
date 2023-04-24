@@ -126,7 +126,12 @@ public class WaveFunctionCollapseGenerator
             }
             else
             {
-                _tileChoicesPerPoint.Add(tileResult.Point, _tiles.ToList());
+                var placementSelection = _tileContent
+                    .Where(t => t.PassesPlacementRule(tileResult.Point, _options.MapWidth, _options.MapHeight))
+                    .SelectMany(t => t.TileChoices)
+                    .ToList();
+
+                _tileChoicesPerPoint.Add(tileResult.Point, placementSelection);
             }
         }
 

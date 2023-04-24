@@ -151,10 +151,37 @@ public class TileContent
 
     public bool IsWithinInitialisationRule(Point point, int mapWidth, int mapHeight)
     {
-        if (String.IsNullOrEmpty(Attributes.InitialisationRule))
+        return IsWithinRule(Attributes.InitialisationRule, point, mapWidth, mapHeight);
+    }
+
+    public bool PassesPlacementRule(Point point, int mapWidth, int mapHeight)
+    {
+        return IsWithinOrNoRule(Attributes.PlacementRule, point, mapWidth, mapHeight);
+    }
+
+    private bool IsWithinRule(string rule, Point point, int mapWidth, int mapHeight)
+    {
+        if (String.IsNullOrEmpty(rule))
             return false;
 
-        var expression = new Expression(Attributes.InitialisationRule);
+        var expression = new Expression(rule);
+
+        expression.Parameters["X"] = point.X;
+        expression.Parameters["Y"] = point.Y;
+        expression.Parameters["MaxX"] = mapWidth - 1;
+        expression.Parameters["MaxY"] = mapHeight - 1;
+
+        var isPointWithinEvaluationRule = (bool)expression.Evaluate();
+
+        return isPointWithinEvaluationRule;
+    }
+
+    private bool IsWithinOrNoRule(string rule, Point point, int mapWidth, int mapHeight)
+    {
+        if (String.IsNullOrEmpty(rule))
+            return true;
+
+        var expression = new Expression(rule);
 
         expression.Parameters["X"] = point.X;
         expression.Parameters["Y"] = point.Y;
