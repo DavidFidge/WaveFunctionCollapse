@@ -9,6 +9,7 @@ public class TileResult
     public Point Point { get; }
     public int Index { get; }
     public bool IsCollapsed => TileChoice != null;
+    public bool IsUnused { get; set; }
     public TileChoice TileChoice { get; set; }
     public int Entropy { get; set; }
     public int StartingEntropy { get; set; }
@@ -24,6 +25,7 @@ public class TileResult
         Neighbours = Point
             .Neighbours(maxWidth - 1, maxHeight - 1, AdjacencyRule.Types.Cardinals)
             .Select(n => tiles[n.ToIndex(maxWidth)])
+            .Where(p => !p.IsUnused)
             .ToList();
     }
 

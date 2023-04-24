@@ -32,13 +32,13 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private Panel _leftPanel;
     private Panel _mapPanel;
 
-    private WaveFunctionCollapseGenerator _waveFunctionCollapse;
+    private WaveFunctionCollapseGeneratorPasses _waveFunctionCollapsePasses;
 
-    private int _tileWidth => _waveFunctionCollapse.TileWidth;
-    private int _tileHeight => _waveFunctionCollapse.TileHeight;
+    private int _tileWidth => _waveFunctionCollapsePasses.TileWidth;
+    private int _tileHeight => _waveFunctionCollapsePasses.TileHeight;
     
-    private int _mapWidth => _waveFunctionCollapse.MapWidth;
-    private int _mapHeight => _waveFunctionCollapse.MapHeight;
+    private int _mapWidth => _waveFunctionCollapsePasses.MapWidth;
+    private int _mapHeight => _waveFunctionCollapsePasses.MapHeight;
     private Vector2 _tileSize => new Vector2(_tileWidth, _tileHeight);
 
     private bool _playUntilComplete;
@@ -116,11 +116,11 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         _mapFont = GameProvider.Game.Content.Load<SpriteFont>("Fonts/MapFont");
 
-        _waveFunctionCollapse = new WaveFunctionCollapseGenerator();
-        _waveFunctionCollapse.CreateTiles(GameProvider.Game.Content, "WaveFunctionCollapse/Dancing");
+        _waveFunctionCollapsePasses = new WaveFunctionCollapseGeneratorPasses();
+        _waveFunctionCollapsePasses.CreatePasses(GameProvider.Game.Content, "WaveFunctionCollapse/Dancing");
 
-        _waveFunctionCollapse.Reset();
-        
+        _waveFunctionCollapsePasses.Reset();
+
         CreateRenderTarget();
     }
 
@@ -138,7 +138,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
 
-        var tiles = _waveFunctionCollapse.CurrentState;
+        var tiles = _waveFunctionCollapsePasses.GetAllTiles();
 
         foreach (var tile in tiles)
         {
@@ -158,15 +158,16 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
                     tile.TileChoice.SpriteEffects,
                     0);
             }
-            else
-            {
-                var position = _tileSize * new Vector2(tile.Point.X, tile.Point.Y);
+        }
 
-                position.X += _tileSize.X / 4f;
-                position.Y += _tileSize.Y / 2f;
+        foreach (var tile in _waveFunctionCollapsePasses.GetCurrentTiles().Where(t => !t.IsCollapsed))
+        {
+            var position = _tileSize * new Vector2(tile.Point.X, tile.Point.Y);
 
-                _spriteBatch.DrawString(_mapFont, tile.Entropy.ToString(), position, Color.Black);
-            }
+            position.X += _tileSize.X / 4f;
+            position.Y += _tileSize.Y / 2f;
+
+            _spriteBatch.DrawString(_mapFont, tile.Entropy.ToString(), position, Color.Black);
         }
 
         _spriteBatch.End();
@@ -187,7 +188,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     {
         ResetPlayContinuously();
 
-        _waveFunctionCollapse.ExecuteNextStep();
+        _waveFunctionCollapsePasses.ExecuteNextStep();
         return Unit.Task;
     }
 
@@ -219,7 +220,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _playUntilComplete = false;
         _dateTimeFinished = null;
 
-        _waveFunctionCollapse.Reset();
+        _waveFunctionCollapsePasses.Reset();
 
         return Unit.Task;
     }
@@ -230,7 +231,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         if (!_dateTimeFinished.HasValue && (_playUntilComplete || _playContinuously))
         {
-            var result = _waveFunctionCollapse.ExecuteNextStep();
+            var result = _waveFunctionCollapsePasses.ExecuteNextStep();
 
             if (result.IsComplete)
                 _playUntilComplete = false;
@@ -244,7 +245,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             if (_gameTimeService.GameTime.TotalGameTime - _dateTimeFinished > _secondsForNextIteration)
             {
                 _dateTimeFinished = null;
-                _waveFunctionCollapse.Reset();
+                _waveFunctionCollapsePasses.Reset();
             }
         }
 
