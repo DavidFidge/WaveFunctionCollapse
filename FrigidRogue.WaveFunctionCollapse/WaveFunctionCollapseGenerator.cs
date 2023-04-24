@@ -395,3 +395,27 @@ public class WaveFunctionCollapseGenerator
         return validTiles;
     }
 }
+
+public interface ITileConstraint
+{
+    public bool Init();
+    public bool Check();
+}
+
+public class AdapterConstraint : ITileConstraint
+{
+    public bool Init()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Check(TileChoice tileToCheck, List<TileResult> neighbours)
+    {
+        neighbours
+            .Where(t => t.IsCollapsed)
+            .All(t => tileToCheck.CanAdaptTo(t.Point, t));
+        
+        return tileToCheck.CanAdaptTo()
+        throw new NotImplementedException();
+    }
+}
