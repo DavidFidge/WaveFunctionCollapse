@@ -46,6 +46,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private TimeSpan? _dateTimeFinished;
     private TimeSpan _secondsForNextIteration = TimeSpan.FromSeconds(2);
     private SpriteFont _mapFont;
+    private bool _hasUpdated;
 
     public WaveFunctionCollapseView(
         WaveFunctionCollapseViewModel waveFunctionCollapseViewModel,
@@ -125,6 +126,11 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
     public override void Draw()
     {
+        if (!_hasUpdated)
+            return;
+
+        _hasUpdated = false;
+
         var oldRenderTargets = Game.GraphicsDevice.GetRenderTargets();
 
         Game.GraphicsDevice.SetRenderTarget(_renderTarget);
@@ -220,6 +226,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
     public override void Update()
     {
+        _hasUpdated = true;
+
         if (!_dateTimeFinished.HasValue && (_playUntilComplete || _playContinuously))
         {
             var result = _waveFunctionCollapse.ExecuteNextStep();
