@@ -55,22 +55,24 @@ public class WaveFunctionCollapseGenerator
         _tiles.AddRange(_tileContent.SelectMany(t => t.TileChoices));
     }
 
-    public void Reset()
+    public void Clear()
     {
-        Reset(null);
-    }
-
-    public void Reset(WaveFunctionCollapseGenerator[] passes)
-    {
-        if (passes == null)
-            passes = Array.Empty<WaveFunctionCollapseGenerator>();
-
-        var mask = GetPriorLayerPointMask(passes);
-
         _options = _passOptions.Options.Clone();
         _uncollapsedTilesSortedByEntropy.Clear();
         _tileChoicesPerPoint.Clear();
         _tileLimits.Clear();
+
+        CurrentState = Array.Empty<TileResult>();
+    }
+
+    public void Prepare(IList<WaveFunctionCollapseGenerator> passes)
+    {
+        Clear();
+
+        if (passes == null)
+            passes = Array.Empty<WaveFunctionCollapseGenerator>();
+
+        var mask = GetPriorLayerPointMask(passes);
 
         CurrentState = new TileResult[MapWidth * MapHeight];
 
@@ -130,7 +132,7 @@ public class WaveFunctionCollapseGenerator
         }
     }
 
-    private HashSet<Point> GetPriorLayerPointMask(WaveFunctionCollapseGenerator[] passes)
+    private HashSet<Point> GetPriorLayerPointMask(IList<WaveFunctionCollapseGenerator> passes)
     {
         var mask = new HashSet<Point>(_mapOptions.MapWidth * _mapOptions.MapHeight);
 
@@ -144,9 +146,12 @@ public class WaveFunctionCollapseGenerator
 
         var priorPassMaskWorking = new HashSet<Point>(_mapOptions.MapWidth * _mapOptions.MapHeight);
 
-        if (_options.LayerMask != null && _options.LayerMask.Any())
+        if (_options.PassMask != null && _options.PassMask.Any())
         {
-            foreach (var item in _options.LayerMask)
+            if (!passes.Any())
+                throw new Exception("Reset must be called with the prior passes when using PassMask");
+
+            foreach (var item in _options.PassMaskByPassIndex)
             {
                 var pass = passes[item.Key];
 

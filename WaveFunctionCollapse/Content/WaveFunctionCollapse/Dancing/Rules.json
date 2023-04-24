@@ -93,49 +93,51 @@
         "FallbackAttempts": 999,
         "FallbackRadius": 2,
         "FallbackRadiusIncrement": 0,
-        "EntropyHeuristic": "ReduceByCountAndMaxWeightOfNeighbours",
-        "LayerMask": ["DanceFloor"]
+        "EntropyHeuristic": "ReduceByCountOfNeighbours",
+        "PassMask": {
+          "0": ["DanceFloor"]
+        }
       },
       "Tiles": {
-        "DanceFloor": {
+        "Empty": {
           "Symmetry": "X",
-          "Weight": 50,
+          "Weight": 1,
           "Adapters": "A,B,A,B",
           "FlipHorizontally": true
         },
         "Man1": {
           "Symmetry": "X",
-          "Weight": 5,
+          "Weight": 1,
           "Adapters": "A,B,A,M",
           "FlipHorizontally": true
         },
         "Man2": {
           "Symmetry": "X",
-          "Weight": 10,
+          "Weight": 1,
           "Adapters": "A,B,A,M",
           "FlipHorizontally": true
         },
         "Man3": {
           "Symmetry": "X",
-          "Weight": 10,
+          "Weight": 1,
           "Adapters": "A,B,A,M",
           "FlipHorizontally": true
         },
         "Woman1": {
           "Symmetry": "X",
-          "Weight": 5,
+          "Weight": 1,
           "Adapters": "A,M,A,B",
           "FlipHorizontally": true
         },
         "Woman2": {
           "Symmetry": "X",
-          "Weight": 10,
+          "Weight": 1,
           "Adapters": "A,M,A,B",
           "FlipHorizontally": true
         },
         "Woman3": {
           "Symmetry": "X",
-          "Weight": 10,
+          "Weight": 1,
           "Adapters": "A,M,A,B",
           "FlipHorizontally": true
         }

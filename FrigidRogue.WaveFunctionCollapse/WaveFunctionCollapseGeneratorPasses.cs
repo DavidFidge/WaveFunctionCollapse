@@ -37,11 +37,16 @@ public class WaveFunctionCollapseGeneratorPasses
                 a => a.Split("/").Last().Replace(".png", ""),
                 a => contentManager.Load<Texture2D>(a));
 
-        for (var index = 0; index < _rules.Layers.Length; index++)
+        CreatePasses(_rules, _textures);
+    }
+
+    public void CreatePasses(Rules rules, Dictionary<string, Texture2D> textures)
+    {
+        for (var index = 0; index < rules.Passes.Length; index++)
         {
-            var layer = _rules.Layers[index];
+            var layer = rules.Passes[index];
             var generator = new WaveFunctionCollapseGenerator();
-            generator.CreateTiles(_textures, layer, _rules.MapOptions);
+            generator.CreateTiles(textures, layer, rules.MapOptions);
             _generators.Add(generator);
         }
     }
@@ -50,11 +55,12 @@ public class WaveFunctionCollapseGeneratorPasses
     {
         foreach (var generator in _generators)
         {
-            generator.Reset();
+            generator.Clear();
             _generatorsQueue.Enqueue(generator);
         }
 
         _currentGenerator = _generatorsQueue.Dequeue();
+        _currentGenerator.Prepare(null);
     }
 
     public NextStepResult Execute()
@@ -71,6 +77,7 @@ public class WaveFunctionCollapseGeneratorPasses
             if (result.IsComplete && _generatorsQueue.Any())
             {
                 _currentGenerator = _generatorsQueue.Dequeue();
+                _currentGenerator.Prepare(_generators);
                 result = NextStepResult.Continue();
             }
         }
@@ -90,6 +97,8 @@ public class WaveFunctionCollapseGeneratorPasses
         if (result.IsComplete && _generatorsQueue.Any())
         {
             _currentGenerator = _generatorsQueue.Dequeue();
+            _currentGenerator.Prepare(_generators);
+
             result = NextStepResult.Continue();
         }
 
@@ -106,6 +115,6 @@ public class WaveFunctionCollapseGeneratorPasses
 
     public IEnumerable<TileResult> GetCurrentTiles()
     {
-        return _currentGenerator.CurrentState;
+        return _currentGenerator?.CurrentState ?? Array.Empty<TileResult>();
     }
 }

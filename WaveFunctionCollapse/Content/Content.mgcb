@@ -1647,15 +1647,10 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Dancing/DiscoBall.png
 
-#begin WaveFunctionCollapse/Dancing/DanceFloorVerticalMan1.png
+#begin WaveFunctionCollapse/Dancing/Empty.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:WaveFunctionCollapse/Dancing/DanceFloorVerticalMan1.png
-
-#begin WaveFunctionCollapse/Dancing/DanceFloorVerticalWoman1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/Dancing/DanceFloorVerticalWoman1.png
+/build:WaveFunctionCollapse/Dancing/Empty.png
 
 #begin WaveFunctionCollapse/DancingDiagonals/DanceFloor.png
 /importer:TextureImporter

@@ -251,7 +251,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
 
         // Act
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Assert
         Assert.AreEqual(4, waveFunctionCollapse.CurrentState.Length);
@@ -299,7 +299,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2));
 
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -346,7 +346,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2));
 
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -413,7 +413,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(3, 3));
 
         // Act
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Assert
         Assert.AreEqual(9, waveFunctionCollapse.CurrentState.Length);
@@ -461,7 +461,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         var result = waveFunctionCollapse.ExecuteNextStep();
@@ -515,7 +515,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -568,7 +568,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -623,7 +623,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -679,7 +679,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         var result = waveFunctionCollapse.Execute();
@@ -733,7 +733,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(3, 3));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -789,7 +789,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -835,7 +835,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
 
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         var result1 = waveFunctionCollapse.ExecuteNextStep();
@@ -880,7 +880,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         var result1 = waveFunctionCollapse.ExecuteNextStep();
@@ -933,7 +933,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
 
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         var result1 = waveFunctionCollapse.ExecuteNextStep();
@@ -990,7 +990,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1038,7 +1038,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
         waveFunctionCollapse.ExecuteNextStep();
         var result = waveFunctionCollapse.ExecuteNextStep();
 
@@ -1052,7 +1052,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(1, tileResults.Count);
 
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1099,7 +1099,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1151,7 +1151,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3));
 
         // Act
-        var exception = Assert.ThrowsException<Exception>(() => waveFunctionCollapse.Reset());
+        var exception = Assert.ThrowsException<Exception>(() => waveFunctionCollapse.Prepare(null));
 
         // Assert
         Assert.AreEqual($"Tile Floor is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.", exception.Message);
@@ -1187,7 +1187,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 3));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1234,7 +1234,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 3));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1291,7 +1291,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
 
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1359,7 +1359,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(3, 1));
 
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1406,7 +1406,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1447,7 +1447,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1488,7 +1488,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1539,7 +1539,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
@@ -1702,7 +1702,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         var result = waveFunctionCollapse.ExecuteNextStep();
@@ -1749,7 +1749,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
-        waveFunctionCollapse.Reset();
+        waveFunctionCollapse.Prepare(null);
 
         // Act
         var result = waveFunctionCollapse.ExecuteNextStep();
@@ -1764,6 +1764,188 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             .ToList();
 
         Assert.AreEqual(0, tileResults.Count);
+    }
+
+    [TestMethod]
+    public void Should_Process_Two_Passes_With_No_Masking_Rule()
+    {
+        // Arrange
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Line", _lineTexture }
+        };
+
+        var firstPass = new PassOptions
+        {
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        var secondPass = new PassOptions
+        {
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "BBB,BBB,BBB,BBB"
+                    }
+                }
+            }
+        };
+
+        var rules = new Rules
+        {
+            MapOptions = new MapOptions(1, 2),
+            Passes = new[] { firstPass, secondPass }
+        };
+
+        var waveFunctionCollapseGeneratorPasses = new WaveFunctionCollapseGeneratorPasses();
+
+        waveFunctionCollapseGeneratorPasses.CreatePasses(rules, textures);
+
+        waveFunctionCollapseGeneratorPasses.Reset();
+
+        // Act
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        var result = waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+
+        // Assert
+        var tiles = waveFunctionCollapseGeneratorPasses
+            .GetAllTiles()
+            .ToList();
+
+        Assert.AreEqual(4, tiles.Count);
+        Assert.IsTrue(result.IsComplete);
+        Assert.IsFalse(result.IsFailed);
+        
+        var tileResults = tiles
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(4, tileResults.Count);
+
+        AssertTile(tileResults[0].TileChoice, "AAA,AAA,AAA,AAA", _floorTexture);
+        AssertTile(tileResults[1].TileChoice, "AAA,AAA,AAA,AAA", _floorTexture);
+        AssertTile(tileResults[2].TileChoice, "BBB,BBB,BBB,BBB", _lineTexture);
+        AssertTile(tileResults[3].TileChoice, "BBB,BBB,BBB,BBB", _lineTexture);
+
+        Assert.AreEqual(0, tiles.Count(t => t.IsUnused));
+    }
+
+    [TestMethod]
+    public void Should_Process_Two_Passes_With_Masking_Rule()
+    {
+        // Arrange
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Line", _lineTexture },
+            { "Corner", _cornerTexture }
+        };
+
+        var firstPass = new PassOptions
+        {
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        InitialisationRule = "[X] == 0 && [Y] == 0"
+                    }
+                },
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        var secondPass = new PassOptions
+        {
+            Options = new GeneratorOptions
+            {
+                PassMask = new Dictionary<string, string[]> { { "0", new[] { "Floor" } } },
+            },
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "BBB,BBB,BBB,BBB",
+                    }
+                }
+            }
+        };
+
+        var rules = new Rules
+        {
+            MapOptions = new MapOptions(1, 2),
+            Passes = new[] { firstPass, secondPass }
+        };
+
+        var waveFunctionCollapseGeneratorPasses = new WaveFunctionCollapseGeneratorPasses();
+
+        waveFunctionCollapseGeneratorPasses.CreatePasses(rules, textures);
+        waveFunctionCollapseGeneratorPasses.Reset();
+
+        // Act
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        var result = waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+
+        // Assert
+        var tiles = waveFunctionCollapseGeneratorPasses
+            .GetAllTiles()
+            .ToList();
+
+        Assert.AreEqual(4, tiles.Count);
+        Assert.IsTrue(result.IsComplete);
+        Assert.IsFalse(result.IsFailed);
+        
+        var tileResults = tiles
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(3, tileResults.Count);
+
+        AssertTile(tileResults[0].TileChoice, "AAA,AAA,AAA,AAA", _floorTexture);
+        AssertTile(tileResults[1].TileChoice, "AAA,AAA,AAA,AAA", _lineTexture);
+        AssertTile(tileResults[2].TileChoice, "BBB,BBB,BBB,BBB", _cornerTexture);
+
+        var point = new Point(0, 0);
+        Assert.AreEqual(point, tileResults[0].Point);
+        Assert.AreEqual(point, tileResults[2].Point);
+
+        Assert.AreEqual(new Point(0, 1), tileResults[1].Point);
+
+        Assert.AreEqual(1, tiles.Count(t => t.IsUnused));
     }
 
     private void AssertTileResult(TileResult tileResult, TileChoice expectedTileChoice, TileResult[] expectedNeighbours,

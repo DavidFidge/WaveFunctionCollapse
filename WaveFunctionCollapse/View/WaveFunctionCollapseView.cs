@@ -159,6 +159,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
                     0);
             }
         }
+        _spriteBatch.End();
+        _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
 
         foreach (var tile in _waveFunctionCollapsePasses.GetCurrentTiles().Where(t => !t.IsCollapsed))
         {
