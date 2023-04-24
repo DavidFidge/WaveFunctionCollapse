@@ -1,9 +1,8 @@
 ﻿using FrigidRogue.MonoGame.Core.Extensions;
+using FrigidRogue.WaveFunctionCollapse.Options;
+using GoRogue.GameFramework;
 using GoRogue.Random;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Content;
-using MonoGame.Extended.Serialization;
 using SadRogue.Primitives;
 using ShaiRandom.Generators;
 
@@ -18,62 +17,33 @@ public class WaveFunctionCollapseGenerator
     public List<TileChoice> Tiles => _tiles;
     private Dictionary<Point, List<TileChoice>> _tileChoicesPerPoint = new();
     private List<TileContent> _tileContent = new();
-    private WaveFunctionCollapseGeneratorOptions _options;
+    private GeneratorOptions _options;
     private List<TileResult> _uncollapsedTilesSortedByEntropy = new();
     private Dictionary<TileContent, int> _tileLimits = new();
-    private TileAttributes _tileAttributes;
-    public int MapWidth => _tileAttributes.Options.MapWidth;
-    public int MapHeight => _tileAttributes.Options.MapHeight;
-    public int TileWidth => _tiles[0].Texture.Bounds.Width * _tileAttributes.Options.TileSizeMultiplier;
-    public int TileHeight => _tiles[0].Texture.Bounds.Height * _tileAttributes.Options.TileSizeMultiplier;
-    
-    public void CreateTiles(ContentManager contentManager, string contentPath, List<string> tileNames)
+    private PassOptions _passOptions;
+    private MapOptions _mapOptions;
+
+    public int MapWidth => _mapOptions.MapWidth;
+    public int MapHeight => _mapOptions.MapHeight;
+
+    public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions)
     {
-        var tileAttributes = contentManager.Load<TileAttributes>($"{contentPath}/TileAttributes.json",
-            new JsonContentLoader());
+        _mapOptions = mapOptions;
+        _passOptions = passOptions;
+        if (_passOptions.Options == null)
+            _passOptions.Options = new GeneratorOptions();
 
-        var textures = tileNames
-            .ToDictionary(
-                a => a.Replace(".png", ""),
-                a => contentManager.Load<Texture2D>($"{contentPath}/{a}"));
-
-        CreateTiles(textures, tileAttributes);
-    }
-
-    public void CreateTiles(ContentManager contentManager, string contentPath)
-    {
-        // Assumes you have a resource in your content called "Content" which is a list of the items in your Content.mgcb file.  Refer to
-        // "Content.npl" item at https://github.com/Martenfur/NoPipeline for an idea on how to do this if you want to use this constructor.
-        var assetsList = contentManager.Load<string[]>("Content");
-        var tileAttributes = contentManager.Load<TileAttributes>($"{contentPath}/TileAttributes.json",
-            new JsonContentLoader());
-        
-        var textures = assetsList
-            .Where(a => a.StartsWith($"{contentPath}/") && !a.EndsWith(".json"))
-            .ToDictionary(
-                a => a.Split("/").Last().Replace(".png", ""),
-                a => contentManager.Load<Texture2D>(a));
-
-        CreateTiles(textures, tileAttributes);
-    }
-
-    public void CreateTiles(Dictionary<string, Texture2D> textures, TileAttributes tileAttributes)
-    {
-        _tileAttributes = tileAttributes;
-        if (_tileAttributes.Options == null)
-            _tileAttributes.Options = new WaveFunctionCollapseGeneratorOptions();
-
-        _options = tileAttributes.Options.Clone();
+        _options = passOptions.Options.Clone();
 
         _tileContent.Clear();
 
-        foreach (var tile in tileAttributes.Tiles.Keys)
+        foreach (var tile in passOptions.Tiles.Keys)
         {
             var tileContent = new TileContent
             {
                 Name = tile,
                 Texture = textures[tile],
-                Attributes = tileAttributes.Tiles[tile]
+                Attributes = passOptions.Tiles[tile]
             };
 
             _tileContent.Add(tileContent);
@@ -85,33 +55,49 @@ public class WaveFunctionCollapseGenerator
         _tiles.AddRange(_tileContent.SelectMany(t => t.TileChoices));
     }
 
-    public void Reset()
+    public void Clear()
     {
-        _options = _tileAttributes.Options.Clone();
+        _options = _passOptions.Options.Clone();
         _uncollapsedTilesSortedByEntropy.Clear();
         _tileChoicesPerPoint.Clear();
         _tileLimits.Clear();
 
-        CurrentState = new TileResult[_options.MapWidth * _options.MapHeight];
-        
-        for (var y = 0; y < _options.MapHeight; y++)
+        CurrentState = Array.Empty<TileResult>();
+    }
+
+    public void Prepare(IList<WaveFunctionCollapseGenerator> passes)
+    {
+        Clear();
+
+        if (passes == null)
+            passes = Array.Empty<WaveFunctionCollapseGenerator>();
+
+        var mask = GetPriorLayerPointMask(passes);
+
+        CurrentState = new TileResult[MapWidth * MapHeight];
+
+        for (var y = 0; y < MapHeight; y++)
         {
-            for (var x = 0; x < _options.MapWidth; x++)
+            for (var x = 0; x < MapWidth; x++)
             {
                 var point = new Point(x, y);
 
-                var tileResult = new TileResult(point, _options.MapWidth);
-                CurrentState[point.ToIndex(_options.MapWidth)] = tileResult;
-                _uncollapsedTilesSortedByEntropy.Add(tileResult);
+                var tileResult = new TileResult(point, MapWidth);
+                CurrentState[point.ToIndex(MapWidth)] = tileResult;
+
+                if (mask.Contains(point))
+                    _uncollapsedTilesSortedByEntropy.Add(tileResult);
+                else
+                    tileResult.IsUnused = true;
             }
         }
 
         foreach (var tileResult in CurrentState)
         {
-            tileResult.SetNeighbours(CurrentState, _options.MapWidth, _options.MapHeight);
+            tileResult.SetNeighbours(CurrentState, MapWidth, MapHeight);
 
             var initialisationSelection = _tileContent
-                .Where(t => t.IsWithinInitialisationRule(tileResult.Point, _options.MapWidth, _options.MapHeight))
+                .Where(t => t.IsWithinInitialisationRule(tileResult.Point, MapWidth, MapHeight))
                 .SelectMany(t => t.TileChoices)
                 .ToList();
 
@@ -127,7 +113,7 @@ public class WaveFunctionCollapseGenerator
             else
             {
                 var placementSelection = _tileContent
-                    .Where(t => t.PassesPlacementRule(tileResult.Point, _options.MapWidth, _options.MapHeight))
+                    .Where(t => t.PassesPlacementRule(tileResult.Point, MapWidth, MapHeight))
                     .SelectMany(t => t.TileChoices)
                     .ToList();
 
@@ -144,6 +130,47 @@ public class WaveFunctionCollapseGenerator
 
             _tileLimits.Add(item, item.Attributes.Limit);
         }
+    }
+
+    private HashSet<Point> GetPriorLayerPointMask(IList<WaveFunctionCollapseGenerator> passes)
+    {
+        var mask = new HashSet<Point>(_mapOptions.MapWidth * _mapOptions.MapHeight);
+
+        for (var y = 0; y < MapHeight; y++)
+        {
+            for (var x = 0; x < MapWidth; x++)
+            {
+                mask.Add(new Point(x, y));
+            }
+        }
+
+        var priorPassMaskWorking = new HashSet<Point>(_mapOptions.MapWidth * _mapOptions.MapHeight);
+
+        if (_options.PassMask != null && _options.PassMask.Any())
+        {
+            if (!passes.Any())
+                throw new Exception("Reset must be called with the prior passes when using PassMask");
+
+            foreach (var item in _options.PassMaskByPassIndex)
+            {
+                var pass = passes[item.Key];
+
+                var acceptedPoints = pass.CurrentState
+                    .Where(t => t.TileChoice != null)
+                    .Where(t => item.Value.Contains(t.TileChoice.TileContent.Name))
+                    .Select(t => t.Point)
+                    .ToList();
+
+                foreach (var point in acceptedPoints)
+                {
+                    priorPassMaskWorking.Add(point);
+                }
+            }
+
+            mask = mask.Intersect(priorPassMaskWorking).ToHashSet();
+        }
+
+        return mask;
     }
 
     public NextStepResult Execute()
@@ -194,7 +221,7 @@ public class WaveFunctionCollapseGenerator
 
     private void ReduceEntropy(TileResult chosenTile)
     {
-        foreach (var neighbour in chosenTile.Neighbours.Where(t => !t.IsCollapsed))
+        foreach (var neighbour in chosenTile.Neighbours.Where(t => !t.IsCollapsed && !t.IsUnused))
         {
             RecalculateEntropy(neighbour);
         }
@@ -293,13 +320,13 @@ public class WaveFunctionCollapseGenerator
     private void RevertTilesInRadius(TileResult chosenTile)
     {
         var retryPoints = chosenTile.Point
-            .NeighboursOutwardsFrom(_options.FallbackRadius, 0, _options.MapWidth - 1, 0, _options.MapHeight - 1)
+            .NeighboursOutwardsFrom(_options.FallbackRadius, 0, MapWidth - 1, 0, MapHeight - 1)
             .OrderBy(p => (int)Distance.Manhattan.Calculate(p, chosenTile.Point))
             .ToList();
 
         foreach (var retryPoint in retryPoints)
         {
-            var retryTile = CurrentState[retryPoint.ToIndex(_options.MapWidth)];
+            var retryTile = CurrentState[retryPoint.ToIndex(MapWidth)];
 
             if (retryTile.IsCollapsed)
             {
@@ -316,7 +343,7 @@ public class WaveFunctionCollapseGenerator
 
         foreach (var retryPoint in retryPoints)
         {
-            var retryTile = CurrentState[retryPoint.ToIndex(_options.MapWidth)];
+            var retryTile = CurrentState[retryPoint.ToIndex(MapWidth)];
 
             RecalculateEntropy(retryTile);
         }

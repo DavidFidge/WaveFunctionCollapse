@@ -41,10 +41,10 @@
     <Content Include="appsettings.Production.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Update="Content\WaveFunctionCollapse\SimpleBlocks\TileAttributes.json">
+    <None Update="Content\WaveFunctionCollapse\SimpleBlocks\Rules.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\WaveFunctionCollapse\Dancing\TileAttributes.json">
+    <None Update="Content\WaveFunctionCollapse\Dancing\Rules.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
