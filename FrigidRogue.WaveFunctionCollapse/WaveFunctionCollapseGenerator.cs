@@ -19,13 +19,20 @@ public class WaveFunctionCollapseGenerator
     private List<TileContent> _tileContent = new();
     private GeneratorOptions _options;
     private List<TileResult> _uncollapsedTilesSortedByEntropy = new();
-    private Dictionary<TileContent, int> _tileLimits = new();
     private PassOptions _passOptions;
     private MapOptions _mapOptions;
 
     public int MapWidth => _mapOptions.MapWidth;
     public int MapHeight => _mapOptions.MapHeight;
+    
+    private List<ITileConstraint> _tileConstraints = new();
 
+    public WaveFunctionCollapseGenerator()
+    {
+        _tileConstraints.Add(new AdapterConstraint());
+        _tileConstraints.Add(new MandatoryAdapterConstraint());
+    }
+    
     public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions)
     {
         _mapOptions = mapOptions;
@@ -121,14 +128,9 @@ public class WaveFunctionCollapseGenerator
             }
         }
 
-        foreach (var item in _tileContent.Where(t => t.Attributes.Limit >= 0))
+        foreach (var constraint in _tileConstraints)
         {
-            if (item.Attributes.Limit == 0 && !item.Attributes.CanExceedLimitIfOnlyValidTile)
-            {
-                throw new Exception($"Tile {item.Name} is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.");
-            }
-
-            _tileLimits.Add(item, item.Attributes.Limit);
+            constraint.Init(_tileContent);
         }
     }
 
@@ -356,66 +358,134 @@ public class WaveFunctionCollapseGenerator
 
     private List<TileChoice> GetPossibleTileChoices(TileResult chosenTile)
     {
-        var validTiles = _tileChoicesPerPoint[chosenTile.Point];
+        var validTiles = _tileChoicesPerPoint[chosenTile.Point].ToHashSet();
 
         if (!validTiles.Any())
             return new List<TileChoice>();
 
-        foreach (var neighbour in chosenTile.Neighbours.Where(t => t.IsCollapsed))
+        foreach (var constraint in _tileConstraints)
         {
-            validTiles = validTiles.Where(t => t.CanAdaptTo(chosenTile.Point, neighbour)).ToList();
-        }
-
-        validTiles = RemoveTileChoicesWhereLimitsReached(validTiles);
-
-        var tilesContainingMandatoryAdapters = validTiles.Where(t => t.MandatoryAdapters.Any()).ToList();
-
-        if (tilesContainingMandatoryAdapters.Any())
-        {
-            var acceptedTilesContainingMandatoryAdapters = new List<TileChoice>(tilesContainingMandatoryAdapters.Count);
-
-            foreach (var tile in tilesContainingMandatoryAdapters)
+            foreach (var validTile in validTiles)
             {
-                // Look through the neighbours of the chosen tile and remove any that don't have a mandatory adapter.
-                foreach (var neighbour in chosenTile.Neighbours.Where(n => n.IsCollapsed))
-                {
-                    if (tile.IsAdapterMandatory(chosenTile.Point, neighbour))
-                    {
-                        acceptedTilesContainingMandatoryAdapters.Add(tile);
-                        break;
-                    }
-                }
+                if (!constraint.Check(chosenTile, validTile))
+                    validTiles.Remove(validTile);
             }
-            
-            var tilesToRemove = tilesContainingMandatoryAdapters.Except(acceptedTilesContainingMandatoryAdapters).ToList();
-
-            tilesToRemove.ForEach(t => validTiles.Remove(t));
         }
+        
+        //
+        // foreach (var neighbour in chosenTile.Neighbours.Where(t => t.IsCollapsed))
+        // {
+        //     validTiles = validTiles.Where(t => t.CanAdaptTo(chosenTile.Point, neighbour)).ToList();
+        // }
+        //
+        // validTiles = RemoveTileChoicesWhereLimitsReached(validTiles);
+        //
+        // var tilesContainingMandatoryAdapters = validTiles.Where(t => t.MandatoryAdapters.Any()).ToList();
+        //
+        // if (tilesContainingMandatoryAdapters.Any())
+        // {
+        //     var acceptedTilesContainingMandatoryAdapters = new List<TileChoice>(tilesContainingMandatoryAdapters.Count);
+        //
+        //     foreach (var tile in tilesContainingMandatoryAdapters)
+        //     {
+        //         // Look through the neighbours of the chosen tile and remove any that don't have a mandatory adapter.
+        //         foreach (var neighbour in chosenTile.Neighbours.Where(n => n.IsCollapsed))
+        //         {
+        //             if (tile.IsAdapterMandatory(chosenTile.Point, neighbour))
+        //             {
+        //                 acceptedTilesContainingMandatoryAdapters.Add(tile);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     
+        //     var tilesToRemove = tilesContainingMandatoryAdapters.Except(acceptedTilesContainingMandatoryAdapters).ToList();
+        //
+        //     tilesToRemove.ForEach(t => validTiles.Remove(t));
+        // }
 
-        return validTiles;
+        return validTiles.ToList();
     }
 }
 
 public interface ITileConstraint
+{ 
+    public bool Init(List<TileContent> tileContent);
+    public bool Check(TileResult tile, TileChoice tileToCheck);
+}
+
+
+
+
+public class LimitConstraint : ITileConstraint
 {
-    public bool Init();
-    public bool Check();
+    private Dictionary<TileContent, int> _tileLimits = new();
+
+    public bool Init(List<TileContent> tileContent)
+    {
+        _tileLimits.Clear();
+        
+        foreach (var item in tileContent.Where(t => t.Attributes.Limit >= 0))
+        {
+            if (item.Attributes.Limit == 0 && !item.Attributes.CanExceedLimitIfOnlyValidTile)
+            {
+                throw new Exception($"Tile {item.Name} is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.");
+            }
+
+            _tileLimits.Add(item, item.Attributes.Limit);
+        }
+        
+        return true;
+    }
+
+    public bool Check(TileResult tile, TileChoice tileToCheck)
+    {
+        if (_tileLimits.ContainsKey(tileToCheck.TileContent))
+        {
+            if (_tileLimits[tileToCheck.TileContent] == 0)
+                return false;
+        }
+
+        return true;
+    }
 }
 
 public class AdapterConstraint : ITileConstraint
 {
-    public bool Init()
+    public bool Init(List<TileContent> tileContent)
     {
-        throw new NotImplementedException();
+        return true;
     }
 
-    public bool Check(TileChoice tileToCheck, List<TileResult> neighbours)
+    public bool Check(TileResult tile, TileChoice tileToCheck)
     {
-        neighbours
+        return tile.Neighbours
             .Where(t => t.IsCollapsed)
-            .All(t => tileToCheck.CanAdaptTo(t.Point, t));
+            .All(t => tileToCheck.CanAdaptTo(tile.Point, t));
+    }
+}
+
+public class MandatoryAdapterConstraint : ITileConstraint
+{
+    public bool Init(List<TileContent> tileContent)
+    {
+        return true;
+    }
+
+    public bool Check(TileResult tile, TileChoice tileToCheck)
+    {
+        if (!tileToCheck.MandatoryAdapters.Any())
+            return true;
         
-        return tileToCheck.CanAdaptTo()
-        throw new NotImplementedException();
+        // Look through the neighbours of the chosen tile and remove any that don't have a mandatory adapter.
+        foreach (var neighbour in tile.Neighbours.Where(n => n.IsCollapsed))
+        {
+            if (tileToCheck.IsAdapterMandatory(tile.Point, neighbour))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
