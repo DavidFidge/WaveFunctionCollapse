@@ -31,6 +31,9 @@ public class WaveFunctionCollapseGenerator
         _tileConstraints.Add(new AdapterConstraint());
         _tileConstraints.Add(new MandatoryAdapterConstraint());
         _tileConstraints.Add(new LimitConstraint());
+        _tileConstraints.Add(new OnlyAllowedIfNoValidTilesConstraint());
+        
+        _tileConstraints.Sort((a, b) => a.Order - b.Order);
     }
     
     public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions)
@@ -341,59 +344,11 @@ public class WaveFunctionCollapseGenerator
         {
             foreach (var validTile in validTiles)
             {
-                if (!constraint.Check(chosenTile, validTile))
+                if (!constraint.Check(chosenTile, validTile, validTiles))
                     validTiles.Remove(validTile);
             }
         }
         
-        //
-        // foreach (var neighbour in chosenTile.Neighbours.Where(t => t.IsCollapsed))
-        // {
-        //     validTiles = validTiles.Where(t => t.CanAdaptTo(chosenTile.Point, neighbour)).ToList();
-        // }
-        //
-        // validTiles = RemoveTileChoicesWhereLimitsReached(validTiles);
-        //
-        // var tilesContainingMandatoryAdapters = validTiles.Where(t => t.MandatoryAdapters.Any()).ToList();
-        //
-        // if (tilesContainingMandatoryAdapters.Any())
-        // {
-        //     var acceptedTilesContainingMandatoryAdapters = new List<TileChoice>(tilesContainingMandatoryAdapters.Count);
-        //
-        //     foreach (var tile in tilesContainingMandatoryAdapters)
-        //     {
-        //         // Look through the neighbours of the chosen tile and remove any that don't have a mandatory adapter.
-        //         foreach (var neighbour in chosenTile.Neighbours.Where(n => n.IsCollapsed))
-        //         {
-        //             if (tile.IsAdapterMandatory(chosenTile.Point, neighbour))
-        //             {
-        //                 acceptedTilesContainingMandatoryAdapters.Add(tile);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     
-        //     var tilesToRemove = tilesContainingMandatoryAdapters.Except(acceptedTilesContainingMandatoryAdapters).ToList();
-        //
-        //     tilesToRemove.ForEach(t => validTiles.Remove(t));
-        // }
-
         return validTiles.ToList();
-    }
-}
-
-public interface IPostTileProcess
-{
-    public bool Check(TileResult tile, List<TileChoice> tileChoices);
-}
-
-public class ReinstateLimitedTileProcess : IPostTileProcess
-{
-    public bool Check(TileResult tile, List<TileChoice> tileChoices)
-    {
-        foreach (var tileChoice in tileChoices.Where(t => t.FailedConstraints.Count == 1 && t.FailedConstraints.First() is LimitConstraint))
-        {
-
-        }
     }
 }

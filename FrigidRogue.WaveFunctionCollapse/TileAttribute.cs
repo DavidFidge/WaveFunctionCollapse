@@ -9,7 +9,7 @@ public class TileAttribute
     public string InitialisationRule { get; set; }
     public string PlacementRule { get; set; }
     public int Limit { get; set; } = -1;
-    public bool CanExceedLimitIfOnlyValidTile { get; set; } = false;
+    public bool OnlyAllowedIfNoValidTiles { get; set; } = false;
     public bool FlipHorizontally { get; set; }
     public bool FlipVertically { get; set; }
 }

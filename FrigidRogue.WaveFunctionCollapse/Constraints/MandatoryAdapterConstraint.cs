@@ -2,7 +2,9 @@
 
 public class MandatoryAdapterConstraint : TileConstraint
 {
-    public override bool Check(TileResult tile, TileChoice tileToCheck)
+    public override int Order => 3;
+
+    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> otherChoices)
     {
         if (!tileToCheck.MandatoryAdapters.Any())
             return true;
@@ -15,8 +17,6 @@ public class MandatoryAdapterConstraint : TileConstraint
                 return true;
             }
         }
-
-        tileToCheck.FailedConstraints.Add(this);
 
         return false;
     }

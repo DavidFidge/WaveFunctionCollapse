@@ -2,6 +2,8 @@
 
 public class LimitConstraint : TileConstraint
 {
+    public override int Order => 2;
+
     private Dictionary<TileContent, int> _tileLimits = new();
     private Dictionary<TileContent, int> _originalTileLimits = new();
 
@@ -12,23 +14,16 @@ public class LimitConstraint : TileConstraint
 
         foreach (var item in tileContent.Where(t => t.Attributes.Limit >= 0))
         {
-            if (item.Attributes.Limit == 0 && !item.Attributes.CanExceedLimitIfOnlyValidTile)
-            {
-                throw new Exception($"Tile {item.Name} is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.");
-            }
-
             _originalTileLimits.Add(item, item.Attributes.Limit);
         }
     }
 
-    public override bool Check(TileResult tile, TileChoice tileToCheck)
+    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> otherChoices)
     {
         if (_tileLimits.TryGetValue(tileToCheck.TileContent, out var limit))
         {
             if (limit == 0)
             {
-                tileToCheck.FailedConstraints.Add(this);
-
                 return false;
             }
         }

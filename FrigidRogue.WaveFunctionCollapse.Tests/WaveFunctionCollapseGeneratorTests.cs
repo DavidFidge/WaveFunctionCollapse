@@ -1142,7 +1142,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA",
                         Limit = 0,
-                        CanExceedLimitIfOnlyValidTile = false
+                        OnlyAllowedIfNoValidTiles = false
                     }
                 }
             }
@@ -1180,7 +1180,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA",
                         Limit = 2,
-                        CanExceedLimitIfOnlyValidTile = true
+                        OnlyAllowedIfNoValidTiles = true
                     }
                 }
             }
@@ -1227,7 +1227,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA",
                         Limit = 0,
-                        CanExceedLimitIfOnlyValidTile = true
+                        OnlyAllowedIfNoValidTiles = true
                     }
                 }
             }
