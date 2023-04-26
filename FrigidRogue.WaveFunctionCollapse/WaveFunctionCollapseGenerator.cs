@@ -1,6 +1,5 @@
 ﻿using FrigidRogue.MonoGame.Core.Extensions;
 using FrigidRogue.WaveFunctionCollapse.Options;
-using GoRogue.GameFramework;
 using GoRogue.Random;
 using Microsoft.Xna.Framework.Graphics;
 using SadRogue.Primitives;
@@ -31,6 +30,7 @@ public class WaveFunctionCollapseGenerator
     {
         _tileConstraints.Add(new AdapterConstraint());
         _tileConstraints.Add(new MandatoryAdapterConstraint());
+        _tileConstraints.Add(new LimitConstraint());
     }
     
     public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions)
@@ -67,7 +67,6 @@ public class WaveFunctionCollapseGenerator
         _options = _passOptions.Options.Clone();
         _uncollapsedTilesSortedByEntropy.Clear();
         _tileChoicesPerPoint.Clear();
-        _tileLimits.Clear();
 
         CurrentState = Array.Empty<TileResult>();
     }
@@ -130,7 +129,7 @@ public class WaveFunctionCollapseGenerator
 
         foreach (var constraint in _tileConstraints)
         {
-            constraint.Init(_tileContent);
+            constraint.Initialise(_tileContent);
         }
     }
 
@@ -211,6 +210,10 @@ public class WaveFunctionCollapseGenerator
         var chosenTile = ChooseTile(possibleTileChoices);
 
         nextUncollapsedTile.SetTile(chosenTile);
+
+        foreach (var constraint in _tileConstraints)
+            constraint.AfterChoice(nextUncollapsedTile, chosenTile);
+
         _uncollapsedTilesSortedByEntropy.Remove(nextUncollapsedTile);
 
         if (!_uncollapsedTilesSortedByEntropy.Any())
@@ -257,29 +260,6 @@ public class WaveFunctionCollapseGenerator
         }
     }
 
-    private List<TileChoice> RemoveTileChoicesWhereLimitsReached(List<TileChoice> possibleTileChoices)
-    {
-        var possibleReAdds = new List<TileChoice>();
-
-        foreach (var tile in _tileLimits.Keys)
-        {
-            if (_tileLimits[tile] == 0)
-            {
-                if (tile.Attributes.CanExceedLimitIfOnlyValidTile)
-                {
-                    possibleReAdds.AddRange(possibleTileChoices.Where(t => t.TileContent == tile));
-                }
-
-                possibleTileChoices = possibleTileChoices.Where(t => t.TileContent != tile).ToList();
-            }
-        }
-
-        if (possibleTileChoices.Any())
-            return possibleTileChoices;
-
-        return possibleReAdds;
-    }
-
     private static TileResult GetNextUncollapsedTile(List<TileResult> entropy)
     {
         var lowestEntropy = entropy
@@ -310,12 +290,6 @@ public class WaveFunctionCollapseGenerator
 
         var chosenTile = possibleTileChoices[i];
 
-        if (_tileLimits.ContainsKey(chosenTile.TileContent))
-        {
-            if (_tileLimits[chosenTile.TileContent] > 0)
-                _tileLimits[chosenTile.TileContent]--;
-        }
-
         return chosenTile;
     }
 
@@ -332,14 +306,14 @@ public class WaveFunctionCollapseGenerator
 
             if (retryTile.IsCollapsed)
             {
-                if (_tileLimits.ContainsKey(retryTile.TileChoice.TileContent))
-                {
-                    _tileLimits[retryTile.TileChoice.TileContent]++;
-                }
-
+                var tileChoice = retryTile.TileChoice;
                 retryTile.TileChoice = null;
-
                 _uncollapsedTilesSortedByEntropy.Add(retryTile);
+
+                foreach (var constraint in _tileConstraints)
+                {
+                    constraint.Revert(retryTile, tileChoice);
+                }
             }
         }
 
@@ -408,84 +382,18 @@ public class WaveFunctionCollapseGenerator
     }
 }
 
-public interface ITileConstraint
-{ 
-    public bool Init(List<TileContent> tileContent);
-    public bool Check(TileResult tile, TileChoice tileToCheck);
+public interface IPostTileProcess
+{
+    public bool Check(TileResult tile, List<TileChoice> tileChoices);
 }
 
-
-
-
-public class LimitConstraint : ITileConstraint
+public class ReinstateLimitedTileProcess : IPostTileProcess
 {
-    private Dictionary<TileContent, int> _tileLimits = new();
-
-    public bool Init(List<TileContent> tileContent)
+    public bool Check(TileResult tile, List<TileChoice> tileChoices)
     {
-        _tileLimits.Clear();
-        
-        foreach (var item in tileContent.Where(t => t.Attributes.Limit >= 0))
+        foreach (var tileChoice in tileChoices.Where(t => t.FailedConstraints.Count == 1 && t.FailedConstraints.First() is LimitConstraint))
         {
-            if (item.Attributes.Limit == 0 && !item.Attributes.CanExceedLimitIfOnlyValidTile)
-            {
-                throw new Exception($"Tile {item.Name} is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.");
-            }
 
-            _tileLimits.Add(item, item.Attributes.Limit);
         }
-        
-        return true;
-    }
-
-    public bool Check(TileResult tile, TileChoice tileToCheck)
-    {
-        if (_tileLimits.ContainsKey(tileToCheck.TileContent))
-        {
-            if (_tileLimits[tileToCheck.TileContent] == 0)
-                return false;
-        }
-
-        return true;
-    }
-}
-
-public class AdapterConstraint : ITileConstraint
-{
-    public bool Init(List<TileContent> tileContent)
-    {
-        return true;
-    }
-
-    public bool Check(TileResult tile, TileChoice tileToCheck)
-    {
-        return tile.Neighbours
-            .Where(t => t.IsCollapsed)
-            .All(t => tileToCheck.CanAdaptTo(tile.Point, t));
-    }
-}
-
-public class MandatoryAdapterConstraint : ITileConstraint
-{
-    public bool Init(List<TileContent> tileContent)
-    {
-        return true;
-    }
-
-    public bool Check(TileResult tile, TileChoice tileToCheck)
-    {
-        if (!tileToCheck.MandatoryAdapters.Any())
-            return true;
-        
-        // Look through the neighbours of the chosen tile and remove any that don't have a mandatory adapter.
-        foreach (var neighbour in tile.Neighbours.Where(n => n.IsCollapsed))
-        {
-            if (tileToCheck.IsAdapterMandatory(tile.Point, neighbour))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -16,9 +16,12 @@ public class TileChoice
     public float Rotation;
     public Dictionary<Direction, Adapter> Adapters { get; set; }
     public List<Adapter> MandatoryAdapters { get; set; }
+    
+    public List<ITileConstraint> FailedConstraints { get; set; }
 
     public TileChoice(TileContent tileContent, Dictionary<Direction, Adapter> adapters, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
     {
+        FailedConstraints = new List<ITileConstraint>();
         _tileContent = tileContent;
         Adapters = adapters;
         SpriteEffects = spriteEffects;
