@@ -1,10 +1,13 @@
-﻿namespace FrigidRogue.WaveFunctionCollapse.Constraints;
+﻿using FrigidRogue.WaveFunctionCollapse.Options;
+
+namespace FrigidRogue.WaveFunctionCollapse.Constraints;
 
 public abstract class TileConstraint : ITileConstraint
 {
     public abstract int Order { get; }
 
-    public virtual void Initialise(List<TileContent> tileContent)
+    public virtual void Initialise(List<TileContent> tileContent, MapOptions mapOptions,
+        GeneratorOptions generatorOptions)
     {
     }
 

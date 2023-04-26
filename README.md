@@ -115,7 +115,7 @@ InitialisationRule: Initialisation rules are analysed across all tiles first.  T
 
 Limit: The maximum number of times this tile can be used in the map.  If not defined then there is no limit.
 
-CanExceedLimitIfOnlyValidTile: If true, then the limit can be exceeded if this tile is the only valid tile that can be placed.  Having a Limit of zero and CanExceedLimitIfOnlyValidTile = true is a useful way of constructing multi-tile objects that must be placed together.
+OnlyAllowedIfNoValidTilesConstraint: If true, this tile can only be placed if this tile (and other tiles with this flag set) is the only valid tile that can be placed.  This is a useful way of constructing multi-tile objects that must be placed together.
 
 #### Code-defined configuration
 Code defined configuration mirrors the json-defined configuration - you pass in a dictionary of tile names to texture 2D objects and pass in a Rules object which contains all rules as defined above.

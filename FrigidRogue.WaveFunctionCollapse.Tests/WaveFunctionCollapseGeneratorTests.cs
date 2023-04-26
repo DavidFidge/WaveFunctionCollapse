@@ -1120,7 +1120,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
     }
 
     [TestMethod]
-    public void Limited_Tiles_Should_Exceed_Their_Limit_If_CanExceedLimitIfOnlyValidTile_Is_Set()
+    public void Limited_Tiles_Should_Not_Exceed_Their_Limit_If_OnlyAllowedIfNoValidTiles_Is_Set()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -1132,7 +1132,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions(),
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1163,11 +1163,11 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             .Where(c => c.IsCollapsed)
             .ToList();
 
-        Assert.AreEqual(3, tileResults.Count);
+        Assert.AreEqual(2, tileResults.Count);
     }
 
     [TestMethod]
-    public void Limited_Tiles_Should_Exceed_Their_Limit_If_CanExceedLimitIfOnlyValidTile_Is_Set_For_Initial_Limit_Of_Zero()
+    public void Limit_Value_Of_Zero_Should_Not_Place_Tile()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -1179,7 +1179,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions(),
+            Options = new GeneratorOptions() { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1188,8 +1188,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA",
-                        Limit = 0,
-                        OnlyAllowedIfNoValidTiles = true
+                        Limit = 0
                     }
                 }
             }
@@ -1200,9 +1199,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         // Act
         waveFunctionCollapse.ExecuteNextStep();
-        waveFunctionCollapse.ExecuteNextStep();
-        waveFunctionCollapse.ExecuteNextStep();
-
+        
         // Assert
         Assert.AreEqual(3, waveFunctionCollapse.CurrentState.Length);
 
@@ -1210,7 +1207,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             .Where(c => c.IsCollapsed)
             .ToList();
 
-        Assert.AreEqual(3, tileResults.Count);
+        Assert.AreEqual(0, tileResults.Count);
     }
 
     [TestMethod]

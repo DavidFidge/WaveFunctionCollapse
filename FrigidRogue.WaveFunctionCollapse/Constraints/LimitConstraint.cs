@@ -1,4 +1,6 @@
-﻿namespace FrigidRogue.WaveFunctionCollapse.Constraints;
+﻿using FrigidRogue.WaveFunctionCollapse.Options;
+
+namespace FrigidRogue.WaveFunctionCollapse.Constraints;
 
 public class LimitConstraint : TileConstraint
 {
@@ -7,12 +9,13 @@ public class LimitConstraint : TileConstraint
     private Dictionary<TileContent, int> _tileLimits = new();
     private Dictionary<TileContent, int> _originalTileLimits = new();
 
-    public override void Initialise(List<TileContent> tileContent)
+    public override void Initialise(List<TileContent> tileContent, MapOptions mapOptions,
+        GeneratorOptions generatorOptions)
     {
         _tileLimits.Clear();
         _originalTileLimits.Clear();
 
-        foreach (var item in tileContent.Where(t => t.Attributes.Limit > 0))
+        foreach (var item in tileContent.Where(t => t.Attributes.Limit >= 0))
         {
             _tileLimits.Add(item, item.Attributes.Limit);
             _originalTileLimits.Add(item, item.Attributes.Limit);

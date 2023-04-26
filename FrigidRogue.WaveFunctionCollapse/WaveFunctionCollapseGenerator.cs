@@ -32,6 +32,7 @@ public class WaveFunctionCollapseGenerator
         _tileConstraints.Add(new AdapterConstraint());
         _tileConstraints.Add(new MandatoryAdapterConstraint());
         _tileConstraints.Add(new LimitConstraint());
+        _tileConstraints.Add(new PlacementConstraint());
         _tileConstraints.Add(new OnlyAllowedIfNoValidTilesConstraint());
         
         _tileConstraints.Sort((a, b) => a.Order - b.Order);
@@ -122,18 +123,17 @@ public class WaveFunctionCollapseGenerator
             }
             else
             {
-                var placementSelection = _tileContent
-                    .Where(t => t.PassesPlacementRule(tileResult.Point, MapWidth, MapHeight))
+                var tileChoices = _tileContent
                     .SelectMany(t => t.TileChoices)
                     .ToList();
 
-                _tileChoicesPerPoint.Add(tileResult.Point, placementSelection);
+                _tileChoicesPerPoint.Add(tileResult.Point, tileChoices);
             }
         }
 
         foreach (var constraint in _tileConstraints)
         {
-            constraint.Initialise(_tileContent);
+            constraint.Initialise(_tileContent, _mapOptions, _options);
         }
     }
 
