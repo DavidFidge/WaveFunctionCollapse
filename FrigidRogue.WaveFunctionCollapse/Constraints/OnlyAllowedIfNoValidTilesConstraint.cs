@@ -6,6 +6,9 @@ public class OnlyAllowedIfNoValidTilesConstraint : TileConstraint
 
     public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> otherChoices)
     {
+        if (!tileToCheck.TileContent.Attributes.OnlyAllowedIfNoValidTiles)
+            return true;
+        
         if (otherChoices.Any(t => !t.TileContent.Attributes.OnlyAllowedIfNoValidTiles))
             return false;
 

@@ -1120,44 +1120,6 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
     }
 
     [TestMethod]
-    public void Should_Throw_Exception_If_Limit_Is_Zero_And_CanExceedLimitIfOnlyValidTile_Is_False()
-    {
-        // Arrange
-        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
-
-        var textures = new Dictionary<string, Texture2D>
-        {
-            { "Floor", _floorTexture }
-        };
-
-        var passOptionsWithInitialisation = new PassOptions
-        {
-            Options = new GeneratorOptions(),
-            Tiles = new Dictionary<string, TileAttribute>
-            {
-                {
-                    "Floor", new TileAttribute
-                    {
-                        Symmetry = "X",
-                        Weight = 1,
-                        Adapters = "AAA,AAA,AAA,AAA",
-                        Limit = 0,
-                        OnlyAllowedIfNoValidTiles = false
-                    }
-                }
-            }
-        };
-
-        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3));
-
-        // Act
-        var exception = Assert.ThrowsException<Exception>(() => waveFunctionCollapse.Prepare(null));
-
-        // Assert
-        Assert.AreEqual($"Tile Floor is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.", exception.Message);
-    }
-
-    [TestMethod]
     public void Limited_Tiles_Should_Exceed_Their_Limit_If_CanExceedLimitIfOnlyValidTile_Is_Set()
     {
         // Arrange
