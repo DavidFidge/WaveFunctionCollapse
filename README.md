@@ -1,5 +1,5 @@
 # WaveFunctionCollapse
-A C# Wave Function Collapse library for MonoGame plus a tool with samples.  This is designed for one of my games, thus it takes a dependency on DavidFidge/FrigidRogue (plus some of its dependencies like GoRogue, SadRogue.Primitives, MonoGame.Extended etc).
+A C# Wave Function Collapse library for MonoGame plus a tool with samples.  This is designed for one of my games, thus it currently takes a dependency on DavidFidge/FrigidRogue.  You could easily remove this and only take a dependency on Chris3606/GoRogue, an excellent, polished, performant roguelike C# library.
 
 This implementation is a "simple tiled" implementation and comes with a host of features and options.
 
@@ -9,7 +9,7 @@ The sample project is WaveFunctionCollapse.  It uses my game's view engine which
 
 The library project is called FrigidRogue.WaveFunctionCollapse.
 
-Test coverage is comprehensive and is in the project called FrigidRogue.WaveFunctionCollapse.Tests
+Test coverage is comprehensive.
 
 ## Instructions
 
