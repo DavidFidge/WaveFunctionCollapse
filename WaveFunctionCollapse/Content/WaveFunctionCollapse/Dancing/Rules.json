@@ -20,7 +20,7 @@
           "Weight": 50,
           "Adapters": "A,B,A,B",
           "FlipHorizontally": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorReverseCorner1": {
           "Symmetry": "X",
@@ -28,7 +28,7 @@
           "Adapters": "AF,FB,A,B",
           "FlipHorizontally": true,
           "OnlyAllowedIfNoValidTiles": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorReverseCorner2": {
           "Symmetry": "X",
@@ -37,47 +37,48 @@
           "FlipHorizontally": true,
           "Limit": 0,
           "OnlyAllowedIfNoValidTiles": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorCorner1": {
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "F,FB,AF,F",
           "FlipHorizontally": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorCorner2": {
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "FA,BF,F,F",
           "FlipHorizontally": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorHorizontal1": {
           "Symmetry": "X",
           "Weight": 11,
           "Adapters": "F,FB,A,BF",
           "FlipHorizontally": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorHorizontal2": {
           "Symmetry": "X",
           "Weight": 11,
           "Adapters": "A,BF,F,FB",
           "FlipHorizontally": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorVertical": {
           "Symmetry": "X",
           "Weight": 11,
           "Adapters": "AF,F,FA,B",
           "FlipHorizontally": true,
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] == [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "Floor": {
           "Symmetry": "X",
           "Weight": 10,
-          "Adapters": "F,F,F,F"
+          "Adapters": "F,F,F,F",
+          "PlacementRule": "[Y] != 0"
         },
         "Curtains": {
           "Symmetry": "X",
