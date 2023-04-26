@@ -26,6 +26,7 @@ public class WaveFunctionCollapseGenerator
     public int MapHeight => _mapOptions.MapHeight;
     
     private List<ITileConstraint> _tileConstraints = new();
+    private IEnhancedRandom _random;
 
     public WaveFunctionCollapseGenerator()
     {
@@ -38,8 +39,9 @@ public class WaveFunctionCollapseGenerator
         _tileConstraints.Sort((a, b) => a.Order - b.Order);
     }
     
-    public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions)
+    public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions, IEnhancedRandom random)
     {
+        _random = random;
         _mapOptions = mapOptions;
         _passOptions = passOptions;
         if (_passOptions.Options == null)
@@ -260,13 +262,13 @@ public class WaveFunctionCollapseGenerator
         }
     }
 
-    private static TileResult GetNextUncollapsedTile(List<TileResult> entropy)
+    private TileResult GetNextUncollapsedTile(List<TileResult> entropy)
     {
         var lowestEntropy = entropy
             .TakeWhile(e => e.Entropy == entropy.First().Entropy)
             .ToList();
 
-        var nextUncollapsedTile = lowestEntropy[GlobalRandom.DefaultRNG.RandomIndex(lowestEntropy)];
+        var nextUncollapsedTile = lowestEntropy[_random.RandomIndex(lowestEntropy)];
 
         return nextUncollapsedTile;
     }
@@ -275,7 +277,7 @@ public class WaveFunctionCollapseGenerator
     {
         var sumWeights = possibleTileChoices.Sum(t => t.Weight);
 
-        var randomNumber = GlobalRandom.DefaultRNG.NextInt(0, sumWeights);
+        var randomNumber = _random.NextInt(0, sumWeights);
 
         var i = 0;
         while (randomNumber > 0)

@@ -1,6 +1,7 @@
 using FrigidRogue.MonoGame.Core.Extensions;
 using FrigidRogue.TestInfrastructure;
 using FrigidRogue.WaveFunctionCollapse.Options;
+using GoRogue.Random;
 using Microsoft.Xna.Framework.Graphics;
 using SadRogue.Primitives;
 using Color = Microsoft.Xna.Framework.Color;
@@ -74,7 +75,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         // Act
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
 
         // Assert
         var tiles = waveFunctionCollapse.Tiles;
@@ -115,7 +116,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         // Act
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
 
         // Assert
         var tiles = waveFunctionCollapse.Tiles;
@@ -154,7 +155,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         // Act
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
 
         // Assert
         var tiles = waveFunctionCollapse.Tiles;
@@ -193,7 +194,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         // Act
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
 
         // Assert
         var tiles = waveFunctionCollapse.Tiles;
@@ -248,7 +249,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
 
         // Act
         waveFunctionCollapse.Prepare(null);
@@ -297,7 +298,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2), GlobalRandom.DefaultRNG);
 
         waveFunctionCollapse.Prepare(null);
 
@@ -344,7 +345,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2), GlobalRandom.DefaultRNG);
 
         waveFunctionCollapse.Prepare(null);
 
@@ -391,7 +392,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3));
+        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3), GlobalRandom.DefaultRNG);
 
         // Act
         waveFunctionCollapse.Prepare(null);
@@ -431,7 +432,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -485,7 +486,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -538,7 +539,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -593,7 +594,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -649,7 +650,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -702,7 +703,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(3, 3));
+        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(3, 3), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -758,7 +759,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -803,7 +804,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1), GlobalRandom.DefaultRNG);
 
         waveFunctionCollapse.Prepare(null);
 
@@ -849,7 +850,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -901,7 +902,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1), GlobalRandom.DefaultRNG);
 
         waveFunctionCollapse.Prepare(null);
 
@@ -959,7 +960,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3));
+        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1007,7 +1008,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
         waveFunctionCollapse.ExecuteNextStep();
         var result = waveFunctionCollapse.ExecuteNextStep();
@@ -1068,7 +1069,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1118,7 +1119,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 3));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 3), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1164,7 +1165,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 3));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 3), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1218,7 +1219,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 1), GlobalRandom.DefaultRNG);
 
         waveFunctionCollapse.Prepare(null);
 
@@ -1287,7 +1288,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(3, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(3, 1), GlobalRandom.DefaultRNG);
 
         waveFunctionCollapse.Prepare(null);
 
@@ -1335,7 +1336,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1376,7 +1377,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1417,7 +1418,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1468,7 +1469,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 2), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1509,7 +1510,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         // Act
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
 
         // Assert
         var tiles = waveFunctionCollapse.Tiles;
@@ -1549,7 +1550,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         // Act
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
 
         // Assert
         var tiles = waveFunctionCollapse.Tiles;
@@ -1590,7 +1591,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         };
 
         // Act
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
 
         // Assert
         var tiles = waveFunctionCollapse.Tiles;
@@ -1631,7 +1632,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act
@@ -1678,7 +1679,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1));
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(1, 1), GlobalRandom.DefaultRNG);
         waveFunctionCollapse.Prepare(null);
 
         // Act

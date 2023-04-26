@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using FrigidRogue.WaveFunctionCollapse.Options;
+using GoRogue.Random;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -46,7 +47,7 @@ public class WaveFunctionCollapseGeneratorPasses
         {
             var layer = rules.Passes[index];
             var generator = new WaveFunctionCollapseGenerator();
-            generator.CreateTiles(textures, layer, rules.MapOptions);
+            generator.CreateTiles(textures, layer, rules.MapOptions, GlobalRandom.DefaultRNG);
             _generators.Add(generator);
         }
     }
