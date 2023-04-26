@@ -1,4 +1,6 @@
 ﻿using FrigidRogue.MonoGame.Core.Extensions;
+using FrigidRogue.WaveFunctionCollapse.Options;
+using NCalc;
 using SadRogue.Primitives;
 
 namespace FrigidRogue.WaveFunctionCollapse;
@@ -32,5 +34,22 @@ public class TileResult
     public void SetTile(TileChoice tileChoice)
     {
         TileChoice = tileChoice;
+    }
+
+    public bool IsWithinRule(string rule, Point point, MapOptions mapOptions)
+    {
+        if (String.IsNullOrEmpty(rule))
+            return false;
+
+        var expression = new Expression(rule);
+
+        expression.Parameters["X"] = point.X;
+        expression.Parameters["Y"] = point.Y;
+        expression.Parameters["MaxX"] = mapOptions.MapWidth - 1;
+        expression.Parameters["MaxY"] = mapOptions.MapHeight - 1;
+
+        var isPointWithinEvaluationRule = (bool)expression.Evaluate();
+
+        return isPointWithinEvaluationRule;
     }
 }

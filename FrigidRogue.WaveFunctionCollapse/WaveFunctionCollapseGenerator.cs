@@ -107,28 +107,24 @@ public class WaveFunctionCollapseGenerator
         {
             tileResult.SetNeighbours(CurrentState, MapWidth, MapHeight);
 
-            var initialisationSelection = _tileContent
-                .Where(t => t.IsWithinInitialisationRule(tileResult.Point, MapWidth, MapHeight))
+            var entropyDivider = 2;
+
+            foreach (var runFirstRule in _options.RunFirstRules)
+            {
+                if (tileResult.IsWithinRule(runFirstRule, tileResult.Point, _mapOptions))
+                {
+                    tileResult.Entropy -= Int32.MaxValue / entropyDivider;
+                    tileResult.StartingEntropy = tileResult.Entropy;
+                }
+
+                entropyDivider++;
+            }
+
+            var tileChoices = _tileContent
                 .SelectMany(t => t.TileChoices)
                 .ToList();
 
-            if (initialisationSelection.Any())
-            {
-                // By reducing entropy the tile will be among the first to be processed and thus initialised with
-                // the tile choice as given by the initialisation rule
-                tileResult.Entropy -= Int32.MaxValue / 2;
-                tileResult.StartingEntropy = tileResult.Entropy;
-
-                _tileChoicesPerPoint.Add(tileResult.Point, initialisationSelection);
-            }
-            else
-            {
-                var tileChoices = _tileContent
-                    .SelectMany(t => t.TileChoices)
-                    .ToList();
-
-                _tileChoicesPerPoint.Add(tileResult.Point, tileChoices);
-            }
+            _tileChoicesPerPoint.Add(tileResult.Point, tileChoices);
         }
 
         foreach (var constraint in _tileConstraints)

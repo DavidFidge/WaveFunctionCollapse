@@ -372,14 +372,12 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var textures = new Dictionary<string, Texture2D>
         {
-            { "Floor", _floorTexture },
-            { "Line", _lineTexture },
-            { "Corner", _cornerTexture },
+            { "Floor", _floorTexture }
         };
 
         var passOptionsWithInitialisation = new PassOptions
         {
-            Options = new GeneratorOptions(),
+            Options = new GeneratorOptions { RunFirstRules = new[] { "[Y] == 0", "[Y] == 2" } },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -387,50 +385,23 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     {
                         Symmetry = "X",
                         Weight = 1,
-                        Adapters = "AAA,AAA,AAA,AAA",
-                        InitialisationRule = "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
-                    }
-                },
-                {
-                    "Line", new TileAttribute
-                    {
-                        Symmetry = "I",
-                        Weight = 1,
-                        Adapters = "ABA,CCC,ABA,CCC"
-                    }
-                },
-                {
-                    "Corner", new TileAttribute
-                    {
-                        Symmetry = "^",
-                        Weight = 1,
-                        Adapters = "AAA,AAA,ABA,ABA"
+                        Adapters = "AAA,AAA,AAA,AAA"
                     }
                 }
             }
         };
 
-        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(3, 3));
+        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 3));
 
         // Act
         waveFunctionCollapse.Prepare(null);
 
         // Assert
-        Assert.AreEqual(9, waveFunctionCollapse.CurrentState.Length);
-        var midPoint = new Point(1, 1);
-        
-        foreach (var tile in waveFunctionCollapse.CurrentState)
-        {
-            AssertTileResult(
-                tile,
-                null,
-                tile.Point
-                    .Neighbours(2, 2, AdjacencyRule.Types.Cardinals)
-                    .Select(p => waveFunctionCollapse.CurrentState.First(t => t.Point == p))
-                    .ToArray(),
-                tile.Point == midPoint ? 0 : (0 - (int.MaxValue / 2)),
-                false);
-        }
+        Assert.AreEqual(3, waveFunctionCollapse.CurrentState.Length);
+
+        Assert.AreEqual(-Int32.MaxValue / 2, waveFunctionCollapse.CurrentState[0].Entropy);
+        Assert.AreEqual(0, waveFunctionCollapse.CurrentState[1].Entropy);
+        Assert.AreEqual(-Int32.MaxValue / 3, waveFunctionCollapse.CurrentState[2].Entropy);
     }
 
     [TestMethod]
@@ -705,7 +676,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
     }
 
     [TestMethod]
-    public void Should_Set_Initialised_Tiles_With_Rule_For_That_Tile()
+    public void Should_Allocate_Initial_Tiles_First()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -717,7 +688,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptionsWithInitialisation = new PassOptions
         {
-            Options = new GeneratorOptions(),
+            Options = new GeneratorOptions() { RunFirstRules = new []{ "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -725,8 +696,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     {
                         Symmetry = "X",
                         Weight = 1,
-                        Adapters = "AAA,AAA,AAA,AAA",
-                        InitialisationRule = "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
+                        Adapters = "AAA,AAA,AAA,AAA"
                     }
                 }
             }
@@ -1224,7 +1194,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0},
+            Options = new GeneratorOptions() { FallbackAttempts = 0, RunFirstRules = new []{ "[X] == 0" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1232,8 +1202,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     {
                         Symmetry = "X",
                         Weight = 1,
-                        Adapters = "A,A,A,C",
-                        InitialisationRule = "[X] == 0"
+                        Adapters = "A,A,A,C"
                     }
                 },
                 {
@@ -1242,7 +1211,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "A,B,A,A", // This tile can match on the left but due to lack of a neighbour on the right to match the mandatory adapter "B" it cannot be placed
-                        MandatoryAdapters = "B"
+                        MandatoryAdapters = "B",
+                        PlacementRule = "[X] == 1"
                     }
                 }
             }
@@ -1283,7 +1253,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0},
+            Options = new GeneratorOptions() { FallbackAttempts = 0, RunFirstRules = new []{ "[X] == 0", "[X] == 2" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1292,7 +1262,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "A,A,A,A",
-                        InitialisationRule = "[X] == 0"
+                        PlacementRule = "[X] == 0"
                     }
                 },
                 {
@@ -1301,7 +1271,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "B,B,B,B",
-                        InitialisationRule = "[X] == 2"
+                        PlacementRule = "[X] == 2"
                     }
                 },
                 {
@@ -1310,7 +1280,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "A,B,A,A",
-                        MandatoryAdapters = "B"
+                        MandatoryAdapters = "B",
+                        PlacementRule = "[X] == 1"
                     }
                 }
             }
@@ -1474,7 +1445,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles},
+            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles, RunFirstRules = new []{ "[Y] == 0" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1482,8 +1453,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     {
                         Symmetry = "/",
                         Weight = 3,
-                        Adapters = "AAA,AAA,AAA,AAA",
-                        InitialisationRule = "[Y] == 0"
+                        Adapters = "AAA,AAA,AAA,AAA"
                     }
                 },
                 {
@@ -1491,7 +1461,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     {
                         Symmetry = "/",
                         Weight = 3,
-                        Adapters = "BBB,BBB,BBB,BBB"
+                        Adapters = "BBB,BBB,BBB,BBB",
+                        PlacementRule = "[Y] != 0"
                     }
                 }
             }
@@ -1830,7 +1801,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA",
-                        InitialisationRule = "[X] == 0 && [Y] == 0"
+                        PlacementRule = "[Y] == 0"
                     }
                 },
                 {
@@ -1838,7 +1809,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     {
                         Symmetry = "X",
                         Weight = 1,
-                        Adapters = "AAA,AAA,AAA,AAA"
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 1"
                     }
                 }
             }

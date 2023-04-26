@@ -67,6 +67,8 @@ Options:
     FallbackRadius - if a tile cannot be placed in a spot due to there being no valid tile that matches the existing neighbours then any assigned tiles in a radius of FallbackRadius are cleared (and entropy is set to ensure all these tiles are collapsed next).
     
     FallbackRadiusIncrement - After a failure, the FallbackRadius is incremented by this figure, meaning a bigger area is cleared each time.
+
+    RunFirstRules: Array of strings defining rules on which tiles should run first.  The tiles involved have their entropy reduced, making the wave collapse algorithm run them first.  Rules must follow the same semantics as PlacementRule (defined in Tiles section below).
     
     EntropyHeuristic - the heuristic to use to reduce entropy.  There are currently four options:
     
@@ -110,8 +112,6 @@ Adapters: The adapters define the allowed connection to other tiles.  It can be 
 MandatoryAdapters: A tile can only be placed if one of the connections will connect to a tile that has one of the mandatory adapters.  This is a comma separated list of adapters.
 
 PlacementRule: An expression that is evaluated to determine if the tile can be placed at a given location (refer to the NCalc GitHub project).  The variables [X] and [Y] are the location of the tile being considered, [MaxX] and [MaxY] are the maximum X and Y values of the map.  The expression must return a boolean.
-
-InitialisationRule: Initialisation rules are analysed across all tiles first.  The tiles involved have their entropy reduced, making the wave collapse algorithm run them first.  Rules must follow the same semantics as PlacementRule.
 
 Limit: The maximum number of times this tile can be used in the map.  If not defined then there is no limit.
 
