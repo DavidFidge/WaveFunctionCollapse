@@ -1,4 +1,5 @@
 ﻿using FrigidRogue.MonoGame.Core.Extensions;
+using FrigidRogue.WaveFunctionCollapse.Constraints;
 using FrigidRogue.WaveFunctionCollapse.Options;
 using GoRogue.Random;
 using Microsoft.Xna.Framework.Graphics;

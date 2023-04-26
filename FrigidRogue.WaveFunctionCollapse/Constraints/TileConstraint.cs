@@ -1,4 +1,4 @@
-﻿namespace FrigidRogue.WaveFunctionCollapse;
+﻿namespace FrigidRogue.WaveFunctionCollapse.Constraints;
 
 public abstract class TileConstraint : ITileConstraint
 {
