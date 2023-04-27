@@ -75,8 +75,6 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
         tileResultLeft.ChosenTile = tileToCheckLeft;
         tileResultRight.ChosenTile = tileToCheckRight;
 
-        mandatoryAdapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
-
         // Act
         var result = mandatoryAdapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
@@ -134,8 +132,6 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
         tileResultDown.ChosenTile = tileToCheckDown;
         tileResultLeft.ChosenTile = tileToCheckLeft;
         tileResultRight.ChosenTile = tileToCheckRight;
-
-        mandatoryAdapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
         var result = mandatoryAdapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });

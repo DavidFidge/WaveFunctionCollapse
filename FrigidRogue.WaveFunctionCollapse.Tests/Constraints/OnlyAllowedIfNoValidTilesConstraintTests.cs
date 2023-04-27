@@ -41,8 +41,6 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
         var tileToCheck = new TileChoice(tileTemplate1, adapters);
         var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters);
 
-        onlyAllowedIfNoValidTilesConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
-
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheckOnlyAllowedIfNoValidTiles, new HashSet<TileChoice> { tileToCheck, tileToCheckOnlyAllowedIfNoValidTiles });
 
@@ -71,8 +69,6 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
 
         var tileToCheck = new TileChoice(tileTemplate1, adapters);
         var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters);
-
-        onlyAllowedIfNoValidTilesConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheck, new HashSet<TileChoice> { tileToCheck, tileToCheckOnlyAllowedIfNoValidTiles });
@@ -103,8 +99,6 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
         var tileToCheck = new TileChoice(tileTemplate1, adapters);
         var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters);
 
-        onlyAllowedIfNoValidTilesConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
-
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheckOnlyAllowedIfNoValidTiles, new HashSet<TileChoice> { tileToCheck, tileToCheckOnlyAllowedIfNoValidTiles });
 
@@ -131,8 +125,6 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
         };
 
         var tileToCheck = new TileChoice(tileTemplate, adapters);
-
-        onlyAllowedIfNoValidTilesConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheck, new HashSet<TileChoice> { tileToCheck });

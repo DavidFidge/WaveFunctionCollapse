@@ -67,8 +67,6 @@ public class AdapterConstraintTests : BaseGraphicsTest
         tileResultLeft.ChosenTile = tileToCheckLeft;
         tileResultRight.ChosenTile = tileToCheckRight;
 
-        adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
-
         // Act
         var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
 
@@ -123,8 +121,6 @@ public class AdapterConstraintTests : BaseGraphicsTest
         tileResultDown.ChosenTile = tileToCheckDown;
         tileResultLeft.ChosenTile = tileToCheckLeft;
         tileResultRight.ChosenTile = tileToCheckRight;
-
-        adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
         var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
@@ -181,8 +177,6 @@ public class AdapterConstraintTests : BaseGraphicsTest
         tileResultLeft.ChosenTile = tileToCheckLeft;
         tileResultRight.ChosenTile = tileToCheckRight;
 
-        adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
-
         // Act
         var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
@@ -238,8 +232,6 @@ public class AdapterConstraintTests : BaseGraphicsTest
         tileResultLeft.ChosenTile = tileToCheckLeft;
         tileResultRight.ChosenTile = tileToCheckRight;
 
-        adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
-
         // Act
         var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
@@ -294,8 +286,6 @@ public class AdapterConstraintTests : BaseGraphicsTest
         tileResultDown.ChosenTile = tileToCheckDown;
         tileResultLeft.ChosenTile = tileToCheckLeft;
         tileResultRight.ChosenTile = tileToCheckRight;
-
-        adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
         var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
