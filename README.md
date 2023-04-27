@@ -109,7 +109,7 @@ Adapters: The adapters define the allowed connection to other tiles.  It can be 
    <--
 ```
 
-MandatoryAdapters: A tile can only be placed if one of the connections will connect to a tile that has one of the mandatory adapters.  This is a comma separated list of adapters.
+MandatoryAdapters: A tile can only be placed if one of the connections will connect to a tile that has ONE (not all) of the mandatory adapters.  This is a comma separated list of adapters.
 
 PlacementRule: An expression that is evaluated to determine if the tile can be placed at a given location (refer to the NCalc GitHub project).  The variables [X] and [Y] are the location of the tile being considered, [MaxX] and [MaxY] are the maximum X and Y values of the map.  The expression must return a boolean.
 

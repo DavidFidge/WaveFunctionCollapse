@@ -37,7 +37,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         {
             new TileResult(new Point(0, 0)), tileResultUp, new TileResult(new Point(2, 0)),
             tileResultLeft, tileResultMiddle, tileResultRight,
-            new TileResult(new Point(0, 2)), tileResultUp, new TileResult(new Point(2, 2))
+            new TileResult(new Point(0, 2)), tileResultDown, new TileResult(new Point(2, 2))
         }, 3, 3);
 
         var adapters = new Dictionary<Direction, Adapter>
@@ -94,7 +94,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         {
             new TileResult(new Point(0, 0)), tileResultUp, new TileResult(new Point(2, 0)),
             tileResultLeft, tileResultMiddle, tileResultRight,
-            new TileResult(new Point(0, 2)), tileResultUp, new TileResult(new Point(2, 2))
+            new TileResult(new Point(0, 2)), tileResultDown, new TileResult(new Point(2, 2))
         }, 3, 3);
 
         var adapters = new Dictionary<Direction, Adapter>
@@ -151,7 +151,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         {
             new TileResult(new Point(0, 0)), tileResultUp, new TileResult(new Point(2, 0)),
             tileResultLeft, tileResultMiddle, tileResultRight,
-            new TileResult(new Point(0, 2)), tileResultUp, new TileResult(new Point(2, 2))
+            new TileResult(new Point(0, 2)), tileResultDown, new TileResult(new Point(2, 2))
         }, 3, 3);
 
         var adapters = new Dictionary<Direction, Adapter>
@@ -208,7 +208,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         {
             new TileResult(new Point(0, 0)), tileResultUp, new TileResult(new Point(2, 0)),
             tileResultLeft, tileResultMiddle, tileResultRight,
-            new TileResult(new Point(0, 2)), tileResultUp, new TileResult(new Point(2, 2))
+            new TileResult(new Point(0, 2)), tileResultDown, new TileResult(new Point(2, 2))
         }, 3, 3);
 
         var adapters = new Dictionary<Direction, Adapter>
@@ -265,7 +265,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         {
             new TileResult(new Point(0, 0)), tileResultUp, new TileResult(new Point(2, 0)),
             tileResultLeft, tileResultMiddle, tileResultRight,
-            new TileResult(new Point(0, 2)), tileResultUp, new TileResult(new Point(2, 2))
+            new TileResult(new Point(0, 2)), tileResultDown, new TileResult(new Point(2, 2))
         }, 3, 3);
 
         var adapters = new Dictionary<Direction, Adapter>

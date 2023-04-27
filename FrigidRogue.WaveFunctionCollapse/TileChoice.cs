@@ -52,7 +52,7 @@ public class TileChoice
     {
         var direction = Direction.GetCardinalDirection(point, neighbourTile.Point);
 
-        var firstAdapter = Adapters[direction];
+        var firstAdapter = neighbourTile.ChosenTile.Adapters[direction.Opposite()];
 
         return MandatoryAdapters.Any(m => m.Pattern == firstAdapter.Pattern);
     }
