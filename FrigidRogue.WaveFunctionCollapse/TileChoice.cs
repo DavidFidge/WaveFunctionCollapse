@@ -38,7 +38,11 @@ public class TileChoice
         var direction = Direction.GetCardinalDirection(point, neighbourTile.Point);
 
         var firstAdapter = Adapters[direction];
-        var secondAdapter = neighbourTile.TileChoice.Adapters[direction.Opposite()];
+        var secondAdapter = neighbourTile.ChosenTile.Adapters[direction.Opposite()];
+
+        // If one of the tiles has no pattern then it can join to anything
+        if (string.IsNullOrEmpty(firstAdapter.Pattern) || string.IsNullOrEmpty(secondAdapter.Pattern))
+            return true;
 
         // Patterns must be defined in a clockwise order - check if this is the case if you're having problems
         return Equals(firstAdapter.Pattern, new string(secondAdapter.Pattern.Reverse().ToArray()));

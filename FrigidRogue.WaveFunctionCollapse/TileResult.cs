@@ -10,9 +10,9 @@ public class TileResult
     public List<TileResult> Neighbours { get; private set; }
     public Point Point { get; }
 
-    public bool IsCollapsed => TileChoice != null;
+    public bool IsCollapsed => ChosenTile != null;
     public bool IsUnused { get; set; }
-    public TileChoice TileChoice { get; set; }
+    public TileChoice ChosenTile { get; set; }
     public int Entropy { get; set; }
     public int StartingEntropy { get; set; }
 

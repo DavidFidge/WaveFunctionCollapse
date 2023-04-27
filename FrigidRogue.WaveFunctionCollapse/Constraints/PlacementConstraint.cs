@@ -14,10 +14,10 @@ public class PlacementConstraint : TileConstraint
         _mapHeight = mapOptions.MapHeight;
     }
 
-    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> otherChoices)
+    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices)
     {
         var passesPlacementRule = tileToCheck.TileTemplate.PassesPlacementRule(tile.Point, _mapWidth, _mapHeight);
-        
+
         return passesPlacementRule;
     }
 }

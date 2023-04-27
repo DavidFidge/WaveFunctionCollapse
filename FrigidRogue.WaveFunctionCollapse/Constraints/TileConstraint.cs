@@ -10,7 +10,7 @@ public abstract class TileConstraint : ITileConstraint
     {
     }
 
-    public abstract bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> otherChoices);
+    public abstract bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices);
 
     public virtual void Revert(TileChoice tileToCheck)
     {

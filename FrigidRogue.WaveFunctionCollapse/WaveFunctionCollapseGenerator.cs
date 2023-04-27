@@ -152,8 +152,8 @@ public class WaveFunctionCollapseGenerator
                 var pass = passes[item.Key];
 
                 var acceptedPoints = pass.Tiles
-                    .Where(t => t.TileChoice != null)
-                    .Where(t => item.Value.Contains(t.TileChoice.TileTemplate.Name))
+                    .Where(t => t.ChosenTile != null)
+                    .Where(t => item.Value.Contains(t.ChosenTile.TileTemplate.Name))
                     .Select(t => t.Point)
                     .ToList();
 
@@ -204,7 +204,7 @@ public class WaveFunctionCollapseGenerator
 
         var chosenTile = ChooseTile(possibleTileChoices);
 
-        nextUncollapsedTile.TileChoice = chosenTile;
+        nextUncollapsedTile.ChosenTile = chosenTile;
 
         foreach (var constraint in _tileConstraints)
             constraint.AfterChoice(chosenTile);
@@ -241,10 +241,10 @@ public class WaveFunctionCollapseGenerator
                 tileToRecalculate.Entropy -= collapsedNeighbours.Count;
                 break;
             case EntropyHeuristic.ReduceByWeightOfNeighbours:
-                tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.TileChoice.Weight);
+                tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.ChosenTile.Weight);
                 break;
             case EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours:
-                tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.TileChoice.Weight) - collapsedNeighbours.Count;
+                tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.ChosenTile.Weight) - collapsedNeighbours.Count;
                 break;
             case EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles:
                 var possibleTileChoices = GetPossibleTileChoices(tileToRecalculate);
@@ -301,8 +301,8 @@ public class WaveFunctionCollapseGenerator
 
             if (retryTile.IsCollapsed)
             {
-                var tileChoice = retryTile.TileChoice;
-                retryTile.TileChoice = null;
+                var tileChoice = retryTile.ChosenTile;
+                retryTile.ChosenTile = null;
                 _uncollapsedTilesSortedByEntropy.Add(retryTile);
 
                 foreach (var constraint in _tileConstraints)

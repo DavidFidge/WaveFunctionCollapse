@@ -23,7 +23,16 @@ public class TileTemplate
     public void CreateTiles()
     {
         TileChoices.Clear();
-        var adapterStrings = Attributes.Adapters.Split(",").Select(a => a.Trim()).ToList();
+
+        var adaptersFromConfiguration = Attributes.Adapters ?? String.Empty;
+
+        var adapterStrings = adaptersFromConfiguration
+            .Split(",")
+            .Select(a => a.Trim())
+            .ToList();
+
+        while (adapterStrings.Count < 4)
+            adapterStrings.Add(String.Empty);
 
         var directions = new List<Direction>
         {

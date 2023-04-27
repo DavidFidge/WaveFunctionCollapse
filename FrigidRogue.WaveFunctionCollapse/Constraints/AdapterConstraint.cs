@@ -4,7 +4,7 @@ public class AdapterConstraint : TileConstraint
 {
     public override int Order => 1;
 
-    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> otherChoices)
+    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices)
     {
         var canAdaptTo = tile.Neighbours
             .Where(t => t.IsCollapsed)

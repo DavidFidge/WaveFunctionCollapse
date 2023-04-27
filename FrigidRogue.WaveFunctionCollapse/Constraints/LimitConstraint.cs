@@ -21,7 +21,7 @@ public class LimitConstraint : TileConstraint
         }
     }
 
-    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> otherChoices)
+    public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices)
     {
         if (_tileLimits.TryGetValue(tileToCheck.TileTemplate, out var limit))
         {
