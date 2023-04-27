@@ -2,8 +2,8 @@
 
 public class NextStepResult
 {
-    public bool IsComplete { get; set; }
-    public bool IsFailed { get; set; }
+    public bool IsComplete { get; private init; }
+    public bool IsFailed { get; private init; }
 
     public bool IsContinue => !IsComplete && !IsFailed;
     

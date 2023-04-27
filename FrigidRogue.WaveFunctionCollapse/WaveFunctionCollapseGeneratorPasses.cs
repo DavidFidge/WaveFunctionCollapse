@@ -110,11 +110,11 @@ public class WaveFunctionCollapseGeneratorPasses
 
     public IEnumerable<TileResult> GetAllTiles()
     {
-        return _generators.SelectMany(generator => generator.CurrentState);
+        return _generators.SelectMany(generator => generator.Tiles);
     }
 
     public IEnumerable<TileResult> GetCurrentTiles()
     {
-        return _currentGenerator?.CurrentState ?? Array.Empty<TileResult>();
+        return _currentGenerator?.Tiles ?? Array.Empty<TileResult>();
     }
 }

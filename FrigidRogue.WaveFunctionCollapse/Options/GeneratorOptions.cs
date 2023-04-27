@@ -2,20 +2,16 @@
 
 public class GeneratorOptions : ICloneable
 {
-    public int FallbackAttempts = 5;
-    public int FallbackRadius = 1;
-    public int FallbackRadiusIncrement = 1;
-    public Dictionary<string, string[]> PassMask = new();
-    public string[] RunFirstRules = Array.Empty<string>();
+    public int FallbackAttempts { get; set; } = 5;
+    public int FallbackRadius { get; set; } = 1;
+    public int FallbackRadiusIncrement { get; set; } = 1;
+    public Dictionary<string, string[]> PassMask { get; set; } = new();
+    public string[] RunFirstRules { get; set; } = Array.Empty<string>();
 
     public Dictionary<int, string[]> PassMaskByPassIndex =>
         PassMask.ToDictionary(k => int.Parse(k.Key), k => k.Value);
 
     public EntropyHeuristic EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours;
-
-    public GeneratorOptions()
-    {
-    }
 
     object ICloneable.Clone()
     {

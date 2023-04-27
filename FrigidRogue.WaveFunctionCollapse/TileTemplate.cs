@@ -5,16 +5,24 @@ using SadRogue.Primitives;
 
 namespace FrigidRogue.WaveFunctionCollapse;
 
-public class TileContent
+public class TileTemplate
 {
-    public string Name { get; set; }
-    public TileAttribute Attributes { get; set; }
-    public Texture2D Texture { get; set; }
-    public List<TileChoice> TileChoices { get; set; }
+    public string Name { get; }
+    public TileAttribute Attributes { get; }
+    public Texture2D Texture { get; }
+    public List<TileChoice> TileChoices { get; }
+
+    public TileTemplate(string name, TileAttribute attributes, Texture2D texture)
+    {
+        Name = name;
+        Attributes = attributes;
+        Texture = texture;
+        TileChoices = new List<TileChoice>();
+    }
 
     public void CreateTiles()
     {
-        TileChoices = new List<TileChoice>();
+        TileChoices.Clear();
         var adapterStrings = Attributes.Adapters.Split(",").Select(a => a.Trim()).ToList();
 
         var directions = new List<Direction>
