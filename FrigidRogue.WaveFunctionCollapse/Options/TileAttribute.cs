@@ -11,4 +11,6 @@ public class TileAttribute
     public bool OnlyAllowedIfNoValidTiles { get; set; }
     public bool FlipHorizontally { get; set; }
     public bool FlipVertically { get; set; }
+    public string Category { get; set; }
+    public string[] CanConnectToCategories { get; set; }
 }

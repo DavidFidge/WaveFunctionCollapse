@@ -33,6 +33,21 @@ public class TileChoice
         }
     }
 
+    public bool CanConnectToCategory(Point point, TileResult neighbourTile)
+    {
+        if (TileTemplate.Attributes.CanConnectToCategories == null)
+            return true;
+
+        if (String.IsNullOrEmpty(neighbourTile.ChosenTile.TileTemplate.Attributes.Category))
+            return true;
+
+        var canConnect =
+            TileTemplate.Attributes.CanConnectToCategories.Any(c =>
+                c == neighbourTile.ChosenTile.TileTemplate.Attributes.Category);
+
+        return canConnect;
+    }
+
     public bool CanAdaptTo(Point point, TileResult neighbourTile)
     {
         var direction = Direction.GetCardinalDirection(point, neighbourTile.Point);

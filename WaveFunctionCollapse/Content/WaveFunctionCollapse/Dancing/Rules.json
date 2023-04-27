@@ -115,36 +115,48 @@
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "A,B,A,M",
+          "Category": "Man",
+          "CanConnectToCategories": ["Woman"],
           "FlipHorizontally": true
         },
         "Man2": {
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "A,B,A,M",
+          "Category": "Man",
+          "CanConnectToCategories": ["Woman"],
           "FlipHorizontally": true
         },
         "Man3": {
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "A,B,A,M",
+          "Category": "Man",
+          "CanConnectToCategories": ["Woman"],
           "FlipHorizontally": true
         },
         "Woman1": {
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "A,M,A,B",
+          "Category": "Woman",
+          "CanConnectToCategories": ["Man"],
           "FlipHorizontally": true
         },
         "Woman2": {
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "A,M,A,B",
+          "Category": "Woman",
+          "CanConnectToCategories": ["Man"],
           "FlipHorizontally": true
         },
         "Woman3": {
           "Symmetry": "X",
           "Weight": 1,
           "Adapters": "A,M,A,B",
+          "Category": "Woman",
+          "CanConnectToCategories": ["Man"],
           "FlipHorizontally": true
         }
       }
