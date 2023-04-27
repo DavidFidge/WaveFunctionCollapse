@@ -1,20 +1,38 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using FrigidRogue.WaveFunctionCollapse.Options;
+using Microsoft.Xna.Framework.Graphics;
 using NCalc;
 using SadRogue.Primitives;
 
 namespace FrigidRogue.WaveFunctionCollapse;
 
-public class TileContent
+public class TileTemplate
 {
-    public string Name { get; set; }
-    public TileAttribute Attributes { get; set; }
-    public Texture2D Texture { get; set; }
-    public List<TileChoice> TileChoices { get; set; }
+    public string Name { get; }
+    public TileAttribute Attributes { get; }
+    public Texture2D Texture { get; }
+    public List<TileChoice> TileChoices { get; }
+
+    public TileTemplate(string name, TileAttribute attributes, Texture2D texture)
+    {
+        Name = name;
+        Attributes = attributes;
+        Texture = texture;
+        TileChoices = new List<TileChoice>();
+    }
 
     public void CreateTiles()
     {
-        TileChoices = new List<TileChoice>();
-        var adapterStrings = Attributes.Adapters.Split(",").Select(a => a.Trim()).ToList();
+        TileChoices.Clear();
+
+        var adaptersFromConfiguration = Attributes.Adapters ?? String.Empty;
+
+        var adapterStrings = adaptersFromConfiguration
+            .Split(",")
+            .Select(a => a.Trim())
+            .ToList();
+
+        while (adapterStrings.Count < 4)
+            adapterStrings.Add(String.Empty);
 
         var directions = new List<Direction>
         {
@@ -149,39 +167,12 @@ public class TileContent
         }
     }
 
-    public bool IsWithinInitialisationRule(Point point, int mapWidth, int mapHeight)
-    {
-        return IsWithinRule(Attributes.InitialisationRule, point, mapWidth, mapHeight);
-    }
-
     public bool PassesPlacementRule(Point point, int mapWidth, int mapHeight)
     {
-        return IsWithinOrNoRule(Attributes.PlacementRule, point, mapWidth, mapHeight);
-    }
-
-    private bool IsWithinRule(string rule, Point point, int mapWidth, int mapHeight)
-    {
-        if (String.IsNullOrEmpty(rule))
-            return false;
-
-        var expression = new Expression(rule);
-
-        expression.Parameters["X"] = point.X;
-        expression.Parameters["Y"] = point.Y;
-        expression.Parameters["MaxX"] = mapWidth - 1;
-        expression.Parameters["MaxY"] = mapHeight - 1;
-
-        var isPointWithinEvaluationRule = (bool)expression.Evaluate();
-
-        return isPointWithinEvaluationRule;
-    }
-
-    private bool IsWithinOrNoRule(string rule, Point point, int mapWidth, int mapHeight)
-    {
-        if (String.IsNullOrEmpty(rule))
+        if (String.IsNullOrEmpty(Attributes.PlacementRule))
             return true;
 
-        var expression = new Expression(rule);
+        var expression = new Expression(Attributes.PlacementRule);
 
         expression.Parameters["X"] = point.X;
         expression.Parameters["Y"] = point.Y;

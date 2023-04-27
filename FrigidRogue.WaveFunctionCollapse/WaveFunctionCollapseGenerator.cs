@@ -1,7 +1,6 @@
 ﻿using FrigidRogue.MonoGame.Core.Extensions;
+using FrigidRogue.WaveFunctionCollapse.Constraints;
 using FrigidRogue.WaveFunctionCollapse.Options;
-using GoRogue.GameFramework;
-using GoRogue.Random;
 using Microsoft.Xna.Framework.Graphics;
 using SadRogue.Primitives;
 using ShaiRandom.Generators;
@@ -12,22 +11,35 @@ namespace FrigidRogue.WaveFunctionCollapse;
 
 public class WaveFunctionCollapseGenerator
 {
-    private List<TileChoice> _tiles = new();
-    public TileResult[] CurrentState { get; private set; }
-    public List<TileChoice> Tiles => _tiles;
-    private Dictionary<Point, List<TileChoice>> _tileChoicesPerPoint = new();
-    private List<TileContent> _tileContent = new();
-    private GeneratorOptions _options;
-    private List<TileResult> _uncollapsedTilesSortedByEntropy = new();
-    private Dictionary<TileContent, int> _tileLimits = new();
-    private PassOptions _passOptions;
-    private MapOptions _mapOptions;
-
+    public TileResult[] Tiles { get; private set; }
+    public List<TileChoice> TileChoices { get; }
     public int MapWidth => _mapOptions.MapWidth;
     public int MapHeight => _mapOptions.MapHeight;
 
-    public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions)
+    private Dictionary<Point, List<TileChoice>> _tileChoicesPerPoint = new();
+    private List<TileTemplate> _tileTemplates = new();
+    private GeneratorOptions _options;
+    private List<TileResult> _uncollapsedTilesSortedByEntropy = new();
+    private PassOptions _passOptions;
+    private MapOptions _mapOptions;
+    private List<ITileConstraint> _tileConstraints = new();
+    private IEnhancedRandom _random;
+
+    public WaveFunctionCollapseGenerator()
     {
+        _tileConstraints.Add(new AdapterConstraint());
+        _tileConstraints.Add(new MandatoryAdapterConstraint());
+        _tileConstraints.Add(new LimitConstraint());
+        _tileConstraints.Add(new PlacementConstraint());
+        _tileConstraints.Add(new OnlyAllowedIfNoValidTilesConstraint());
+
+        _tileConstraints.Sort((a, b) => a.Order - b.Order);
+        TileChoices = new List<TileChoice>();
+    }
+    
+    public void CreateTiles(Dictionary<string, Texture2D> textures, PassOptions passOptions, MapOptions mapOptions, IEnhancedRandom random)
+    {
+        _random = random;
         _mapOptions = mapOptions;
         _passOptions = passOptions;
         if (_passOptions.Options == null)
@@ -35,24 +47,19 @@ public class WaveFunctionCollapseGenerator
 
         _options = passOptions.Options.Clone();
 
-        _tileContent.Clear();
+        _tileTemplates.Clear();
 
         foreach (var tile in passOptions.Tiles.Keys)
         {
-            var tileContent = new TileContent
-            {
-                Name = tile,
-                Texture = textures[tile],
-                Attributes = passOptions.Tiles[tile]
-            };
+            var tileTemplate = new TileTemplate(tile, passOptions.Tiles[tile], textures[tile]);
 
-            _tileContent.Add(tileContent);
+            _tileTemplates.Add(tileTemplate);
 
-            tileContent.CreateTiles();
+            tileTemplate.CreateTiles();
         }
 
-        _tiles.Clear();
-        _tiles.AddRange(_tileContent.SelectMany(t => t.TileChoices));
+        TileChoices.Clear();
+        TileChoices.AddRange(_tileTemplates.SelectMany(t => t.TileChoices));
     }
 
     public void Clear()
@@ -60,9 +67,8 @@ public class WaveFunctionCollapseGenerator
         _options = _passOptions.Options.Clone();
         _uncollapsedTilesSortedByEntropy.Clear();
         _tileChoicesPerPoint.Clear();
-        _tileLimits.Clear();
 
-        CurrentState = Array.Empty<TileResult>();
+        Tiles = Array.Empty<TileResult>();
     }
 
     public void Prepare(IList<WaveFunctionCollapseGenerator> passes)
@@ -74,7 +80,7 @@ public class WaveFunctionCollapseGenerator
 
         var mask = GetPriorLayerPointMask(passes);
 
-        CurrentState = new TileResult[MapWidth * MapHeight];
+        Tiles = new TileResult[MapWidth * MapHeight];
 
         for (var y = 0; y < MapHeight; y++)
         {
@@ -82,8 +88,8 @@ public class WaveFunctionCollapseGenerator
             {
                 var point = new Point(x, y);
 
-                var tileResult = new TileResult(point, MapWidth);
-                CurrentState[point.ToIndex(MapWidth)] = tileResult;
+                var tileResult = new TileResult(point);
+                Tiles[point.ToIndex(MapWidth)] = tileResult;
 
                 if (mask.Contains(point))
                     _uncollapsedTilesSortedByEntropy.Add(tileResult);
@@ -92,43 +98,33 @@ public class WaveFunctionCollapseGenerator
             }
         }
 
-        foreach (var tileResult in CurrentState)
+        foreach (var tileResult in Tiles)
         {
-            tileResult.SetNeighbours(CurrentState, MapWidth, MapHeight);
+            tileResult.SetNeighbours(Tiles, MapWidth, MapHeight);
 
-            var initialisationSelection = _tileContent
-                .Where(t => t.IsWithinInitialisationRule(tileResult.Point, MapWidth, MapHeight))
+            var entropyDivider = 2;
+
+            foreach (var runFirstRule in _options.RunFirstRules)
+            {
+                if (tileResult.IsWithinRule(runFirstRule, tileResult.Point, _mapOptions))
+                {
+                    tileResult.Entropy -= Int32.MaxValue / entropyDivider;
+                    tileResult.StartingEntropy = tileResult.Entropy;
+                }
+
+                entropyDivider++;
+            }
+
+            var tileChoices = _tileTemplates
                 .SelectMany(t => t.TileChoices)
                 .ToList();
 
-            if (initialisationSelection.Any())
-            {
-                // By reducing entropy the tile will be among the first to be processed and thus initialised with
-                // the tile choice as given by the initialisation rule
-                tileResult.Entropy -= Int32.MaxValue / 2;
-                tileResult.StartingEntropy = tileResult.Entropy;
-
-                _tileChoicesPerPoint.Add(tileResult.Point, initialisationSelection);
-            }
-            else
-            {
-                var placementSelection = _tileContent
-                    .Where(t => t.PassesPlacementRule(tileResult.Point, MapWidth, MapHeight))
-                    .SelectMany(t => t.TileChoices)
-                    .ToList();
-
-                _tileChoicesPerPoint.Add(tileResult.Point, placementSelection);
-            }
+            _tileChoicesPerPoint.Add(tileResult.Point, tileChoices);
         }
 
-        foreach (var item in _tileContent.Where(t => t.Attributes.Limit >= 0))
+        foreach (var constraint in _tileConstraints)
         {
-            if (item.Attributes.Limit == 0 && !item.Attributes.CanExceedLimitIfOnlyValidTile)
-            {
-                throw new Exception($"Tile {item.Name} is defined with a Limit of zero and CanExceedLimitIfOnlyValidTile set to false.  This is not allowed as it would mean no tiles could be placed.");
-            }
-
-            _tileLimits.Add(item, item.Attributes.Limit);
+            constraint.Initialise(_tileTemplates, _mapOptions);
         }
     }
 
@@ -155,9 +151,9 @@ public class WaveFunctionCollapseGenerator
             {
                 var pass = passes[item.Key];
 
-                var acceptedPoints = pass.CurrentState
-                    .Where(t => t.TileChoice != null)
-                    .Where(t => item.Value.Contains(t.TileChoice.TileContent.Name))
+                var acceptedPoints = pass.Tiles
+                    .Where(t => t.ChosenTile != null)
+                    .Where(t => item.Value.Contains(t.ChosenTile.TileTemplate.Name))
                     .Select(t => t.Point)
                     .ToList();
 
@@ -208,7 +204,11 @@ public class WaveFunctionCollapseGenerator
 
         var chosenTile = ChooseTile(possibleTileChoices);
 
-        nextUncollapsedTile.SetTile(chosenTile);
+        nextUncollapsedTile.ChosenTile = chosenTile;
+
+        foreach (var constraint in _tileConstraints)
+            constraint.AfterChoice(chosenTile);
+
         _uncollapsedTilesSortedByEntropy.Remove(nextUncollapsedTile);
 
         if (!_uncollapsedTilesSortedByEntropy.Any())
@@ -241,50 +241,27 @@ public class WaveFunctionCollapseGenerator
                 tileToRecalculate.Entropy -= collapsedNeighbours.Count;
                 break;
             case EntropyHeuristic.ReduceByWeightOfNeighbours:
-                tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.TileChoice.Weight);
+                tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.ChosenTile.Weight);
                 break;
             case EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours:
-                tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.TileChoice.Weight) - collapsedNeighbours.Count;
+                tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.ChosenTile.Weight) - collapsedNeighbours.Count;
                 break;
             case EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles:
-                var tileChoices = GetPossibleTileChoices(tileToRecalculate);
-                tileToRecalculate.Entropy -= (_tiles.Count - tileChoices.Count);
+                var possibleTileChoices = GetPossibleTileChoices(tileToRecalculate);
+                tileToRecalculate.Entropy -= (TileChoices.Count - possibleTileChoices.Count);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    private List<TileChoice> RemoveTileChoicesWhereLimitsReached(List<TileChoice> possibleTileChoices)
-    {
-        var possibleReAdds = new List<TileChoice>();
-
-        foreach (var tile in _tileLimits.Keys)
-        {
-            if (_tileLimits[tile] == 0)
-            {
-                if (tile.Attributes.CanExceedLimitIfOnlyValidTile)
-                {
-                    possibleReAdds.AddRange(possibleTileChoices.Where(t => t.TileContent == tile));
-                }
-
-                possibleTileChoices = possibleTileChoices.Where(t => t.TileContent != tile).ToList();
-            }
-        }
-
-        if (possibleTileChoices.Any())
-            return possibleTileChoices;
-
-        return possibleReAdds;
-    }
-
-    private static TileResult GetNextUncollapsedTile(List<TileResult> entropy)
+    private TileResult GetNextUncollapsedTile(List<TileResult> entropy)
     {
         var lowestEntropy = entropy
             .TakeWhile(e => e.Entropy == entropy.First().Entropy)
             .ToList();
 
-        var nextUncollapsedTile = lowestEntropy[GlobalRandom.DefaultRNG.RandomIndex(lowestEntropy)];
+        var nextUncollapsedTile = lowestEntropy[_random.RandomIndex(lowestEntropy)];
 
         return nextUncollapsedTile;
     }
@@ -293,7 +270,7 @@ public class WaveFunctionCollapseGenerator
     {
         var sumWeights = possibleTileChoices.Sum(t => t.Weight);
 
-        var randomNumber = GlobalRandom.DefaultRNG.NextInt(0, sumWeights);
+        var randomNumber = _random.NextInt(0, sumWeights);
 
         var i = 0;
         while (randomNumber > 0)
@@ -308,12 +285,6 @@ public class WaveFunctionCollapseGenerator
 
         var chosenTile = possibleTileChoices[i];
 
-        if (_tileLimits.ContainsKey(chosenTile.TileContent))
-        {
-            if (_tileLimits[chosenTile.TileContent] > 0)
-                _tileLimits[chosenTile.TileContent]--;
-        }
-
         return chosenTile;
     }
 
@@ -326,24 +297,24 @@ public class WaveFunctionCollapseGenerator
 
         foreach (var retryPoint in retryPoints)
         {
-            var retryTile = CurrentState[retryPoint.ToIndex(MapWidth)];
+            var retryTile = Tiles[retryPoint.ToIndex(MapWidth)];
 
             if (retryTile.IsCollapsed)
             {
-                if (_tileLimits.ContainsKey(retryTile.TileChoice.TileContent))
-                {
-                    _tileLimits[retryTile.TileChoice.TileContent]++;
-                }
-
-                retryTile.TileChoice = null;
-
+                var tileChoice = retryTile.ChosenTile;
+                retryTile.ChosenTile = null;
                 _uncollapsedTilesSortedByEntropy.Add(retryTile);
+
+                foreach (var constraint in _tileConstraints)
+                {
+                    constraint.Revert(tileChoice);
+                }
             }
         }
 
         foreach (var retryPoint in retryPoints)
         {
-            var retryTile = CurrentState[retryPoint.ToIndex(MapWidth)];
+            var retryTile = Tiles[retryPoint.ToIndex(MapWidth)];
 
             RecalculateEntropy(retryTile);
         }
@@ -356,42 +327,20 @@ public class WaveFunctionCollapseGenerator
 
     private List<TileChoice> GetPossibleTileChoices(TileResult chosenTile)
     {
-        var validTiles = _tileChoicesPerPoint[chosenTile.Point];
+        var validTiles = _tileChoicesPerPoint[chosenTile.Point].ToHashSet();
 
         if (!validTiles.Any())
             return new List<TileChoice>();
 
-        foreach (var neighbour in chosenTile.Neighbours.Where(t => t.IsCollapsed))
+        foreach (var constraint in _tileConstraints)
         {
-            validTiles = validTiles.Where(t => t.CanAdaptTo(chosenTile.Point, neighbour)).ToList();
-        }
-
-        validTiles = RemoveTileChoicesWhereLimitsReached(validTiles);
-
-        var tilesContainingMandatoryAdapters = validTiles.Where(t => t.MandatoryAdapters.Any()).ToList();
-
-        if (tilesContainingMandatoryAdapters.Any())
-        {
-            var acceptedTilesContainingMandatoryAdapters = new List<TileChoice>(tilesContainingMandatoryAdapters.Count);
-
-            foreach (var tile in tilesContainingMandatoryAdapters)
+            foreach (var validTile in validTiles)
             {
-                // Look through the neighbours of the chosen tile and remove any that don't have a mandatory adapter.
-                foreach (var neighbour in chosenTile.Neighbours.Where(n => n.IsCollapsed))
-                {
-                    if (tile.IsAdapterMandatory(chosenTile.Point, neighbour))
-                    {
-                        acceptedTilesContainingMandatoryAdapters.Add(tile);
-                        break;
-                    }
-                }
+                if (!constraint.Check(chosenTile, validTile, validTiles))
+                    validTiles.Remove(validTile);
             }
-            
-            var tilesToRemove = tilesContainingMandatoryAdapters.Except(acceptedTilesContainingMandatoryAdapters).ToList();
-
-            tilesToRemove.ForEach(t => validTiles.Remove(t));
         }
-
-        return validTiles;
+        
+        return validTiles.ToList();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using FrigidRogue.MonoGame.Core.Extensions;
+using FrigidRogue.WaveFunctionCollapse.Options;
+using NCalc;
 using SadRogue.Primitives;
 
 namespace FrigidRogue.WaveFunctionCollapse;
@@ -7,17 +9,16 @@ public class TileResult
 {
     public List<TileResult> Neighbours { get; private set; }
     public Point Point { get; }
-    public int Index { get; }
-    public bool IsCollapsed => TileChoice != null;
+
+    public bool IsCollapsed => ChosenTile != null;
     public bool IsUnused { get; set; }
-    public TileChoice TileChoice { get; set; }
+    public TileChoice ChosenTile { get; set; }
     public int Entropy { get; set; }
     public int StartingEntropy { get; set; }
 
-    public TileResult(Point point, int maxWidth)
+    public TileResult(Point point)
     {
         Point = point;
-        Index = point.ToIndex(maxWidth);
     }
 
     public void SetNeighbours(TileResult[] tiles, int maxWidth, int maxHeight)
@@ -29,8 +30,20 @@ public class TileResult
             .ToList();
     }
 
-    public void SetTile(TileChoice tileChoice)
+    public bool IsWithinRule(string rule, Point point, MapOptions mapOptions)
     {
-        TileChoice = tileChoice;
+        if (String.IsNullOrEmpty(rule))
+            return false;
+
+        var expression = new Expression(rule);
+
+        expression.Parameters["X"] = point.X;
+        expression.Parameters["Y"] = point.Y;
+        expression.Parameters["MaxX"] = mapOptions.MapWidth - 1;
+        expression.Parameters["MaxY"] = mapOptions.MapHeight - 1;
+
+        var isPointWithinEvaluationRule = (bool)expression.Evaluate();
+
+        return isPointWithinEvaluationRule;
     }
 }

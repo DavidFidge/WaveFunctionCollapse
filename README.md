@@ -1,5 +1,5 @@
 # WaveFunctionCollapse
-A C# Wave Function Collapse library for MonoGame plus a tool with samples.  This is designed for one of my games, thus it takes a dependency on DavidFidge/FrigidRogue (plus some of its dependencies like GoRogue, SadRogue.Primitives, MonoGame.Extended etc).
+A C# Wave Function Collapse library for MonoGame plus a tool with samples.  This is designed for one of my games, thus it currently takes a dependency on DavidFidge/FrigidRogue.  You could easily remove this and only take a dependency on Chris3606/GoRogue, an excellent, polished, performant roguelike C# library.
 
 This implementation is a "simple tiled" implementation and comes with a host of features and options.
 
@@ -9,7 +9,7 @@ The sample project is WaveFunctionCollapse.  It uses my game's view engine which
 
 The library project is called FrigidRogue.WaveFunctionCollapse.
 
-Test coverage is comprehensive and is in the project called FrigidRogue.WaveFunctionCollapse.Tests
+Test coverage is comprehensive.
 
 ## Instructions
 
@@ -67,6 +67,8 @@ Options:
     FallbackRadius - if a tile cannot be placed in a spot due to there being no valid tile that matches the existing neighbours then any assigned tiles in a radius of FallbackRadius are cleared (and entropy is set to ensure all these tiles are collapsed next).
     
     FallbackRadiusIncrement - After a failure, the FallbackRadius is incremented by this figure, meaning a bigger area is cleared each time.
+
+    RunFirstRules: Array of strings defining rules on which tiles should run first.  The tiles involved have their entropy reduced, making the wave collapse algorithm run them first.  Rules must follow the same semantics as PlacementRule (defined in Tiles section below).
     
     EntropyHeuristic - the heuristic to use to reduce entropy.  There are currently four options:
     
@@ -107,15 +109,13 @@ Adapters: The adapters define the allowed connection to other tiles.  It can be 
    <--
 ```
 
-MandatoryAdapters: A tile can only be placed if one of the connections will connect to a tile that has one of the mandatory adapters.  This is a comma separated list of adapters.
+MandatoryAdapters: A tile can only be placed if one of the connections will connect to a tile that has ONE (not all) of the mandatory adapters.  This is a comma separated list of adapters.
 
 PlacementRule: An expression that is evaluated to determine if the tile can be placed at a given location (refer to the NCalc GitHub project).  The variables [X] and [Y] are the location of the tile being considered, [MaxX] and [MaxY] are the maximum X and Y values of the map.  The expression must return a boolean.
 
-InitialisationRule: Initialisation rules are analysed across all tiles first.  The tiles involved have their entropy reduced, making the wave collapse algorithm run them first.  Rules must follow the same semantics as PlacementRule.
-
 Limit: The maximum number of times this tile can be used in the map.  If not defined then there is no limit.
 
-CanExceedLimitIfOnlyValidTile: If true, then the limit can be exceeded if this tile is the only valid tile that can be placed.  Having a Limit of zero and CanExceedLimitIfOnlyValidTile = true is a useful way of constructing multi-tile objects that must be placed together.
+OnlyAllowedIfNoValidTilesConstraint: If true, this tile can only be placed if this tile (and other tiles with this flag set) is the only valid tile that can be placed.  This is a useful way of constructing multi-tile objects that must be placed together.
 
 #### Code-defined configuration
 Code defined configuration mirrors the json-defined configuration - you pass in a dictionary of tile names to texture 2D objects and pass in a Rules object which contains all rules as defined above.

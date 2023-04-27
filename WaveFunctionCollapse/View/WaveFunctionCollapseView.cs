@@ -145,17 +145,17 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             if (tile.IsCollapsed)
             {
                 var offset = _tileSize * new Vector2(tile.Point.X, tile.Point.Y);
-                var rotateOrigin = tile.TileChoice.Texture.Bounds.Size.ToVector2() / 2f;
+                var rotateOrigin = tile.ChosenTile.Texture.Bounds.Size.ToVector2() / 2f;
                 var position = (_tileSize / 2f) + offset;
 
-                _spriteBatch.Draw(tile.TileChoice.Texture,
+                _spriteBatch.Draw(tile.ChosenTile.Texture,
                     position,
-                    tile.TileChoice.Texture.Bounds,
+                    tile.ChosenTile.Texture.Bounds,
                     Color.White,
-                    tile.TileChoice.Rotation,
+                    tile.ChosenTile.Rotation,
                     rotateOrigin,
-                    (float)_tileWidth / tile.TileChoice.Texture.Width,
-                    tile.TileChoice.SpriteEffects,
+                    (float)_tileWidth / tile.ChosenTile.Texture.Width,
+                    tile.ChosenTile.SpriteEffects,
                     0);
             }
         }
