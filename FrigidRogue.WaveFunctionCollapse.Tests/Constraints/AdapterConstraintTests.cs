@@ -184,7 +184,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
-        var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
+        var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
         // Assert
         Assert.IsTrue(result);
@@ -241,7 +241,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
-        var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
+        var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
         // Assert
         Assert.IsTrue(result);
@@ -298,7 +298,7 @@ public class AdapterConstraintTests : BaseGraphicsTest
         adapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
-        var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
+        var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
         // Assert
         Assert.IsFalse(result);

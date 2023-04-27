@@ -78,7 +78,7 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
         mandatoryAdapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
-        var result = mandatoryAdapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
+        var result = mandatoryAdapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
         // Assert
         Assert.AreEqual(expectedResult, result);
@@ -138,7 +138,7 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
         mandatoryAdapterConstraint.Initialise(new List<TileTemplate>(), new MapOptions(3, 3));
 
         // Act
-        var result = mandatoryAdapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
+        var result = mandatoryAdapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
 
         // Assert
         Assert.IsTrue(result);
