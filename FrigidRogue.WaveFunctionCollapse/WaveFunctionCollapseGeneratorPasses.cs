@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using FrigidRogue.WaveFunctionCollapse.Options;
+﻿using FrigidRogue.WaveFunctionCollapse.Options;
 using GoRogue.Random;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
