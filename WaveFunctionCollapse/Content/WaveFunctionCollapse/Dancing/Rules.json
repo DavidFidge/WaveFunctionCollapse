@@ -117,7 +117,8 @@
           "Adapters": "A,B,A,M",
           "Category": "Man",
           "CanConnectToCategories": ["Woman"],
-          "FlipHorizontally": true
+          "FlipHorizontally": true,
+          "EmptyPlacementRules": "true,true,true,false"
         },
         "Man2": {
           "Symmetry": "X",
@@ -125,7 +126,8 @@
           "Adapters": "A,B,A,M",
           "Category": "Man",
           "CanConnectToCategories": ["Woman"],
-          "FlipHorizontally": true
+          "FlipHorizontally": true,
+          "EmptyPlacementRules": "true,true,true,false"
         },
         "Man3": {
           "Symmetry": "X",
@@ -133,7 +135,8 @@
           "Adapters": "A,B,A,M",
           "Category": "Man",
           "CanConnectToCategories": ["Woman"],
-          "FlipHorizontally": true
+          "FlipHorizontally": true,
+          "EmptyPlacementRules": "true,true,true,false"
         },
         "Woman1": {
           "Symmetry": "X",
@@ -141,7 +144,8 @@
           "Adapters": "A,M,A,B",
           "Category": "Woman",
           "CanConnectToCategories": ["Man"],
-          "FlipHorizontally": true
+          "FlipHorizontally": true,
+          "EmptyPlacementRules": "true,false,true,true"
         },
         "Woman2": {
           "Symmetry": "X",
@@ -149,7 +153,8 @@
           "Adapters": "A,M,A,B",
           "Category": "Woman",
           "CanConnectToCategories": ["Man"],
-          "FlipHorizontally": true
+          "FlipHorizontally": true,
+          "EmptyPlacementRules": "true,false,true,true"
         },
         "Woman3": {
           "Symmetry": "X",
@@ -157,7 +162,8 @@
           "Adapters": "A,M,A,B",
           "Category": "Woman",
           "CanConnectToCategories": ["Man"],
-          "FlipHorizontally": true
+          "FlipHorizontally": true,
+          "EmptyPlacementRules": "true,false,true,true"
         }
       }
     }

@@ -33,6 +33,7 @@ public class WaveFunctionCollapseGenerator
         _tileConstraints.Add(new PlacementConstraint());
         _tileConstraints.Add(new OnlyAllowedIfNoValidTilesConstraint());
         _tileConstraints.Add(new CategoryConstraint());
+        _tileConstraints.Add(new EmptyPlacementConstraint());
 
         _tileConstraints.Sort((a, b) => a.Order - b.Order);
         TileChoices = new List<TileChoice>();
