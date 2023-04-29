@@ -137,5 +137,5 @@ Call GetCurrentTiles() to get the results, ordered by pass.  Note that there are
 
 ## Examples
 
-See the WaveFunctionCollapse project for a series of example projects which will help you understand the various features~~~~.
+See the WaveFunctionCollapse project for a series of example projects which will help you understand the various features.
 
