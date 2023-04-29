@@ -47,6 +47,10 @@
     <None Update="Content\WaveFunctionCollapse\Dancing\Rules.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Remove="Content\WaveFunctionCollapse\Circuit\Rules.json" />
+    <Content Include="Content\WaveFunctionCollapse\Circuit\Rules.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Fonts\" />

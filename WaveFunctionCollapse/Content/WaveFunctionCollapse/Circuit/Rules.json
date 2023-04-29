@@ -1,0 +1,101 @@
+{
+  "MapOptions":
+  {
+    "MapWidth": 20,
+    "MapHeight": 20,
+    "TileSizeMultiplier": 20
+  },
+  "Passes":
+  [
+    {
+      "Options": {
+        "FallbackAttempts": 999,
+        "FallbackRadius": 2,
+        "FallbackRadiusIncrement": 0,
+        "EntropyHeuristic": "ReduceByCountOfAllTilesMinusPossibleTiles"
+      },
+      "Tiles": {
+        "bridge": {
+          "Symmetry": "I",
+          "Weight": 1,
+          "Adapters": "DLD,DGD,DLD,DGD"
+        },
+        "component": {
+          "Symmetry": "X",
+          "Weight": 50,
+          "Adapters": "B,B,B,B",
+          "Category": "Component",
+          "CanConnectToCategories": ["Corner","Component"]
+        },
+        "connection": {
+          "Symmetry": "^",
+          "Weight": 10,
+          "Adapters": "DLD,DB,B,BD",
+          "Category": "Component",
+          "CanConnectToCategories": ["Corner","Component"]
+        },
+        "corner": {
+          "Symmetry": "X",
+          "Weight": 1,
+          "Adapters": "D,D,DB,BD",
+          "FlipHorizontally": true,
+          "FlipVertically": true,
+          "Category": "Corner",
+          "CanConnectToCategories": ["Component"]
+        },
+        "dskew": {
+          "Symmetry": "X",
+          "Weight": 10,
+          "Adapters": "DLD,DLD,DLD,DLD"
+        },
+        "skew": {
+          "Symmetry": "X",
+          "Weight": 10,
+          "Adapters": "DLD,DLD,D,D"
+        },
+        "substrate": {
+          "Symmetry": "X",
+          "Weight": 1,
+          "Adapters": "D,D,D,D"
+        },
+        "t": {
+          "Symmetry": "^",
+          "Weight": 1,
+          "Adapters": "D,DLD,DLD,DLD"
+        },
+        "track": {
+          "Symmetry": "I",
+          "Weight": 5,
+          "Adapters": "DLD,D,DLD,D"
+        },
+        "transition": {
+          "Symmetry": "^",
+          "Weight": 1,
+          "Adapters": "DGD,D,DLD,D"
+        },
+        "turn": {
+          "Symmetry": "X",
+          "Weight": 1,
+          "Adapters": "DLD,DLD,D,D",
+          "FlipHorizontally": true,
+          "FlipVertically": true
+        },
+        "viad": {
+          "Symmetry": "I",
+          "Weight": 1,
+          "Adapters": "D,DLD,D,DLD"
+        },
+        "vias": {
+          "Symmetry": "^",
+          "Weight": 1,
+          "Adapters": "DLD,D,D,D"
+        },
+        "wire": {
+          "Symmetry": "I",
+          "Weight": 10,
+          "Adapters": "D,DGD,D,DGD"
+        }
+      }
+    }
+  ]
+}
