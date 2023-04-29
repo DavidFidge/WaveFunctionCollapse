@@ -1,6 +1,5 @@
 ﻿using FrigidRogue.WaveFunctionCollapse.Options;
 using Microsoft.Xna.Framework.Graphics;
-using NCalc;
 using SadRogue.Primitives;
 
 namespace FrigidRogue.WaveFunctionCollapse;
@@ -34,6 +33,16 @@ public class TileTemplate
         while (adapterStrings.Count < 4)
             adapterStrings.Add(String.Empty);
 
+        var prohibitedEmptyNeighboursFromConfiguration = Attributes.ProhibitedEmptyNeighbourRules ?? "None";
+
+        var prohibitedEmptyNeighboursStrings = prohibitedEmptyNeighboursFromConfiguration
+            .Split(",")
+            .Select(a => a.Trim().Replace("|",","))
+            .ToList();
+
+        while (prohibitedEmptyNeighboursStrings.Count < 4)
+            prohibitedEmptyNeighboursStrings.Add("None");
+
         var directions = new List<Direction>
         {
             Direction.Up,
@@ -48,7 +57,11 @@ public class TileTemplate
                 .Select((d, index) => new { Direction = d, Index = index })
                 .ToDictionary(d => d.Direction, d => (Adapter)adapterStrings[d.Index]);
 
-            TileChoices.Add(new TileChoice(this, adapters));
+            var prohibitedEmptyNeighbours = directions
+                .Select((d, index) => new { Direction = d, Index = index })
+                .ToDictionary(d => d.Direction, d => Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursStrings[d.Index]));
+
+            TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours));
         }
         else if (Attributes.Symmetry == "^")
         {
@@ -56,15 +69,19 @@ public class TileTemplate
             for (var i = 0; i < 4; i++)
             {
                 var adapters = new Dictionary<Direction, Adapter>(4);
+                var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
                     // Populate adapters for each rotation
                     var direction = directions[j];
                     var index = GoRogue.MathHelpers.WrapAround(j - i, directions.Count);
-                    var adapterString = adapterStrings[index];
 
+                    var adapterString = adapterStrings[index];
                     adapters.Add(direction, adapterString);
+
+                    var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
+                    prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
                 }
 
                 var rotation = i switch
@@ -75,7 +92,7 @@ public class TileTemplate
                     _ => 0f
                 };
 
-                TileChoices.Add(new TileChoice(this, adapters, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, rotation: rotation));
             }
         }
         else if (Attributes.Symmetry == "I")
@@ -83,15 +100,19 @@ public class TileTemplate
             for (var i = 0; i < 2; i++)
             {
                 var adapters = new Dictionary<Direction, Adapter>(4);
+                var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
                     // Populate adapters for each rotation
                     var direction = directions[j];
                     var index = GoRogue.MathHelpers.WrapAround(j - i, directions.Count);
-                    var adapterString = adapterStrings[index];
 
+                    var adapterString = adapterStrings[index];
                     adapters.Add(direction, adapterString);
+
+                    var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
+                    prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
                 }
 
                 var rotation = 0f;
@@ -99,7 +120,7 @@ public class TileTemplate
                 if (i == 1)
                     rotation = (float)Math.PI / 2f;
 
-                TileChoices.Add(new TileChoice(this, adapters, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, rotation: rotation));
             }
         }
         else if (Attributes.Symmetry == "/")
@@ -107,15 +128,19 @@ public class TileTemplate
             for (var i = 0; i < 2; i++)
             {
                 var adapters = new Dictionary<Direction, Adapter>(4);
+                var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
                     // Populate adapters for each rotation
                     var direction = directions[j];
                     var index = GoRogue.MathHelpers.WrapAround(j - (i * 2), directions.Count);
+                    
                     var adapterString = adapterStrings[index];
-
                     adapters.Add(direction, adapterString);
+
+                    var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
+                    prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
                 }
 
                 var rotation = 0f;
@@ -123,7 +148,7 @@ public class TileTemplate
                 if (i == 1)
                     rotation = (float)Math.PI;
 
-                TileChoices.Add(new TileChoice(this, adapters, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, rotation: rotation));
             }
         }
 
@@ -136,7 +161,12 @@ public class TileTemplate
                 (adapters[Direction.Up].Pattern, adapters[Direction.Down].Pattern) = (adapters[Direction.Down].Pattern, adapters[Direction.Up].Pattern);
                 (adapters[Direction.Left].Pattern, adapters[Direction.Right].Pattern) = (adapters[Direction.Right].Pattern, adapters[Direction.Left].Pattern);
 
-                TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
+                var prohibitedEmptyNeighbours = tile.ProhibitedEmptyNeighbours.ToDictionary(d => d.Key, d => d.Value);
+
+                (prohibitedEmptyNeighbours[Direction.Up], prohibitedEmptyNeighbours[Direction.Down]) = (prohibitedEmptyNeighbours[Direction.Down], prohibitedEmptyNeighbours[Direction.Up]);
+                (prohibitedEmptyNeighbours[Direction.Left], prohibitedEmptyNeighbours[Direction.Right]) = (prohibitedEmptyNeighbours[Direction.Right], prohibitedEmptyNeighbours[Direction.Left]);
+
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
             }
             if (Attributes.FlipHorizontally)
             {
@@ -149,7 +179,10 @@ public class TileTemplate
                 adapters[Direction.Left].Pattern = new String(adapters[Direction.Right].Pattern.Reverse().ToArray());
                 adapters[Direction.Right].Pattern = new String(oldLeft.Reverse().ToArray());
 
-                TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipHorizontally));
+                var prohibitedEmptyNeighbours = tile.ProhibitedEmptyNeighbours.ToDictionary(d => d.Key, d => d.Value);
+                (prohibitedEmptyNeighbours[Direction.Left], prohibitedEmptyNeighbours[Direction.Right]) = (prohibitedEmptyNeighbours[Direction.Right], prohibitedEmptyNeighbours[Direction.Left]);
+
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, SpriteEffects.FlipHorizontally));
             }
             if (Attributes.FlipVertically)
             {
@@ -162,25 +195,11 @@ public class TileTemplate
                 adapters[Direction.Left].Pattern = new String(adapters[Direction.Left].Pattern.Reverse().ToArray());
                 adapters[Direction.Right].Pattern = new String(adapters[Direction.Right].Pattern.Reverse().ToArray());
 
-                TileChoices.Add(new TileChoice(this, adapters, SpriteEffects.FlipVertically));
+                var prohibitedEmptyNeighbours = tile.ProhibitedEmptyNeighbours.ToDictionary(d => d.Key, d => d.Value);
+                (prohibitedEmptyNeighbours[Direction.Up], prohibitedEmptyNeighbours[Direction.Down]) = (prohibitedEmptyNeighbours[Direction.Down], prohibitedEmptyNeighbours[Direction.Up]);
+
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, SpriteEffects.FlipVertically));
             }
         }
-    }
-
-    public bool PassesPlacementRule(Point point, int mapWidth, int mapHeight)
-    {
-        if (String.IsNullOrEmpty(Attributes.PlacementRule))
-            return true;
-
-        var expression = new Expression(Attributes.PlacementRule);
-
-        expression.Parameters["X"] = point.X;
-        expression.Parameters["Y"] = point.Y;
-        expression.Parameters["MaxX"] = mapWidth - 1;
-        expression.Parameters["MaxY"] = mapHeight - 1;
-
-        var isPointWithinEvaluationRule = (bool)expression.Evaluate();
-
-        return isPointWithinEvaluationRule;
     }
 }

@@ -16,7 +16,7 @@ public class PlacementConstraint : TileConstraint
 
     public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices)
     {
-        var passesPlacementRule = tileToCheck.TileTemplate.PassesPlacementRule(tile.Point, _mapWidth, _mapHeight);
+        var passesPlacementRule = tileToCheck.PassesPlacementRule(tile.Point, _mapWidth, _mapHeight);
 
         return passesPlacementRule;
     }

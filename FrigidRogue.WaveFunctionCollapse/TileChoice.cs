@@ -1,5 +1,6 @@
 ﻿using FrigidRogue.MonoGame.Core.Extensions;
 using Microsoft.Xna.Framework.Graphics;
+using NCalc;
 using SadRogue.Primitives;
 
 namespace FrigidRogue.WaveFunctionCollapse;
@@ -10,11 +11,12 @@ public class TileChoice
     public SpriteEffects SpriteEffects { get; }
     public float Rotation { get; }
     public Dictionary<Direction, Adapter> Adapters { get; }
+    public Dictionary<Direction, ProhibitedEmptyNeighbourFlags> ProhibitedEmptyNeighbours { get; }
     public List<Adapter> MandatoryAdapters { get; }
     public int Weight => TileTemplate.Attributes.Weight;
     public Texture2D Texture => TileTemplate.Texture;
 
-    public TileChoice(TileTemplate tileTemplate, Dictionary<Direction, Adapter> adapters, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
+    public TileChoice(TileTemplate tileTemplate, Dictionary<Direction, Adapter> adapters, Dictionary<Direction, ProhibitedEmptyNeighbourFlags> prohibitedEmptyNeighbours, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
     {
         TileTemplate = tileTemplate;
         Adapters = adapters;
@@ -31,6 +33,16 @@ public class TileChoice
                 .Select(a => (Adapter)a)
                 .ToList();
         }
+
+        if (prohibitedEmptyNeighbours == null)
+        {
+            prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>
+            {
+                { Direction.Up, ProhibitedEmptyNeighbourFlags.None }, { Direction.Right, ProhibitedEmptyNeighbourFlags.None }, { Direction.Down, ProhibitedEmptyNeighbourFlags.None }, { Direction.Left, ProhibitedEmptyNeighbourFlags.None }
+            };
+        }
+
+        ProhibitedEmptyNeighbours = prohibitedEmptyNeighbours;
     }
 
     public bool CanConnectToCategory(Point point, TileResult neighbourTile)
@@ -70,5 +82,22 @@ public class TileChoice
         var firstAdapter = neighbourTile.ChosenTile.Adapters[direction.Opposite()];
 
         return MandatoryAdapters.Any(m => m.Pattern == firstAdapter.Pattern);
+    }
+
+    public bool PassesPlacementRule(Point point, int mapWidth, int mapHeight)
+    {
+        if (String.IsNullOrEmpty(TileTemplate.Attributes.PlacementRule))
+            return true;
+
+        var expression = new Expression(TileTemplate.Attributes.PlacementRule);
+
+        expression.Parameters["X"] = point.X;
+        expression.Parameters["Y"] = point.Y;
+        expression.Parameters["MaxX"] = mapWidth - 1;
+        expression.Parameters["MaxY"] = mapHeight - 1;
+
+        var isPointWithinEvaluationRule = (bool)expression.Evaluate();
+
+        return isPointWithinEvaluationRule;
     }
 }

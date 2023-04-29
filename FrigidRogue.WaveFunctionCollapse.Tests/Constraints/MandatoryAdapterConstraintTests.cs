@@ -64,11 +64,11 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
             { Direction.Right, "B" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckDown = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckLeft = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckRight = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle);
+        var tileToCheckUp = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckDown = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckRight = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -122,11 +122,11 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
             { Direction.Right, "B" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckDown = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckLeft = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckRight = new TileChoice(tileTemplate1, adapters);
-        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle);
+        var tileToCheckUp = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckDown = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckRight = new TileChoice(tileTemplate1, adapters, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
