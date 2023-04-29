@@ -11,12 +11,12 @@ public class TileChoice
     public SpriteEffects SpriteEffects { get; }
     public float Rotation { get; }
     public Dictionary<Direction, Adapter> Adapters { get; }
-    public Dictionary<Direction, bool> EmptyPlacementRules { get; }
+    public Dictionary<Direction, ProhibitedEmptyNeighbourFlags> ProhibitedEmptyNeighbours { get; }
     public List<Adapter> MandatoryAdapters { get; }
     public int Weight => TileTemplate.Attributes.Weight;
     public Texture2D Texture => TileTemplate.Texture;
 
-    public TileChoice(TileTemplate tileTemplate, Dictionary<Direction, Adapter> adapters, Dictionary<Direction, bool> emptyPlacementRules, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
+    public TileChoice(TileTemplate tileTemplate, Dictionary<Direction, Adapter> adapters, Dictionary<Direction, ProhibitedEmptyNeighbourFlags> prohibitedEmptyNeighbours, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
     {
         TileTemplate = tileTemplate;
         Adapters = adapters;
@@ -34,15 +34,15 @@ public class TileChoice
                 .ToList();
         }
 
-        if (emptyPlacementRules == null)
+        if (prohibitedEmptyNeighbours == null)
         {
-            emptyPlacementRules = new Dictionary<Direction, bool>
+            prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>
             {
-                { Direction.Up, true }, { Direction.Right, true }, { Direction.Down, true }, { Direction.Left, true }
+                { Direction.Up, ProhibitedEmptyNeighbourFlags.None }, { Direction.Right, ProhibitedEmptyNeighbourFlags.None }, { Direction.Down, ProhibitedEmptyNeighbourFlags.None }, { Direction.Left, ProhibitedEmptyNeighbourFlags.None }
             };
         }
 
-        EmptyPlacementRules = emptyPlacementRules;
+        ProhibitedEmptyNeighbours = prohibitedEmptyNeighbours;
     }
 
     public bool CanConnectToCategory(Point point, TileResult neighbourTile)

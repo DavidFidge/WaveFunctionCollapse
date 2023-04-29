@@ -13,5 +13,5 @@ public class TileAttribute
     public bool FlipVertically { get; set; }
     public string Category { get; set; }
     public string[] CanConnectToCategories { get; set; }
-    public string EmptyPlacementRules { get; set; }
+    public string ProhibitedEmptyNeighbourRules { get; set; }
 }

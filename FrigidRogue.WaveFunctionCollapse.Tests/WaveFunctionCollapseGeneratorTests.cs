@@ -69,7 +69,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "^",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        EmptyPlacementRules = "true,true,false,false"
+                        ProhibitedEmptyNeighbourRules = "None,None,All,All"
                     }
                 }
             }
@@ -83,10 +83,10 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(4, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "true,true,false,false", _floorTexture);
-        AssertTile(tiles[1], "JKL,ABC,DEF,GHI", "false,true,true,false", _floorTexture, expectedRotation: (float)Math.PI / 2);
-        AssertTile(tiles[2], "GHI,JKL,ABC,DEF", "false,false,true,true", _floorTexture, expectedRotation: (float)Math.PI);
-        AssertTile(tiles[3], "DEF,GHI,JKL,ABC", "true,false,false,true", _floorTexture, expectedRotation: (float)-Math.PI / 2);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture);
+        AssertTile(tiles[1], "JKL,ABC,DEF,GHI", "All,None,None,All", _floorTexture, expectedRotation: (float)Math.PI / 2);
+        AssertTile(tiles[2], "GHI,JKL,ABC,DEF", "All,All,None,None", _floorTexture, expectedRotation: (float)Math.PI);
+        AssertTile(tiles[3], "DEF,GHI,JKL,ABC", "None,All,All,None", _floorTexture, expectedRotation: (float)-Math.PI / 2);
     }
 
     [TestMethod]
@@ -111,7 +111,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "I",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        EmptyPlacementRules = "true,true,false,false"
+                        ProhibitedEmptyNeighbourRules = "None,None,All,All"
                     }
                 }
             }
@@ -125,8 +125,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "true,true,false,false", _floorTexture);
-        AssertTile(tiles[1], "JKL,ABC,DEF,GHI", "false,true,true,false", _floorTexture, expectedRotation: (float)Math.PI / 2);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture);
+        AssertTile(tiles[1], "JKL,ABC,DEF,GHI", "All,None,None,All", _floorTexture, expectedRotation: (float)Math.PI / 2);
     }
 
     [TestMethod]
@@ -151,7 +151,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "/",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        EmptyPlacementRules = "true,true,false,false"
+                        ProhibitedEmptyNeighbourRules = "None,None,All,All"
                     }
                 }
             }
@@ -165,8 +165,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "true,true,false,false", _floorTexture);
-        AssertTile(tiles[1], "GHI,JKL,ABC,DEF", "false,false,true,true", _floorTexture, expectedRotation: (float)Math.PI);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture);
+        AssertTile(tiles[1], "GHI,JKL,ABC,DEF", "All,All,None,None", _floorTexture, expectedRotation: (float)Math.PI);
     }
 
     [TestMethod]
@@ -191,7 +191,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA",
-                        EmptyPlacementRules = "true,true,false,false"
+                        ProhibitedEmptyNeighbourRules = "None,None,All,All"
                     }
                 }
             }
@@ -205,7 +205,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(1, tiles.Count);
 
-        AssertTile(tiles[0], "AAA,AAA,AAA,AAA", "true,true,false,false", _floorTexture);
+        AssertTile(tiles[0], "AAA,AAA,AAA,AAA", "None,None,All,All", _floorTexture);
     }
 
     [TestMethod]
@@ -1306,7 +1306,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
     }
 
     [TestMethod]
-    public void Should_Not_Place_Tile_If_Adjacent_Square_Is_Empty_And_EmptyPlacementRule_Is_False_For_That_Direction()
+    public void Should_Not_Place_Tile_If_Adjacent_Square_Is_Uncollapsed_And_ProhibitedEmptyNeighbourRule_Is_Set_To_Uncollapsed_For_That_Direction()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -1325,7 +1325,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     "Floor", new TileAttribute
                     {
                         Symmetry = "X",
-                        EmptyPlacementRules = "true,false,true,true"
+                        ProhibitedEmptyNeighbourRules = "None,Uncollapsed,None,None"
                     }
                 }
             }
@@ -1351,7 +1351,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
     }
 
     [TestMethod]
-    public void Should_Not_Place_Tile_If_On_Edge_Of_Map_And_EmptyPlacementRule_Is_False_For_That_Direction()
+    public void Should_Not_Place_Tile_If_On_Edge_Of_Map_And_ProhibitedEmptyNeighbourRule_Is_Set_To_EdgeOfMap_For_That_Direction()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -1370,7 +1370,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     "Floor", new TileAttribute
                     {
                         Symmetry = "X",
-                        EmptyPlacementRules = "false,true,true,true"
+                        ProhibitedEmptyNeighbourRules = "EdgeOfMap,None,None,None"
                     }
                 }
             }
@@ -1397,7 +1397,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
 
     [TestMethod]
-    public void Should_Place_Tile_If_Adjacent_Square_Is_Not_Empty_And_EmptyPlacementRule_Is_False_For_That_Direction()
+    public void Should_Place_Tile_If_Adjacent_Square_Is_Not_Empty_And_ProhibitedEmptyNeighbourRule_Is_Not_Set_To_Uncollapsed_For_That_Direction()
     {
         // Arrange
         var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
@@ -1421,7 +1421,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Adapters = "A,A,A,A",
                         Category = "D",
                         PlacementRule = "[X] == 0",
-                        EmptyPlacementRules = "true,false,true,true"
+                        ProhibitedEmptyNeighbourRules = "None,All,None,None"
                     }
                 },
                 {
@@ -1779,7 +1779,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        EmptyPlacementRules = "true,true,false,false",
+                        ProhibitedEmptyNeighbourRules = "None,None,All,All",
                         FlipHorizontally = true
                     }
                 }
@@ -1794,8 +1794,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "true,true,false,false", _floorTexture, SpriteEffects.None);
-        AssertTile(tiles[1], "CBA,LKJ,IHG,FED", "true,false,false,true", _floorTexture, SpriteEffects.FlipHorizontally);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[1], "CBA,LKJ,IHG,FED", "None,All,All,None", _floorTexture, SpriteEffects.FlipHorizontally);
     }
 
     [TestMethod]
@@ -1820,7 +1820,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        EmptyPlacementRules = "true,true,false,false",
+                        ProhibitedEmptyNeighbourRules = "None,None,All,All",
                         FlipVertically = true
                     }
                 }
@@ -1835,8 +1835,8 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "true,true,false,false", _floorTexture, SpriteEffects.None);
-        AssertTile(tiles[1], "IHG,FED,CBA,LKJ", "false,true,true,false", _floorTexture, SpriteEffects.FlipVertically);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[1], "IHG,FED,CBA,LKJ", "All,None,None,All", _floorTexture, SpriteEffects.FlipVertically);
     }
 
     [TestMethod]
@@ -1861,7 +1861,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "ABC,DEF,GHI,JKL",
-                        EmptyPlacementRules = "true,true,false,false",
+                        ProhibitedEmptyNeighbourRules = "None,None,All,All",
                         FlipHorizontally = true,
                         FlipVertically = true
                     }
@@ -1877,10 +1877,10 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(4, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "true,true,false,false", _floorTexture, SpriteEffects.None);
-        AssertTile(tiles[1], "GHI,JKL,ABC,DEF", "false,false,true,true", _floorTexture, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically);
-        AssertTile(tiles[2], "CBA,LKJ,IHG,FED", "true,false,false,true", _floorTexture, SpriteEffects.FlipHorizontally);
-        AssertTile(tiles[3], "IHG,FED,CBA,LKJ", "false,true,true,false", _floorTexture, SpriteEffects.FlipVertically);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[1], "GHI,JKL,ABC,DEF", "All,All,None,None", _floorTexture, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically);
+        AssertTile(tiles[2], "CBA,LKJ,IHG,FED", "None,All,All,None", _floorTexture, SpriteEffects.FlipHorizontally);
+        AssertTile(tiles[3], "IHG,FED,CBA,LKJ", "All,None,None,All", _floorTexture, SpriteEffects.FlipVertically);
     }
 
     [TestMethod]
@@ -2159,6 +2159,204 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         Assert.AreEqual(1, tiles.Count(t => t.IsUnused));
     }
 
+    [TestMethod]
+    public void Should_Process_Two_Passes_With_Second_Pass_Failing_Due_To_ProhibitedEmptyNeighbour_Unused_Rule()
+    {
+        // Arrange
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Line", _lineTexture },
+            { "Corner", _cornerTexture }
+        };
+
+        var firstPass = new PassOptions
+        {
+            Options = new GeneratorOptions
+            {
+                EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours,
+                FallbackAttempts = 0
+            },
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 0"
+                    }
+                },
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 1"
+                    }
+                }
+            }
+        };
+
+        var secondPass = new PassOptions
+        {
+            Options = new GeneratorOptions
+            {
+                PassMask = new Dictionary<string, string[]> { { "0", new[] { "Floor" } } },
+                FallbackAttempts = 0
+            },
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "BBB,BBB,BBB,BBB",
+                        ProhibitedEmptyNeighbourRules = "None,None,Unused,None"
+                    }
+                }
+            }
+        };
+
+        var rules = new Rules
+        {
+            MapOptions = new MapOptions(1, 2),
+            Passes = new[] { firstPass, secondPass }
+        };
+
+        var waveFunctionCollapseGeneratorPasses = new WaveFunctionCollapseGeneratorPasses();
+
+        waveFunctionCollapseGeneratorPasses.CreatePasses(rules, textures);
+        waveFunctionCollapseGeneratorPasses.Reset();
+
+        // Act
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        var result = waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+
+        // Assert
+        var tiles = waveFunctionCollapseGeneratorPasses
+            .GetAllTiles()
+            .ToList();
+
+        Assert.AreEqual(4, tiles.Count);
+        Assert.IsFalse(result.IsComplete);
+        Assert.IsTrue(result.IsFailed);
+
+        var tileResults = tiles
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(2, tileResults.Count);
+
+        AssertTile(tileResults[0].ChosenTile, "AAA,AAA,AAA,AAA", _floorTexture);
+        AssertTile(tileResults[1].ChosenTile, "AAA,AAA,AAA,AAA", _lineTexture);
+    }
+
+    [TestMethod]
+    public void Should_Process_Two_Passes_With_Second_Pass_Succeeding_Due_To_ProhibitedEmptyNeighbour_Rules_Other_Than_Unused()
+    {
+        // Arrange
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Line", _lineTexture },
+            { "Corner", _cornerTexture }
+        };
+
+        var firstPass = new PassOptions
+        {
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 0"
+                    }
+                },
+                {
+                    "Line", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 1"
+                    }
+                }
+            }
+        };
+
+        var secondPass = new PassOptions
+        {
+            Options = new GeneratorOptions
+            {
+                PassMask = new Dictionary<string, string[]> { { "0", new[] { "Floor" } } },
+            },
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "BBB,BBB,BBB,BBB",
+                        ProhibitedEmptyNeighbourRules = "None,None,Uncollapsed|EdgeOfMap,None"
+                    }
+                }
+            }
+        };
+
+        var rules = new Rules
+        {
+            MapOptions = new MapOptions(1, 2),
+            Passes = new[] { firstPass, secondPass }
+        };
+
+        var waveFunctionCollapseGeneratorPasses = new WaveFunctionCollapseGeneratorPasses();
+
+        waveFunctionCollapseGeneratorPasses.CreatePasses(rules, textures);
+        waveFunctionCollapseGeneratorPasses.Reset();
+
+        // Act
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+        var result = waveFunctionCollapseGeneratorPasses.ExecuteNextStep();
+
+        // Assert
+        var tiles = waveFunctionCollapseGeneratorPasses
+            .GetAllTiles()
+            .ToList();
+
+        Assert.AreEqual(4, tiles.Count);
+        Assert.IsTrue(result.IsComplete);
+        Assert.IsFalse(result.IsFailed);
+        
+        var tileResults = tiles
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(3, tileResults.Count);
+
+        AssertTile(tileResults[0].ChosenTile, "AAA,AAA,AAA,AAA", _floorTexture);
+        AssertTile(tileResults[1].ChosenTile, "AAA,AAA,AAA,AAA", _lineTexture);
+        AssertTile(tileResults[2].ChosenTile, "BBB,BBB,BBB,BBB", secondPass.Tiles.First().Value.ProhibitedEmptyNeighbourRules, _cornerTexture);
+
+        var point = new Point(0, 0);
+        Assert.AreEqual(point, tileResults[0].Point);
+        Assert.AreEqual(point, tileResults[2].Point);
+
+        Assert.AreEqual(new Point(0, 1), tileResults[1].Point);
+
+        Assert.AreEqual(1, tiles.Count(t => t.IsUnused));
+    }
+
     private void AssertTileResult(TileResult tileResult, TileChoice expectedTileChoice, TileResult[] expectedNeighbours,
         int expectedEntropy, bool expectedCollapsed)
     {
@@ -2168,7 +2366,6 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         Assert.AreEqual(expectedCollapsed, tileResult.IsCollapsed);
     }
 
-
     private void AssertTile(
         TileChoice tileChoice,
         string expectedAdapters,
@@ -2176,13 +2373,13 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         SpriteEffects expectedSpriteEffect = SpriteEffects.None,
         float expectedRotation = 0f)
     {
-        AssertTile(tileChoice, expectedAdapters, "true,true,true,true", expectedTexture, expectedSpriteEffect, expectedRotation);
+        AssertTile(tileChoice, expectedAdapters, "None,None,None,None", expectedTexture, expectedSpriteEffect, expectedRotation);
     }
 
     private void AssertTile(
         TileChoice tileChoice,
         string expectedAdapters,
-        string expectedEmptyPlacementRules,
+        string expectedProhibitedEmptyNeighbourFlags,
         Texture2D expectedTexture,
         SpriteEffects expectedSpriteEffect = SpriteEffects.None,
         float expectedRotation = 0f)
@@ -2194,12 +2391,12 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         Assert.AreEqual(adapters[2], tileChoice.Adapters[Direction.Down].Pattern);
         Assert.AreEqual(adapters[3], tileChoice.Adapters[Direction.Left].Pattern);
 
-        var emptyPlacementRules = expectedEmptyPlacementRules.Split(",");
+        var prohibitedEmptyNeighbourFlags = expectedProhibitedEmptyNeighbourFlags.Split(",");
 
-        Assert.AreEqual(bool.Parse(emptyPlacementRules[0]), tileChoice.EmptyPlacementRules[Direction.Up]);
-        Assert.AreEqual(bool.Parse(emptyPlacementRules[1]), tileChoice.EmptyPlacementRules[Direction.Right]);
-        Assert.AreEqual(bool.Parse(emptyPlacementRules[2]), tileChoice.EmptyPlacementRules[Direction.Down]);
-        Assert.AreEqual(bool.Parse(emptyPlacementRules[3]), tileChoice.EmptyPlacementRules[Direction.Left]);
+        Assert.AreEqual(Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighbourFlags[0].Replace("|",",")), tileChoice.ProhibitedEmptyNeighbours[Direction.Up]);
+        Assert.AreEqual(Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighbourFlags[1].Replace("|",",")), tileChoice.ProhibitedEmptyNeighbours[Direction.Right]);
+        Assert.AreEqual(Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighbourFlags[2].Replace("|",",")), tileChoice.ProhibitedEmptyNeighbours[Direction.Down]);
+        Assert.AreEqual(Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighbourFlags[3].Replace("|",",")), tileChoice.ProhibitedEmptyNeighbours[Direction.Left]);
 
         Assert.AreEqual(expectedTexture, tileChoice.Texture);
         Assert.AreEqual(expectedSpriteEffect, tileChoice.SpriteEffects);

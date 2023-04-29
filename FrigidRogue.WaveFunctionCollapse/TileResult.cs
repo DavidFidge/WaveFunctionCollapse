@@ -26,7 +26,6 @@ public class TileResult
         Neighbours = Point
             .Neighbours(maxWidth - 1, maxHeight - 1, AdjacencyRule.Types.Cardinals)
             .Select(n => tiles[n.ToIndex(maxWidth)])
-            .Where(p => !p.IsUnused)
             .ToList();
     }
 
