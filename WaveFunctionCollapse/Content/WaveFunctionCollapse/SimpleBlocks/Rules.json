@@ -1,32 +1,35 @@
 {
   "MapOptions": {
     "MapWidth": 20,
-    "MapHeight": 20
+    "MapHeight": 20,
+    "TileSizeMultiplier": 20
   },
   "Passes": [
     {
       "Options": {
-        "FallbackAttempts": 5,
+        "FallbackAttempts": 50,
         "FallbackRadius": 1,
         "FallbackRadiusIncrement": 1,
-        "EntropyHeuristic": "ReduceByCountOfNeighbours"
+        "EntropyHeuristic": "ReduceByCountOfNeighbours",
+        "RunFirstRules": ["([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"]
       },
       "Tiles": {
         "Floor": {
           "Symmetry": "X",
           "Weight": 10,
-          "Adapters": "AAA,AAA,AAA,AAA",
-          "InitialisationRule": "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])"
+          "Adapters": "AAA,AAA,AAA,AAA"
         },
         "Corner": {
           "Symmetry": "^",
           "Weight": 1,
-          "Adapters": "AAA,AAA,ABA,ABA"
+          "Adapters": "AAA,AAA,ABA,ABA",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "Wall": {
           "Symmetry": "I",
           "Weight": 10,
-          "Adapters": "ABA,AAA,ABA,AAA"
+          "Adapters": "ABA,AAA,ABA,AAA",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "GateMiddle": {
           "Symmetry": "X",
@@ -38,7 +41,8 @@
           "Symmetry": "X",
           "Weight": 10,
           "Adapters": "UL,L,AAA,ABA",
-          "Limit": 1
+          "Limit": 1,
+          "PlacementRule": "([X] > 0 && [Y] != 0 && [X] < [MaxX] - 3 && [Y] != [MaxY])"
         },
         "GateRight": {
           "Symmetry": "X",

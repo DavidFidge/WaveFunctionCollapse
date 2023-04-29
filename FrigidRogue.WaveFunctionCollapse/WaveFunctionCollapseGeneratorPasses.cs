@@ -32,7 +32,7 @@ public class WaveFunctionCollapseGeneratorPasses
         var assetsList = contentManager.Load<string[]>("Content");
 
         _textures = assetsList
-            .Where(a => a.StartsWith($"{contentPath}/") && !a.EndsWith(".json"))
+            .Where(a => a.ToLower().StartsWith($"{contentPath.ToLower()}/") && !a.EndsWith(".json"))
             .ToDictionary(
                 a => a.Split("/").Last().Replace(".png", ""),
                 a => contentManager.Load<Texture2D>(a));
@@ -53,6 +53,8 @@ public class WaveFunctionCollapseGeneratorPasses
 
     public void Reset()
     {
+        _generatorsQueue.Clear();
+
         foreach (var generator in _generators)
         {
             generator.Clear();

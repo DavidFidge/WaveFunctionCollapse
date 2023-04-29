@@ -1652,31 +1652,6 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Dancing/Empty.png
 
-#begin WaveFunctionCollapse/DancingDiagonals/DanceFloor.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/DancingDiagonals/DanceFloor.png
-
-#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerLong.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerLong.png
-
-#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerShort.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorCornerShort.png
-
-#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorHorizontal.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorHorizontal.png
-
-#begin WaveFunctionCollapse/DancingDiagonals/DanceFloorVertical.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/DancingDiagonals/DanceFloorVertical.png
-
 # The following section produces an asset named "Content" in the content manager
 # which can be retrieved via load:  var assetsList = contentManager.Load<string[]>("Content");
 # This gives you a list of all the assets in the content manager.

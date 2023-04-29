@@ -77,6 +77,9 @@ public class WaveFunctionCollapseGenerator
     {
         Clear();
 
+        if (!_tileTemplates.Any())
+            return;
+
         if (passes == null)
             passes = Array.Empty<WaveFunctionCollapseGenerator>();
 

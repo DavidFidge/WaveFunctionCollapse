@@ -2,7 +2,8 @@
   "MapOptions":
   {
     "MapWidth": 20,
-    "MapHeight": 20
+    "MapHeight": 20,
+    "TileSizeMultiplier": 4
   },
   "Passes":
   [

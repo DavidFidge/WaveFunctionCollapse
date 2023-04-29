@@ -7,7 +7,6 @@ using FrigidRogue.MonoGame.Core.Interfaces.Services;
 using FrigidRogue.MonoGame.Core.Messages;
 using FrigidRogue.MonoGame.Core.View;
 using FrigidRogue.MonoGame.Core.View.Extensions;
-using FrigidRogue.WaveFunctionCollapse;
 using GeonBit.UI.Entities;
 
 using MediatR;
@@ -22,7 +21,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     IRequestHandler<NextStepRequest>,
     IRequestHandler<MewMapRequest>,
     IRequestHandler<PlayContinuouslyRequest>,
-    IRequestHandler<PlayUntilCompleteRequest>
+    IRequestHandler<PlayUntilCompleteRequest>,
+    IRequestHandler<ChangeContentRequest>
 {
     private readonly IGameCamera _gameCamera;
     private readonly MapEntity _mapEntity;
@@ -32,14 +32,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private Panel _leftPanel;
     private Panel _mapPanel;
 
-    private WaveFunctionCollapseGeneratorPasses _waveFunctionCollapsePasses;
 
-    private int _tileWidth => _waveFunctionCollapsePasses.TileWidth;
-    private int _tileHeight => _waveFunctionCollapsePasses.TileHeight;
-    
-    private int _mapWidth => _waveFunctionCollapsePasses.MapWidth;
-    private int _mapHeight => _waveFunctionCollapsePasses.MapHeight;
-    private Vector2 _tileSize => new Vector2(_tileWidth, _tileHeight);
 
     private bool _playUntilComplete;
     private bool _playContinuously;
@@ -75,6 +68,29 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             .SkinNone()
             .NoPadding()
             .Height(0.999f);
+
+        var dropDown = new DropDown()
+            .Height(800)
+            .Width(400)
+            .AddTo(_leftPanel);
+
+        dropDown.DefaultText = "Select Tile Set";
+
+        var rulesFiles = GameProvider.Game.Content.Load<string[]>("Content")
+            .Where(a => a.ToLower().StartsWith("wavefunctioncollapse"))
+            .Select(a => a.Split('/').Skip(1).Take(1).First())
+            .Distinct()
+            .ToList();
+
+        foreach (var rule in rulesFiles)
+        {
+            dropDown.AddItem(rule);
+        }
+
+        dropDown.OnValueChange += e =>
+        {
+            Mediator.Send(new ChangeContentRequest { Content = $"WaveFunctionCollapse/{((DropDown)e).SelectedValue}"});
+        };
 
         new Button("New Map")
             .SendOnClick<MewMapRequest>(Mediator)
@@ -115,13 +131,6 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         _mapFont = GameProvider.Game.Content.Load<SpriteFont>("Fonts/MapFont");
-
-        _waveFunctionCollapsePasses = new WaveFunctionCollapseGeneratorPasses();
-        _waveFunctionCollapsePasses.CreatePasses(GameProvider.Game.Content, "WaveFunctionCollapse/Dancing");
-
-        _waveFunctionCollapsePasses.Reset();
-
-        CreateRenderTarget();
     }
 
     public override void Draw()
@@ -131,6 +140,12 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         _hasUpdated = false;
 
+        if (_renderTarget == null)
+        {
+            Game.GraphicsDevice.Clear(Color.Black);
+            return;
+        }
+
         var oldRenderTargets = Game.GraphicsDevice.GetRenderTargets();
 
         Game.GraphicsDevice.SetRenderTarget(_renderTarget);
@@ -138,15 +153,15 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
 
-        var tiles = _waveFunctionCollapsePasses.GetAllTiles();
+        var tiles = _viewModel.GetAllTiles();
 
         foreach (var tile in tiles)
         {
             if (tile.IsCollapsed)
             {
-                var offset = _tileSize * new Vector2(tile.Point.X, tile.Point.Y);
+                var offset = _viewModel.TileSize * new Vector2(tile.Point.X, tile.Point.Y);
                 var rotateOrigin = tile.ChosenTile.Texture.Bounds.Size.ToVector2() / 2f;
-                var position = (_tileSize / 2f) + offset;
+                var position = (_viewModel.TileSize / 2f) + offset;
 
                 _spriteBatch.Draw(tile.ChosenTile.Texture,
                     position,
@@ -154,7 +169,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
                     Color.White,
                     tile.ChosenTile.Rotation,
                     rotateOrigin,
-                    (float)_tileWidth / tile.ChosenTile.Texture.Width,
+                    (float)_viewModel.TileWidth / tile.ChosenTile.Texture.Width,
                     tile.ChosenTile.SpriteEffects,
                     0);
             }
@@ -162,12 +177,12 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _spriteBatch.End();
         _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
 
-        foreach (var tile in _waveFunctionCollapsePasses.GetCurrentTiles().Where(t => !t.IsCollapsed))
+        foreach (var tile in _viewModel.GetCurrentTiles().Where(t => !t.IsCollapsed))
         {
-            var position = _tileSize * new Vector2(tile.Point.X, tile.Point.Y);
+            var position = _viewModel.TileSize * new Vector2(tile.Point.X, tile.Point.Y);
 
-            position.X += _tileSize.X / 4f;
-            position.Y += _tileSize.Y / 2f;
+            position.X += _viewModel.TileSize.X / 4f;
+            position.Y += _viewModel.TileSize.Y / 2f;
 
             _spriteBatch.DrawString(_mapFont, tile.Entropy.ToString(), position, Color.Black);
         }
@@ -190,7 +205,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     {
         ResetPlayContinuously();
 
-        _waveFunctionCollapsePasses.ExecuteNextStep();
+        _viewModel.ExecuteNextStep();
         return Unit.Task;
     }
 
@@ -222,18 +237,21 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _playUntilComplete = false;
         _dateTimeFinished = null;
 
-        _waveFunctionCollapsePasses.Reset();
+        _viewModel.Reset();
 
         return Unit.Task;
     }
 
     public override void Update()
     {
+        if (_renderTarget == null)
+            return;
+
         _hasUpdated = true;
 
         if (!_dateTimeFinished.HasValue && (_playUntilComplete || _playContinuously))
         {
-            var result = _waveFunctionCollapsePasses.ExecuteNextStep();
+            var result = _viewModel.ExecuteNextStep();
 
             if (result.IsComplete)
                 _playUntilComplete = false;
@@ -247,7 +265,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             if (_gameTimeService.GameTime.TotalGameTime - _dateTimeFinished > _secondsForNextIteration)
             {
                 _dateTimeFinished = null;
-                _waveFunctionCollapsePasses.Reset();
+                _viewModel.Reset();
             }
         }
 
@@ -260,8 +278,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     {
         _renderTarget = new RenderTarget2D(
             Game.GraphicsDevice,
-            _tileWidth * _mapWidth,
-            _tileHeight * _mapHeight,
+            _viewModel.TileWidth * _viewModel.MapWidth,
+            _viewModel.TileHeight * _viewModel.MapHeight,
             false,
             Game.GraphicsDevice.PresentationParameters.BackBufferFormat,
             Game.GraphicsDevice.PresentationParameters.DepthStencilFormat,
@@ -269,8 +287,17 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             RenderTargetUsage.PreserveContents
         );
 
-        _mapEntity.Initialize(Game.GraphicsDevice.Viewport.Height / _mapHeight, Game.GraphicsDevice.Viewport.Height / _mapHeight);
-        _mapEntity.LoadContent(_mapWidth, _mapHeight);
+        _mapEntity.Initialize(Game.GraphicsDevice.Viewport.Height / _viewModel.MapHeight, Game.GraphicsDevice.Viewport.Height / _viewModel.MapHeight);
+        _mapEntity.LoadContent(_viewModel.MapWidth, _viewModel.MapHeight);
         _mapEntity.SetMapTexture(_renderTarget);
+    }
+
+    public Task<Unit> Handle(ChangeContentRequest request, CancellationToken cancellationToken)
+    {
+        _renderTarget = null;
+        _viewModel.CreatePasses(GameProvider.Game.Content, request.Content);
+        CreateRenderTarget();
+
+        return Unit.Task;
     }
 }
