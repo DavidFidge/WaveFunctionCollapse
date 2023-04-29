@@ -98,7 +98,7 @@ FlipVertically: as per flip horizontally but vertically instead.  Using both Fli
 
 Weight: The weight is the chance of the tile being chosen from the list of valid tiles.
 
-Adapters: The adapters define the allowed connection to other tiles.  It can be any string whatsoever, however the order of the string is important. The ordering is clockwise starting from the north side of the tile. So for example a tile defined as "AB,AB,AB,AB" cannot join on itself.  It must be defined as "AB,AB,BA,BA" - a visualisation of the ordering is below:
+Adapters: The adapters define the allowed connection to other tiles.  Each direction must be specified in the order of up, right, down, left.  It can be any string whatsoever, however the order of the string is important. The ordering is clockwise starting from the north side of the tile. So for example a tile defined as "AB,AB,AB,AB" cannot join on itself.  It must be defined as "AB,AB,BA,BA" - a visualisation of the ordering is below:
 
 ```
    AB->
@@ -116,6 +116,8 @@ PlacementRule: An expression that is evaluated to determine if the tile can be p
 Limit: The maximum number of times this tile can be used in the map.  If not defined then there is no limit.
 
 OnlyAllowedIfNoValidTilesConstraint: If true, this tile can only be placed if this tile (and other tiles with this flag set) is the only valid tile that can be placed.  This is a useful way of constructing multi-tile objects that must be placed together.
+
+ProhibitedEmptyNeighbourRules: Flags that define whether this tile can be placed if this tile is on the edge of the map or a neighbour is uncollapsed or unused.  Possible values are None|Uncollapsed|Unused|EdgeOfMap.  You can also use All which is the same as Uncollapsed|Unused|EdgeOfMap.  Each direction must be specified in the order of up, right, down, left (like adapters).  The rules are automatically translated for tiles that are flipped or have symmetrical copies.
 
 #### Code-defined configuration
 Code defined configuration mirrors the json-defined configuration - you pass in a dictionary of tile names to texture 2D objects and pass in a Rules object which contains all rules as defined above.
@@ -135,5 +137,5 @@ Call GetCurrentTiles() to get the results, ordered by pass.  Note that there are
 
 ## Examples
 
-See the WaveFunctionCollapse project for a series of example projects which will help you understand the various features of the library.
+See the WaveFunctionCollapse project for a series of example projects which will help you understand the various features~~~~.
 
