@@ -3,6 +3,10 @@
     "Wave Function Collapse": {
       "commandName": "Project",
       "commandLineArgs": ""
+    },
+    "Dancing": {
+      "commandName": "Project",
+      "commandLineArgs": "--TileSet Dancing"
     }
   }
 }

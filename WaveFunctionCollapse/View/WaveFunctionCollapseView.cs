@@ -40,6 +40,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private TimeSpan _secondsForNextIteration = TimeSpan.FromSeconds(2);
     private SpriteFont _mapFont;
     private bool _hasUpdated;
+    private DropDown _tileSetDropDown;
+    private string _startingTileSet;
 
     public WaveFunctionCollapseView(
         WaveFunctionCollapseViewModel waveFunctionCollapseViewModel,
@@ -69,12 +71,12 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             .NoPadding()
             .Height(0.999f);
 
-        var dropDown = new DropDown()
+        _tileSetDropDown = new DropDown()
             .Height(800)
             .Width(400)
             .AddTo(_leftPanel);
 
-        dropDown.DefaultText = "Select Tile Set";
+        _tileSetDropDown.DefaultText = "Select Tile Set";
 
         var rulesFiles = GameProvider.Game.Content.Load<string[]>("Content")
             .Where(a => a.ToLower().StartsWith("wavefunctioncollapse"))
@@ -84,10 +86,10 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         foreach (var rule in rulesFiles)
         {
-            dropDown.AddItem(rule);
+            _tileSetDropDown.AddItem(rule);
         }
 
-        dropDown.OnValueChange += e =>
+        _tileSetDropDown.OnValueChange += e =>
         {
             Mediator.Send(new ChangeContentRequest { Content = $"WaveFunctionCollapse/{((DropDown)e).SelectedValue}"});
         };
@@ -114,6 +116,11 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         RootPanel.AddChild(_leftPanel);
         RootPanel.AddChild(_mapPanel);
+        
+        if (!string.IsNullOrEmpty(_startingTileSet))
+        {
+            _tileSetDropDown.SelectedValue = _startingTileSet;
+        }
     }
 
     private void ResetPlayContinuously()
@@ -125,8 +132,9 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _gameTimeService.Start();
     }
 
-    public void Initialise()
+    public void Initialise(string startingTileSet)
     {
+        _startingTileSet = startingTileSet;
         ResetPlayContinuously();
 
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);

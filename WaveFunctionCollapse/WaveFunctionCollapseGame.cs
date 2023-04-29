@@ -110,7 +110,7 @@ public class WaveFunctionCollapseGame : Game, IGame
 
         InitializeDisplaySettings();
 
-        _waveFunctionCollapseScreen.ShowScreen();
+        _waveFunctionCollapseScreen.ShowScreen(_options.TileSet);
 
         _renderTarget = new RenderTarget2D(
             _gameProvider.Game.GraphicsDevice,

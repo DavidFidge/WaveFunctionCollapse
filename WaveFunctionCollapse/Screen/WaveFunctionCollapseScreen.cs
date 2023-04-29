@@ -12,9 +12,9 @@ public class WaveFunctionCollapseScreen : Screen
         _waveFunctionCollapseView = waveFunctionCollapseView;
     }
 
-    public void ShowScreen()
+    public void ShowScreen(string startingTileSet)
     {
-        _waveFunctionCollapseView.Initialise();
+        _waveFunctionCollapseView.Initialise(startingTileSet);
 
         Show();
     }
