@@ -53,7 +53,12 @@ public class WaveFunctionCollapseGenerator
 
         foreach (var tile in passOptions.Tiles.Keys)
         {
-            var tileTemplate = new TileTemplate(tile, passOptions.Tiles[tile], textures[tile]);
+            var textureName = passOptions.Tiles[tile].TextureName;
+            
+            if (string.IsNullOrEmpty(textureName))
+                textureName = tile;
+            
+            var tileTemplate = new TileTemplate(tile, passOptions.Tiles[tile], textures[textureName]);
 
             _tileTemplates.Add(tileTemplate);
 

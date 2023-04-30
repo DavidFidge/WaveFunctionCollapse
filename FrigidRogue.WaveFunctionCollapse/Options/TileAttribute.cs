@@ -2,6 +2,7 @@
 
 public class TileAttribute
 {
+    public string TextureName { get; set; }
     public string Symmetry { get; set; }
     public int Weight { get; set; } = 1;
     public string Adapters { get; set; }
