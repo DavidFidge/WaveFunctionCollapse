@@ -1775,6 +1775,13 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Pipes/Underground.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeTurn1.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeTurn2.png
 
 # The following section produces an asset named "Content" in the content manager
 # which can be retrieved via load:  var assetsList = contentManager.Load<string[]>("Content");
