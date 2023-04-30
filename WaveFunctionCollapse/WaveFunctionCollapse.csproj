@@ -51,6 +51,10 @@
     <Content Include="Content\WaveFunctionCollapse\Circuit\Rules.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Remove="Content\WaveFunctionCollapse\Pipes\Rules.json" />
+    <Content Include="Content\WaveFunctionCollapse\Pipes\Rules.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Fonts\" />

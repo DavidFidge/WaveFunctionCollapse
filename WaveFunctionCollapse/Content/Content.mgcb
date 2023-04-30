@@ -1707,11 +1707,81 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/Circuit/wire.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Background1.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Background2.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Background3.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Background4.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Empty.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/PipeOpening.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Section.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Slime1.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Slime2.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeExpand1.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeExpand2.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeFull1.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeFull2.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeTop1.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SlimeTop2.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Turn.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/Underground.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/SectionStart.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Pipes/EmptyStart.png
 
 # The following section produces an asset named "Content" in the content manager
 # which can be retrieved via load:  var assetsList = contentManager.Load<string[]>("Content");

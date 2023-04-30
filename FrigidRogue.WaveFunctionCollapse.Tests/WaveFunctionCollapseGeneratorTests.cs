@@ -1668,6 +1668,47 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
     }
 
     [TestMethod]
+    public void Entropy_Should_ReduceByCountAndWeightOfNeighbours()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var passOptions = new PassOptions
+        {
+            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountAndWeightOfNeighbours},
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 3,
+                        Adapters = "AAA,AAA,AAA,AAA"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
+        waveFunctionCollapse.Prepare(null);
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var remainingTile = waveFunctionCollapse.Tiles.Single(t => !t.IsCollapsed);
+
+        Assert.AreEqual(-8, remainingTile.Entropy);
+    }
+
+    [TestMethod]
     public void Entropy_Should_ReduceByCountAndMaxWeightOfNeighbours()
     {
         // Arrange

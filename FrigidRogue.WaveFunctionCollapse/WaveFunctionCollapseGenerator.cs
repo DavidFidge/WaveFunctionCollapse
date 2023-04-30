@@ -248,6 +248,9 @@ public class WaveFunctionCollapseGenerator
             case EntropyHeuristic.ReduceByWeightOfNeighbours:
                 tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.ChosenTile.Weight);
                 break;
+            case EntropyHeuristic.ReduceByCountAndWeightOfNeighbours:
+                tileToRecalculate.Entropy -= (collapsedNeighbours.Sum(t => t.ChosenTile.Weight) + collapsedNeighbours.Count);
+                break;
             case EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours:
                 tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.ChosenTile.Weight) - collapsedNeighbours.Count;
                 break;

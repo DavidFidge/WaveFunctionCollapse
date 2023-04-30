@@ -7,6 +7,10 @@
     "Dancing": {
       "commandName": "Project",
       "commandLineArgs": "--TileSet Dancing"
+    },
+    "Pipes": {
+      "commandName": "Project",
+      "commandLineArgs": "--TileSet Pipes"
     }
   }
 }
