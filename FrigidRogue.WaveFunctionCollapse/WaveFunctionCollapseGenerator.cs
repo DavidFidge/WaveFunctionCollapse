@@ -212,6 +212,8 @@ public class WaveFunctionCollapseGenerator
             return NextStepResult.Continue();
         }
 
+        ReduceFallbackRadius();
+
         var chosenTile = ChooseTile(possibleTileChoices);
 
         nextUncollapsedTile.ChosenTile = chosenTile;
@@ -227,6 +229,22 @@ public class WaveFunctionCollapseGenerator
         ReduceEntropy(nextUncollapsedTile);
 
         return NextStepResult.Continue();
+    }
+
+    private void ReduceFallbackRadius()
+    {
+        if (_options.SuccessfullyPlacedTilesToReduceFallbackRadius > 0 &&
+            _options.FallbackRadius > _passOptions.Options.FallbackRadius)
+        {
+            _options.SuccessfullyPlacedTilesToReduceFallbackRadius--;
+
+            if (_options.SuccessfullyPlacedTilesToReduceFallbackRadius == 0)
+            {
+                _options.FallbackRadius -= _options.FallbackRadiusIncrement;
+                _options.SuccessfullyPlacedTilesToReduceFallbackRadius =
+                    _passOptions.Options.SuccessfullyPlacedTilesToReduceFallbackRadius;
+            }
+        }
     }
 
     private void ReduceEntropy(TileResult chosenTile)
@@ -339,6 +357,7 @@ public class WaveFunctionCollapseGenerator
 
         _options.FallbackAttempts--;
         _options.FallbackRadius += _options.FallbackRadiusIncrement;
+        _options.SuccessfullyPlacedTilesToReduceFallbackRadius = _passOptions.Options.SuccessfullyPlacedTilesToReduceFallbackRadius;
     }
 
     private List<TileChoice> GetPossibleTileChoices(TileResult chosenTile)

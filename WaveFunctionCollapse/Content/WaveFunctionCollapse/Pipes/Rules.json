@@ -43,7 +43,8 @@
       "Options": {
         "FallbackAttempts": 99,
         "FallbackRadius": 1,
-        "FallbackRadiusIncrement": 0,
+        "FallbackRadiusIncrement": 1,
+        "SuccessfullyPlacedTilesToReduceFallbackRadius": 25,
         "EntropyHeuristic": "ReduceByCountAndMaxWeightOfNeighbours",
         "RunFirstRules": ["[Y] == 0"]
       },

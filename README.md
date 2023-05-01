@@ -64,9 +64,11 @@ Options:
 
     FallbackAttempts - total amount of retries to perform if a collapse fails at any stage.  This is a total number, not local to any particular failure point, as are the other Fallback-properties below.
     
-    FallbackRadius - if a tile cannot be placed in a spot due to there being no valid tile that matches the existing neighbours then any assigned tiles in a radius of FallbackRadius are cleared (and entropy is set to ensure all these tiles are collapsed next).
-    
+    FallbackRadius - if a tile cannot be placed in a spot due to there being no valid tile that matches the exist~~~~ing neighbours then any assigned tiles in a radius of FallbackRadius are cleared (and entropy is set to ensure all these tiles are collapsed next).
+
     FallbackRadiusIncrement - After a failure, the FallbackRadius is incremented by this figure, meaning a bigger area is cleared each time.
+
+    SuccessfullyPlacedTilesToReduceFallbackRadius - after this many tiles are placed successfully in a row then the FallbackRadius is reduced back towards its original value.
 
     RunFirstRules: Array of strings defining rules on which tiles should run first.  The tiles involved have their entropy reduced, making the wave collapse algorithm run them first.  Rules must follow the same semantics as PlacementRule (defined in Tiles section below).
     
