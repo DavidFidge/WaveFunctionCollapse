@@ -12,16 +12,18 @@ public class TileChoice
     public float Rotation { get; }
     public Dictionary<Direction, Adapter> Adapters { get; }
     public Dictionary<Direction, ProhibitedEmptyNeighbourFlags> ProhibitedEmptyNeighbours { get; }
+    public Dictionary<Direction, int> EntropyWeights { get; }
     public List<Adapter> MandatoryAdapters { get; }
     public int Weight => TileTemplate.Attributes.Weight;
     public Texture2D Texture => TileTemplate.Texture;
 
-    public TileChoice(TileTemplate tileTemplate, Dictionary<Direction, Adapter> adapters, Dictionary<Direction, ProhibitedEmptyNeighbourFlags> prohibitedEmptyNeighbours, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
+    public TileChoice(TileTemplate tileTemplate, Dictionary<Direction, Adapter> adapters, Dictionary<Direction, ProhibitedEmptyNeighbourFlags> prohibitedEmptyNeighbours, Dictionary<Direction, int> entropyWeights, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
     {
         TileTemplate = tileTemplate;
         Adapters = adapters;
         SpriteEffects = spriteEffects;
         Rotation = rotation;
+        EntropyWeights = entropyWeights;
 
         if (string.IsNullOrEmpty(tileTemplate.Attributes.MandatoryAdapters))
             MandatoryAdapters = new List<Adapter>();
@@ -43,6 +45,16 @@ public class TileChoice
         }
 
         ProhibitedEmptyNeighbours = prohibitedEmptyNeighbours;
+
+        if (entropyWeights == null)
+        {
+            entropyWeights = new Dictionary<Direction, int>
+            {
+                { Direction.Up, Weight }, { Direction.Right, Weight }, { Direction.Down, Weight }, { Direction.Left, Weight }
+            };
+        }
+
+        EntropyWeights = entropyWeights;
     }
 
     public bool CanConnectToCategory(Point point, TileResult neighbourTile)

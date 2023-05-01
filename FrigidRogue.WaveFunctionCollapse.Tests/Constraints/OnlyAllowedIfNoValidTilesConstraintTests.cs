@@ -38,8 +38,8 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null);
-        var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters, null, null);
 
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheckOnlyAllowedIfNoValidTiles, new HashSet<TileChoice> { tileToCheck, tileToCheckOnlyAllowedIfNoValidTiles });
@@ -67,8 +67,8 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null);
-        var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters, null, null);
 
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheck, new HashSet<TileChoice> { tileToCheck, tileToCheckOnlyAllowedIfNoValidTiles });
@@ -96,8 +96,8 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null);
-        var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileToCheckOnlyAllowedIfNoValidTiles = new TileChoice(tileTemplate2, adapters, null, null);
 
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheckOnlyAllowedIfNoValidTiles, new HashSet<TileChoice> { tileToCheck, tileToCheckOnlyAllowedIfNoValidTiles });
@@ -124,7 +124,7 @@ public class OnlyAllowedIfNoValidTilesConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate, adapters, null);
+        var tileToCheck = new TileChoice(tileTemplate, adapters, null, null);
 
         // Act
         var result = onlyAllowedIfNoValidTilesConstraint.Check(tileResult, tileToCheck, new HashSet<TileChoice> { tileToCheck });

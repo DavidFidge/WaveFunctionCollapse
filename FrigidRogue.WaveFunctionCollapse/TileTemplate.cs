@@ -43,6 +43,16 @@ public class TileTemplate
         while (prohibitedEmptyNeighboursStrings.Count < 4)
             prohibitedEmptyNeighboursStrings.Add("None");
 
+        var entropyWeights = Attributes.EntropyWeights ?? Attributes.Weight.ToString();
+
+        var entropyWeightsStrings = entropyWeights
+            .Split(",")
+            .Select(a => int.Parse(a.Trim()))
+            .ToList();
+
+        while (entropyWeightsStrings.Count < 4)
+            entropyWeightsStrings.Add(Attributes.Weight);
+
         var directions = new List<Direction>
         {
             Direction.Up,
@@ -61,7 +71,11 @@ public class TileTemplate
                 .Select((d, index) => new { Direction = d, Index = index })
                 .ToDictionary(d => d.Direction, d => Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursStrings[d.Index]));
 
-            TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours));
+            var entropyWeightsDictionary = directions
+                .Select((d, index) => new { Direction = d, Index = index })
+                .ToDictionary(d => d.Direction, d => entropyWeightsStrings[d.Index]);
+
+            TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary));
         }
         else if (Attributes.Symmetry == "^")
         {
@@ -70,6 +84,7 @@ public class TileTemplate
             {
                 var adapters = new Dictionary<Direction, Adapter>(4);
                 var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
+                var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
@@ -82,6 +97,9 @@ public class TileTemplate
 
                     var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
                     prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
+
+                    var entropyWeight = entropyWeightsStrings[index];
+                    entropyWeightsDictionary.Add(direction, entropyWeight);
                 }
 
                 var rotation = i switch
@@ -92,7 +110,7 @@ public class TileTemplate
                     _ => 0f
                 };
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, rotation: rotation));
             }
         }
         else if (Attributes.Symmetry == "I")
@@ -101,6 +119,7 @@ public class TileTemplate
             {
                 var adapters = new Dictionary<Direction, Adapter>(4);
                 var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
+                var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
@@ -113,6 +132,9 @@ public class TileTemplate
 
                     var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
                     prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
+
+                    var entropyWeight = entropyWeightsStrings[index];
+                    entropyWeightsDictionary.Add(direction, entropyWeight);
                 }
 
                 var rotation = 0f;
@@ -120,7 +142,7 @@ public class TileTemplate
                 if (i == 1)
                     rotation = (float)Math.PI / 2f;
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, rotation: rotation));
             }
         }
         else if (Attributes.Symmetry == "/")
@@ -129,6 +151,7 @@ public class TileTemplate
             {
                 var adapters = new Dictionary<Direction, Adapter>(4);
                 var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
+                var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
@@ -141,6 +164,9 @@ public class TileTemplate
 
                     var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
                     prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
+
+                    var entropyWeight = entropyWeightsStrings[index];
+                    entropyWeightsDictionary.Add(direction, entropyWeight);
                 }
 
                 var rotation = 0f;
@@ -148,7 +174,7 @@ public class TileTemplate
                 if (i == 1)
                     rotation = (float)Math.PI;
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, rotation: rotation));
             }
         }
 
@@ -166,7 +192,12 @@ public class TileTemplate
                 (prohibitedEmptyNeighbours[Direction.Up], prohibitedEmptyNeighbours[Direction.Down]) = (prohibitedEmptyNeighbours[Direction.Down], prohibitedEmptyNeighbours[Direction.Up]);
                 (prohibitedEmptyNeighbours[Direction.Left], prohibitedEmptyNeighbours[Direction.Right]) = (prohibitedEmptyNeighbours[Direction.Right], prohibitedEmptyNeighbours[Direction.Left]);
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
+                var entropyWeightDictionary = tile.EntropyWeights.ToDictionary(d => d.Key, d => d.Value);
+
+                (entropyWeightDictionary[Direction.Up], entropyWeightDictionary[Direction.Down]) = (entropyWeightDictionary[Direction.Down], entropyWeightDictionary[Direction.Up]);
+                (entropyWeightDictionary[Direction.Left], entropyWeightDictionary[Direction.Right]) = (entropyWeightDictionary[Direction.Right], entropyWeightDictionary[Direction.Left]);
+
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
             }
             if (Attributes.FlipHorizontally)
             {
@@ -182,7 +213,11 @@ public class TileTemplate
                 var prohibitedEmptyNeighbours = tile.ProhibitedEmptyNeighbours.ToDictionary(d => d.Key, d => d.Value);
                 (prohibitedEmptyNeighbours[Direction.Left], prohibitedEmptyNeighbours[Direction.Right]) = (prohibitedEmptyNeighbours[Direction.Right], prohibitedEmptyNeighbours[Direction.Left]);
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, SpriteEffects.FlipHorizontally));
+                var entropyWeightDictionary = tile.EntropyWeights.ToDictionary(d => d.Key, d => d.Value);
+
+                (entropyWeightDictionary[Direction.Left], entropyWeightDictionary[Direction.Right]) = (entropyWeightDictionary[Direction.Right], entropyWeightDictionary[Direction.Left]);
+
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, SpriteEffects.FlipHorizontally));
             }
             if (Attributes.FlipVertically)
             {
@@ -198,7 +233,10 @@ public class TileTemplate
                 var prohibitedEmptyNeighbours = tile.ProhibitedEmptyNeighbours.ToDictionary(d => d.Key, d => d.Value);
                 (prohibitedEmptyNeighbours[Direction.Up], prohibitedEmptyNeighbours[Direction.Down]) = (prohibitedEmptyNeighbours[Direction.Down], prohibitedEmptyNeighbours[Direction.Up]);
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, SpriteEffects.FlipVertically));
+                var entropyWeightDictionary = tile.EntropyWeights.ToDictionary(d => d.Key, d => d.Value);
+                (entropyWeightDictionary[Direction.Up], entropyWeightDictionary[Direction.Down]) = (entropyWeightDictionary[Direction.Down], entropyWeightDictionary[Direction.Up]);
+
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, SpriteEffects.FlipVertically));
             }
         }
     }

@@ -15,4 +15,5 @@ public class TileAttribute
     public string Category { get; set; }
     public string[] CanConnectToCategories { get; set; }
     public string ProhibitedEmptyNeighbourRules { get; set; }
+    public string EntropyWeights { get; set; }
 }

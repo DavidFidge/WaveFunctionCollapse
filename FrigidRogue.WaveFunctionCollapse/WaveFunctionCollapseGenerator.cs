@@ -251,13 +251,16 @@ public class WaveFunctionCollapseGenerator
                 tileToRecalculate.Entropy -= collapsedNeighbours.Count;
                 break;
             case EntropyHeuristic.ReduceByWeightOfNeighbours:
-                tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.ChosenTile.Weight);
+                tileToRecalculate.Entropy -= collapsedNeighbours.Sum(t => t.ChosenTile.EntropyWeights[Direction.GetDirection(t.Point, tileToRecalculate.Point)]);
+                break;
+            case EntropyHeuristic.ReduceByMaxWeightOfNeighbours:
+                tileToRecalculate.Entropy -= collapsedNeighbours.Max(t => t.ChosenTile.EntropyWeights[Direction.GetDirection(t.Point, tileToRecalculate.Point)]);
                 break;
             case EntropyHeuristic.ReduceByCountAndWeightOfNeighbours:
-                tileToRecalculate.Entropy -= (collapsedNeighbours.Sum(t => t.ChosenTile.Weight) + collapsedNeighbours.Count);
+                tileToRecalculate.Entropy -= (collapsedNeighbours.Sum(t => t.ChosenTile.EntropyWeights[Direction.GetDirection(t.Point, tileToRecalculate.Point)]) + collapsedNeighbours.Count);
                 break;
             case EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours:
-                tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.ChosenTile.Weight) - collapsedNeighbours.Count;
+                tileToRecalculate.Entropy = tileToRecalculate.Entropy - collapsedNeighbours.Max(t => t.ChosenTile.EntropyWeights[Direction.GetDirection(t.Point, tileToRecalculate.Point)]) - collapsedNeighbours.Count;
                 break;
             case EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles:
                 var possibleTileChoices = GetPossibleTileChoices(tileToRecalculate);

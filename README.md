@@ -70,11 +70,13 @@ Options:
 
     RunFirstRules: Array of strings defining rules on which tiles should run first.  The tiles involved have their entropy reduced, making the wave collapse algorithm run them first.  Rules must follow the same semantics as PlacementRule (defined in Tiles section below).
     
-    EntropyHeuristic - the heuristic to use to reduce entropy.  There are currently four options:
-    
-        ReduceByCountOfNeighbours
-        ReduceByWeightOfNeighbours
-        ReduceByCountAndMaxWeightOfNeighbours
+    EntropyHeuristic - the heuristic to use to reduce entropy.  There are currently six options:
+
+        ReduceByCountOfNeighbours,
+        ReduceByWeightOfNeighbours,
+        ReduceByMaxWeightOfNeighbours,
+        ReduceByCountAndWeightOfNeighbours,
+        ReduceByCountAndMaxWeightOfNeighbours,
         ReduceByCountOfAllTilesMinusPossibleTiles
         
     PassMask - the mask to use for this pass.  This is a list of tiles from previous passes which will allow that tile to be used in this pass.  If not defined then all tiles are considered.  Example:
@@ -96,7 +98,7 @@ FlipHorizontally: Like the symmetry rules but allows a tile graphic to be flippe
 
 FlipVertically: as per flip horizontally but vertically instead.  Using both FlipHorizontally and FlipVertically will give you 4 new tiles - one flipped horizontally, one flipped vertically and one flipped horizontally then vertically.
 
-Weight: The weight is the chance of the tile being chosen from the list of valid tiles.
+Weight: The weight is the chance of the tile being chosen from the list of valid tiles.  Also used for reducing entropy when one of the "Weights" heuristics is being used.
 
 Adapters: The adapters define the allowed connection to other tiles.  Each direction must be specified in the order of up, right, down, left.  It can be any string whatsoever, however the order of the string is important. The ordering is clockwise starting from the north side of the tile. So for example a tile defined as "AB,AB,AB,AB" cannot join on itself.  It must be defined as "AB,AB,BA,BA" - a visualisation of the ordering is below:
 
@@ -118,6 +120,8 @@ Limit: The maximum number of times this tile can be used in the map.  If not def
 OnlyAllowedIfNoValidTilesConstraint: If true, this tile can only be placed if this tile (and other tiles with this flag set) is the only valid tile that can be placed.  This is a useful way of constructing multi-tile objects that must be placed together.
 
 ProhibitedEmptyNeighbourRules: Flags that define whether this tile can be placed if this tile is on the edge of the map or a neighbour is uncollapsed or unused.  Possible values are None|Uncollapsed|Unused|EdgeOfMap.  You can also use All which is the same as Uncollapsed|Unused|EdgeOfMap.  Each direction must be specified in the order of up, right, down, left (like adapters).  The rules are automatically translated for tiles that are flipped or have symmetrical copies.
+
+EntropyWeights: When using one of the "Weights" heuristics then instead of using the Weight value of the tile, use the weight specified in this list for the given direction. Each direction must be specified in the order of up, right, down, left (like adapters) in the form of a string e.g. "20,30,40,50".  The weights are automatically translated for tiles that are flipped or have symmetrical copies.  If no value is given to EntropyWeights then it uses the Weight value instead.
 
 #### Code-defined configuration
 Code defined configuration mirrors the json-defined configuration - you pass in a dictionary of tile names to texture 2D objects and pass in a Rules object which contains all rules as defined above.

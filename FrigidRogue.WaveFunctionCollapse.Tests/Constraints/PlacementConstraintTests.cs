@@ -41,7 +41,7 @@ public class PlacementConstraintTests : BaseGraphicsTest
             { Direction.Right, "A,A,A,A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate, adapters, null);
+        var tileToCheck = new TileChoice(tileTemplate, adapters, null, null);
 
         placementConstraint.Initialise(new List<TileTemplate>(), new MapOptions(5, 5));
 
@@ -70,7 +70,7 @@ public class PlacementConstraintTests : BaseGraphicsTest
             { Direction.Right, "A,A,A,A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate, adapters, null);
+        var tileToCheck = new TileChoice(tileTemplate, adapters, null, null);
 
         placementConstraint.Initialise(new List<TileTemplate>(), new MapOptions(5, 5));
 
@@ -103,7 +103,7 @@ public class PlacementConstraintTests : BaseGraphicsTest
             { Direction.Right, "A,A,A,A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate, adapters, null);
+        var tileToCheck = new TileChoice(tileTemplate, adapters, null, null);
 
         placementConstraint.Initialise(new List<TileTemplate>(), new MapOptions(5, 5));
 

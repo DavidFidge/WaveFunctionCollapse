@@ -1667,6 +1667,55 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         Assert.AreEqual(-6, remainingTile.Entropy);
     }
 
+
+    [TestMethod]
+    public void Entropy_Should_ReduceByWeightOfNeighbours_When_Using_EntropyWeights_Attribute()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var passOptions = new PassOptions
+        {
+            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByWeightOfNeighbours, RunFirstRules = new []{"[X] == 1 && [Y] == 1"}},
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 3,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        EntropyWeights = "1,11,111,1111"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(3, 3), GlobalRandom.DefaultRNG);
+        waveFunctionCollapse.Prepare(null);
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var tileUp = waveFunctionCollapse.Tiles[Point.ToIndex(1, 0, 3)];
+        Assert.AreEqual(-1, tileUp.Entropy);
+
+        var tileDown = waveFunctionCollapse.Tiles[Point.ToIndex(1, 2, 3)];
+        Assert.AreEqual(-111, tileDown.Entropy);
+
+        var tileRight = waveFunctionCollapse.Tiles[Point.ToIndex(2, 1, 3)];
+        Assert.AreEqual(-11, tileRight.Entropy);
+
+        var tileLeft = waveFunctionCollapse.Tiles[Point.ToIndex(0, 1, 3)];
+        Assert.AreEqual(-1111, tileLeft.Entropy);
+    }
+
     [TestMethod]
     public void Entropy_Should_ReduceByCountAndWeightOfNeighbours()
     {
@@ -1716,12 +1765,14 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var textures = new Dictionary<string, Texture2D>
         {
-            { "Floor", _floorTexture }
+            { "Floor", _floorTexture },
+            { "Corner", _cornerTexture },
         };
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours},
+            Options = new GeneratorOptions()
+                { EntropyHeuristic = EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours, RunFirstRules = new[] {"[X] == 0 || [Y] == 0"}},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1729,7 +1780,17 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                     {
                         Symmetry = "X",
                         Weight = 3,
-                        Adapters = "AAA,AAA,AAA,AAA"
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 1"
+                    }
+                },
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 10,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 0"
                     }
                 }
             }
@@ -1746,7 +1807,60 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         // Assert
         var remainingTile = waveFunctionCollapse.Tiles.Single(t => !t.IsCollapsed);
 
-        Assert.AreEqual(-5, remainingTile.Entropy);
+        Assert.AreEqual(-12, remainingTile.Entropy);
+    }
+
+    [TestMethod]
+    public void Entropy_Should_ReduceByMaxWeightOfNeighbours()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture },
+            { "Corner", _cornerTexture },
+        };
+
+        var passOptions = new PassOptions
+        {
+            Options = new GeneratorOptions()
+                { EntropyHeuristic = EntropyHeuristic.ReduceByMaxWeightOfNeighbours, RunFirstRules = new[] {"[X] == 0 || [Y] == 0"}},
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 3,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 1"
+                    }
+                },
+                {
+                    "Corner", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 10,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        PlacementRule = "[Y] == 0"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(2, 2), GlobalRandom.DefaultRNG);
+        waveFunctionCollapse.Prepare(null);
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var remainingTile = waveFunctionCollapse.Tiles.Single(t => !t.IsCollapsed);
+
+        Assert.AreEqual(-10, remainingTile.Entropy);
     }
 
     [TestMethod]

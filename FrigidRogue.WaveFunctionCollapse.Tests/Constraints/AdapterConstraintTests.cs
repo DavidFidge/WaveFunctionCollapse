@@ -56,11 +56,11 @@ public class AdapterConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null);
+        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -111,11 +111,11 @@ public class AdapterConstraintTests : BaseGraphicsTest
             { Direction.Right, "B" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null);
+        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -166,11 +166,11 @@ public class AdapterConstraintTests : BaseGraphicsTest
             { Direction.Right, "ONM" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null);
+        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -221,11 +221,11 @@ public class AdapterConstraintTests : BaseGraphicsTest
             { Direction.Right, "" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null);
+        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -276,11 +276,11 @@ public class AdapterConstraintTests : BaseGraphicsTest
             { Direction.Right, "MNO" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null);
+        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
