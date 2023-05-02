@@ -1016,7 +1016,79 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
         Assert.IsTrue(waveFunctionCollapse.Tiles.First().IsCollapsed);
         Assert.IsTrue(waveFunctionCollapse.Tiles.Skip(1).First().IsCollapsed);
     }
-    
+
+    [TestMethod]
+    public void Should_Decrement_Rollback_Radius_When_Successfully_Placed_Enough_Tiles_Using_Formula()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+        var failingTexture = new Texture2D(GraphicsDevice, 3, 3);
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "FailingTexture", failingTexture }
+        };
+
+        var waveFunctionCollapseGeneratorOptions = new GeneratorOptions
+        {
+            FallbackRadius = 1,
+            FallbackRadiusIncrement = 1,
+            SuccessfullyPlacedTilesToReduceFallbackRadiusFormula = "[MaxX] + [MaxY] + [MapWidth] + [MapHeight] - 7", // = 1
+            RunFirstRules = new []{ "[X] == 0" }
+        };
+
+        var passOptions = new PassOptions
+        {
+            Options = waveFunctionCollapseGeneratorOptions,
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "FailingTexture", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "A,A,A,A",
+                        PlacementRule = "[X] <= 2"
+                    }
+                },
+                {
+                    "FailingTexture2", new TileAttribute
+                    {
+                        TextureName = "FailingTexture",
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "Z,Z,Z,Z",
+                        PlacementRule = "[X] > 2"
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, passOptions, new MapOptions(4, 1), GlobalRandom.DefaultRNG);
+        waveFunctionCollapse.Prepare(null);
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        var result = waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        Assert.IsFalse(result.IsFailed);
+        Assert.IsFalse(result.IsComplete);
+
+        var tileResults = waveFunctionCollapse.Tiles
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(2, tileResults.Count);
+        
+        Assert.IsTrue(waveFunctionCollapse.Tiles.First().IsCollapsed);
+        Assert.IsTrue(waveFunctionCollapse.Tiles.Skip(1).First().IsCollapsed);
+    }
+
     [TestMethod]
     public void Should_Roll_Back_Tiles_Within_Fallback_Radius()
     {

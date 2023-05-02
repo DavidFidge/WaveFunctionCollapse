@@ -70,6 +70,8 @@ Options:
 
     SuccessfullyPlacedTilesToReduceFallbackRadius - after this many tiles are placed successfully in a row then the FallbackRadius is reduced back towards its original value.
 
+    SuccessfullyPlacedTilesToReduceFallbackRadiusFormula - Same as above but you define the value as a string formula.  Refer to PlacementRules for more information about the formula (note, [X] and [Y] are not available to this formula).
+
     RunFirstRules: Array of strings defining rules on which tiles should run first.  The tiles involved have their entropy reduced, making the wave collapse algorithm run them first.  Rules must follow the same semantics as PlacementRule (defined in Tiles section below).
     
     EntropyHeuristic - the heuristic to use to reduce entropy.  There are currently six options:
@@ -115,7 +117,7 @@ Adapters: The adapters define the allowed connection to other tiles.  Each direc
 
 MandatoryAdapters: A tile can only be placed if an existing collapsed neighbour in any direction matches against a mandatory adapter.  You use the pipe symbol to designate more than one mandatory adapters e.g. "A|B" will mean at least one of the neighbours must match against A or B.  Specific directions for the source tile are currently not supported.
 
-PlacementRule: An expression that is evaluated to determine if the tile can be placed at a given location (refer to the NCalc GitHub project).  The variables [X] and [Y] are the location of the tile being considered, [MaxX] and [MaxY] are the maximum X and Y values of the map.  The expression must return a boolean.
+PlacementRule: An expression that is evaluated to determine if the tile can be placed at a given location (refer to the NCalc GitHub project).  The variables [X] and [Y] are the location of the tile being considered, [MapWidth] and [MapHeight] are the map width and height, [MaxX] and [MaxY] are the maximum X and Y values of the map (i.e. MapWidth-1, MapHeight-1).  The expression must return a boolean.
 
 Limit: The maximum number of times this tile can be used in the map.  If not defined then there is no limit.
 

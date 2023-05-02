@@ -47,6 +47,8 @@ public class WaveFunctionCollapseGenerator
         if (_passOptions.Options == null)
             _passOptions.Options = new GeneratorOptions();
 
+        _passOptions.Options.SetSuccessfullyPlacedTilesToReduceFallbackRadius(_mapOptions);
+
         _options = passOptions.Options.Clone();
 
         _tileTemplates.Clear();

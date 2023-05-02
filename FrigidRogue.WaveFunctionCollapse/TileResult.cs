@@ -40,6 +40,8 @@ public class TileResult
         expression.Parameters["Y"] = point.Y;
         expression.Parameters["MaxX"] = mapOptions.MapWidth - 1;
         expression.Parameters["MaxY"] = mapOptions.MapHeight - 1;
+        expression.Parameters["MapWidth"] = mapOptions.MapWidth;
+        expression.Parameters["MapHeight"] = mapOptions.MapHeight;
 
         var isPointWithinEvaluationRule = (bool)expression.Evaluate();
 

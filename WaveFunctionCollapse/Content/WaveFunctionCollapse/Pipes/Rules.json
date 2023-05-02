@@ -44,7 +44,7 @@
         "FallbackAttempts": 99,
         "FallbackRadius": 1,
         "FallbackRadiusIncrement": 1,
-        "SuccessfullyPlacedTilesToReduceFallbackRadius": 10,
+        "SuccessfullyPlacedTilesToReduceFallbackRadiusFormula": "[MaxX] + [MaxY]",
         "EntropyHeuristic": "ReduceByCountAndMaxWeightOfNeighbours",
         "RunFirstRules": ["[Y] == 0"]
       },
