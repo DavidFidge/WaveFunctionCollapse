@@ -6,7 +6,7 @@ public class MandatoryAdapterConstraint : TileConstraint
 
     public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices)
     {
-        if (!tileToCheck.MandatoryAdapters.Any())
+        if (string.IsNullOrEmpty(tileToCheck.MandatoryAdapter.Pattern))
             return true;
 
         foreach (var neighbour in tile.Neighbours.Where(n => n.IsCollapsed))

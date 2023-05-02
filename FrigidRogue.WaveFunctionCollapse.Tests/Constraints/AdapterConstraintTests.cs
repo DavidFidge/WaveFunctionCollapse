@@ -130,6 +130,61 @@ public class AdapterConstraintTests : BaseGraphicsTest
     }
 
     [TestMethod]
+    public void Should_Pass_In_All_Directions_For_Multiple_Adapter_Choices()
+    {
+        // Arrange
+        var adapterConstraint = new AdapterConstraint();
+
+        var tileTemplate = new TileTemplate("Test", new TileAttribute(), _texture);
+
+        var tileResultUp = new TileResult(new Point(1, 0));
+        var tileResultDown = new TileResult(new Point(1, 2));
+        var tileResultLeft = new TileResult(new Point(0, 1));
+        var tileResultRight = new TileResult(new Point(2, 1));
+        var tileResultMiddle = new TileResult(new Point(1, 1));
+
+        tileResultMiddle.SetNeighbours(new []
+        {
+            new TileResult(new Point(0, 0)), tileResultUp, new TileResult(new Point(2, 0)),
+            tileResultLeft, tileResultMiddle, tileResultRight,
+            new TileResult(new Point(0, 2)), tileResultDown, new TileResult(new Point(2, 2))
+        }, 3, 3);
+
+        var adapters = new Dictionary<Direction, Adapter>
+        {
+            { Direction.Down, "A|B" },
+            { Direction.Up, "B|A" },
+            { Direction.Left, "A" },
+            { Direction.Right, "B" }
+        };
+
+        var adaptersMiddle = new Dictionary<Direction, Adapter>
+        {
+            { Direction.Down, "A" },
+            { Direction.Up, "B" },
+            { Direction.Left, "B|A" },
+            { Direction.Right, "A|B" }
+        };
+
+        var tileToCheckUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate, adapters, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adaptersMiddle, null, null);
+
+        tileResultUp.ChosenTile = tileToCheckUp;
+        tileResultDown.ChosenTile = tileToCheckDown;
+        tileResultLeft.ChosenTile = tileToCheckLeft;
+        tileResultRight.ChosenTile = tileToCheckRight;
+
+        // Act
+        var result = adapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckUp, tileToCheckDown, tileToCheckLeft, tileToCheckRight, tileToCheckMiddle });
+
+        // Assert
+        Assert.IsTrue(result);
+    }
+
+    [TestMethod]
     public void Should_Pass_For_MultiCharacter_Adapter_Strings()
     {
         // Arrange

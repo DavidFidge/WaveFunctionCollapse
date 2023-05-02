@@ -13,7 +13,7 @@ public class TileChoice
     public Dictionary<Direction, Adapter> Adapters { get; }
     public Dictionary<Direction, ProhibitedEmptyNeighbourFlags> ProhibitedEmptyNeighbours { get; }
     public Dictionary<Direction, int> EntropyWeights { get; }
-    public List<Adapter> MandatoryAdapters { get; }
+    public Adapter MandatoryAdapter { get; }
     public int Weight => TileTemplate.Attributes.Weight;
     public Texture2D Texture => TileTemplate.Texture;
 
@@ -25,16 +25,7 @@ public class TileChoice
         Rotation = rotation;
         EntropyWeights = entropyWeights;
 
-        if (string.IsNullOrEmpty(tileTemplate.Attributes.MandatoryAdapters))
-            MandatoryAdapters = new List<Adapter>();
-        else
-        {
-            MandatoryAdapters = tileTemplate.Attributes.MandatoryAdapters
-                .Split(",")
-                .Select(a => a.Trim())
-                .Select(a => (Adapter)a)
-                .ToList();
-        }
+        MandatoryAdapter = tileTemplate.Attributes.MandatoryAdapters;
 
         if (prohibitedEmptyNeighbours == null)
         {
@@ -79,12 +70,7 @@ public class TileChoice
         var firstAdapter = Adapters[direction];
         var secondAdapter = neighbourTile.ChosenTile.Adapters[direction.Opposite()];
 
-        // If one of the tiles has no pattern then it can join to anything
-        if (string.IsNullOrEmpty(firstAdapter.Pattern) || string.IsNullOrEmpty(secondAdapter.Pattern))
-            return true;
-
-        // Patterns must be defined in a clockwise order - check if this is the case if you're having problems
-        return Equals(firstAdapter.Pattern, new string(secondAdapter.Pattern.Reverse().ToArray()));
+        return firstAdapter.Matches(secondAdapter);
     }
 
     public bool IsAdapterMandatory(Point point, TileResult neighbourTile)
@@ -93,7 +79,7 @@ public class TileChoice
 
         var firstAdapter = neighbourTile.ChosenTile.Adapters[direction.Opposite()];
 
-        return MandatoryAdapters.Any(m => m.Pattern == firstAdapter.Pattern);
+        return MandatoryAdapter.MatchesMandatory(firstAdapter);
     }
 
     public bool PassesPlacementRule(Point point, int mapWidth, int mapHeight)

@@ -159,7 +159,7 @@
           "Weight": 70,
           "Adapters": "B,FT,F,FT",
           "FlipHorizontally": true,
-          "MandatoryAdapters": "F,FT",
+          "MandatoryAdapters": "F|FT",
           "PlacementRule": "([Y] > [MaxY] / 2)"
         },
         "SlimeTop2": {
@@ -167,7 +167,7 @@
           "Weight": 70,
           "Adapters": "B,FT,F,FT",
           "FlipHorizontally": true,
-          "MandatoryAdapters": "F,FT",
+          "MandatoryAdapters": "F|FT",
           "PlacementRule": "([Y] > [MaxY] / 2)"
         }
       }

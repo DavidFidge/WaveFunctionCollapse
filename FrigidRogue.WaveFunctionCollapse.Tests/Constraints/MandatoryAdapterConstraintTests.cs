@@ -82,6 +82,77 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
         Assert.AreEqual(expectedResult, result);
     }
 
+    [DataTestMethod]
+    [DataRow("A","","","", true)]
+    [DataRow("","A","","", true)]
+    [DataRow("","","A","", true)]
+    [DataRow("","","","A", true)]
+    [DataRow("B","","","", true)]
+    [DataRow("","B","","", true)]
+    [DataRow("","","B","", true)]
+    [DataRow("","","","B", true)]
+    [DataRow("AB","","","", false)]
+    [DataRow("","AB","","", false)]
+    [DataRow("","","AB","", false)]
+    [DataRow("","","","AB", false)]
+    [DataRow("","","","", false)]
+    public void Should_Pass_For_Multiple_MandatoryAdapters(string upAdaptor, string downAdapter, string leftAdapter, string rightAdapter, bool expectedResult)
+    {
+        // Arrange
+        var mandatoryAdapterConstraint = new MandatoryAdapterConstraint();
+
+        var tileTemplate1 = new TileTemplate("Test", new TileAttribute(), _texture);
+        var tileTemplate2 = new TileTemplate("Test2", new TileAttribute() { MandatoryAdapters = "A|B"}, _texture);
+
+        var tileResultUp = new TileResult(new Point(1, 0));
+        var tileResultDown = new TileResult(new Point(1, 2));
+        var tileResultLeft = new TileResult(new Point(0, 1));
+        var tileResultRight = new TileResult(new Point(2, 1));
+        var tileResultMiddle = new TileResult(new Point(1, 1));
+
+        tileResultMiddle.SetNeighbours(new []
+        {
+            new TileResult(new Point(0, 0)), tileResultUp, new TileResult(new Point(2, 0)),
+            tileResultLeft, tileResultMiddle, tileResultRight,
+            new TileResult(new Point(0, 2)), tileResultDown, new TileResult(new Point(2, 2))
+        }, 3, 3);
+
+        var adapters = new Dictionary<Direction, Adapter>
+        {
+            { Direction.Down, downAdapter },
+            { Direction.Up, upAdaptor },
+            { Direction.Left, leftAdapter },
+            { Direction.Right, rightAdapter }
+        };
+
+        var adaptersMiddle = new Dictionary<Direction, Adapter>
+        {
+            // using arbitrary values for adapters - the mandatory adapters checker only checks 
+            // the mandatory adapters string of the tile being allocated against the adapters of the neighbour tiles
+            { Direction.Down, "B" },
+            { Direction.Up, "B" },
+            { Direction.Left, "B" },
+            { Direction.Right, "B" }
+        };
+
+        var tileToCheckUp = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null);
+
+        tileResultUp.ChosenTile = tileToCheckUp;
+        tileResultDown.ChosenTile = tileToCheckDown;
+        tileResultLeft.ChosenTile = tileToCheckLeft;
+        tileResultRight.ChosenTile = tileToCheckRight;
+
+        // Act
+        var result = mandatoryAdapterConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
+
+        // Assert
+        Assert.AreEqual(expectedResult, result);
+    }
+
     [TestMethod]
     public void Should_Pass_When_No_Mandatory_Adapters()
     {

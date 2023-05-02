@@ -102,18 +102,18 @@ FlipVertically: as per flip horizontally but vertically instead.  Using both Fli
 
 Weight: The weight is the chance of the tile being chosen from the list of valid tiles.  Also used for reducing entropy when one of the "Weights" heuristics is being used.
 
-Adapters: The adapters define the allowed connection to other tiles.  Each direction must be specified in the order of up, right, down, left.  It can be any string whatsoever, however the order of the string is important. The ordering is clockwise starting from the north side of the tile. So for example a tile defined as "AB,AB,AB,AB" cannot join on itself.  It must be defined as "AB,AB,BA,BA" - a visualisation of the ordering is below:
+Adapters: The adapters define the allowed connection to other tiles.  Each direction must be specified in the order of up, right, down, left.  You can include a pipe symbol to match against multiple patterns e.g. "A|B,A,A,A"  It can be any string whatsoever, however the order of the string is important. The ordering is clockwise starting from the north side of the tile. So for example a tile defined as "AB,AB,AB,AB" cannot join on itself.  It must be defined as "AB,AB,BA,BA" - a visualisation of the ordering is below:
 
 ```
-   AB->
- ^  --   A
- A |  |  B
- B  --  \/
-   AB
-   <--
+    AB→
+ ↑  --
+ A |  | A
+ B |  | B
+    --  ↓
+   ←AB
 ```
 
-MandatoryAdapters: A tile can only be placed if one of the connections will connect to a tile that has ONE (not all) of the mandatory adapters.  This is a comma separated list of adapters.
+MandatoryAdapters: A tile can only be placed if an existing collapsed neighbour in any direction matches against a mandatory adapter.  You use the pipe symbol to designate more than one mandatory adapters e.g. "A|B" will mean at least one of the neighbours must match against A or B.  Specific directions for the source tile are currently not supported.
 
 PlacementRule: An expression that is evaluated to determine if the tile can be placed at a given location (refer to the NCalc GitHub project).  The variables [X] and [Y] are the location of the tile being considered, [MaxX] and [MaxY] are the maximum X and Y values of the map.  The expression must return a boolean.
 
