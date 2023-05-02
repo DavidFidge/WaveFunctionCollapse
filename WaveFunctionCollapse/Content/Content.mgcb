@@ -1745,14 +1745,6 @@
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:WaveFunctionCollapse/Pipes/SlimeExpand1.png
-
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:WaveFunctionCollapse/Pipes/SlimeExpand2.png
-
-/importer:TextureImporter
-/processor:TextureProcessor
 /build:WaveFunctionCollapse/Pipes/SlimeFull1.png
 
 /importer:TextureImporter

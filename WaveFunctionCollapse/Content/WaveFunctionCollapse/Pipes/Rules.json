@@ -52,95 +52,69 @@
         "EmptyStart": {
           "TextureName": "Empty",
           "Symmetry": "X",
-          "Weight": 9,
+          "Weight": 1,
           "Adapters": "B,B,B,B",
-          "PlacementRule": "([Y] == 0)"
+          "PlacementRule": "[Y] == 0"
         },
         "SectionStart": {
           "TextureName": "Section",
           "Symmetry": "X",
-          "Weight": 10,
+          "Weight": 1,
+          "EntropyWeights": "10,1,10,1",
           "Adapters": "P,B,P,B",
-          "PlacementRule": "([Y] == 0)"
+          "PlacementRule": "[Y] == 0"
         },
         "Empty": {
           "Symmetry": "X",
-          "Weight": 40,
+          "Weight": 7,
           "Adapters": "B,B,B,B",
-          "PlacementRule": "([Y] > 0)"
+          "PlacementRule": "[Y] > 0"
         },
         "PipeOpening": {
           "Symmetry": "X",
-          "Weight": 50,
+          "Weight": 4,
           "Adapters": "P,B,S,B",
-          "PlacementRule": "([Y] > ([MaxY] / 2) - 1)"
+          "EntropyWeights": "20,1,100,1",
+          "PlacementRule": "[Y] > ([MaxY] / 3)"
         },
         "Section": {
           "Symmetry": "I",
-          "Weight": 50,
+          "Weight": 20,
           "Adapters": "P,B,P,B",
-          "PlacementRule": "([Y] > 0)"
+          "PlacementRule": "[Y] > 0"
         },
         "Turn": {
           "Symmetry": "^",
           "Weight": 1,
           "Adapters": "B,P,P,B",
-          "PlacementRule": "([Y] > 0)"
+          "PlacementRule": "[Y] > 0"
         },
         "Underground": {
           "Symmetry": "^",
           "Weight": 1,
           "Adapters": "P,B,B,B",
-          "PlacementRule": "([Y] > 0)",
+          "PlacementRule": "[Y] > 0",
           "OnlyAllowedIfNoValidTiles": true
         },
         "Slime1": {
           "Symmetry": "X",
-          "Weight": 60,
+          "Weight": 10,
           "Adapters": "S,B,S,B",
+          "EntropyWeights": "10,1,10,1",
           "FlipHorizontally": true,
-          "PlacementRule": "([Y] > [MaxY] / 2)"
+          "PlacementRule": "[Y] > ([MaxY] / 3) + 1"
         },
         "Slime2": {
           "Symmetry": "X",
-          "Weight": 60,
+          "Weight": 10,
           "Adapters": "S,B,S,B",
+          "EntropyWeights": "10,1,10,1",
           "FlipHorizontally": true,
-          "PlacementRule": "([Y] > [MaxY] / 2)"
-        },
-        "SlimeExpand1": {
-          "Symmetry": "X",
-          "Weight": 60,
-          "Adapters": "S,B,FC,B",
-          "FlipHorizontally": true,
-          "PlacementRule": "([Y] > [MaxY] / 2)"
-        },
-        "SlimeExpand2": {
-          "Symmetry": "X",
-          "Weight": 60,
-          "Adapters": "S,B,FC,B",
-          "FlipHorizontally": true,
-          "PlacementRule": "([Y] > [MaxY] / 2)"
-        },
-        "SlimeFullConnector1": {
-          "TextureName": "SlimeFull1",
-          "Symmetry": "X",
-          "Weight": 70,
-          "Adapters": "FC,FT,F,FT",
-          "FlipHorizontally": true,
-          "PlacementRule": "([Y] > [MaxY] / 2)"
-        },
-        "SlimeFullConnector2": {
-          "TextureName": "SlimeFull2",
-          "Symmetry": "X",
-          "Weight": 70,
-          "Adapters": "FC,FT,F,FT",
-          "FlipHorizontally": true,
-          "PlacementRule": "([Y] > [MaxY] / 2)"
+          "PlacementRule": "[Y] > ([MaxY] / 3) + 1"
         },
         "SlimeFull1": {
           "Symmetry": "X",
-          "Weight": 70,
+          "Weight": 40,
           "Adapters": "F,F,F,F",
           "FlipHorizontally": true,
           "FlipVertically": true,
@@ -148,7 +122,7 @@
         },
         "SlimeFull2": {
           "Symmetry": "X",
-          "Weight": 70,
+          "Weight": 40,
           "Adapters": "F,F,F,F",
           "FlipHorizontally": true,
           "FlipVertically": true,
@@ -156,19 +130,42 @@
         },
         "SlimeTop1": {
           "Symmetry": "X",
-          "Weight": 70,
-          "Adapters": "B,FT,F,FT",
+          "Weight": 40,
+          "Adapters": "B|S,T,F,T",
           "FlipHorizontally": true,
-          "MandatoryAdapters": "F|FT",
+          "MandatoryAdapters": "T|S",
+          "EntropyWeights": "1,40,40,40",
           "PlacementRule": "([Y] > [MaxY] / 2)"
         },
         "SlimeTop2": {
           "Symmetry": "X",
-          "Weight": 70,
-          "Adapters": "B,FT,F,FT",
+          "Weight": 40,
+          "Adapters": "B|S,T,F,T",
           "FlipHorizontally": true,
-          "MandatoryAdapters": "F|FT",
+          "MandatoryAdapters": "T|S",
           "PlacementRule": "([Y] > [MaxY] / 2)"
+        },
+        "SlimeBottom1": {
+          "TextureName": "SlimeTop1",
+          "Symmetry": "X",
+          "Weight": 1,
+          "Adapters": "B,T,F,T",
+          "FlipVertically": true,
+          "FlipHorizontally": true,
+          "EntropyWeights": "1,40,40,40",
+          "PlacementRule": "([Y] > [MaxY] / 2)",
+          "OnlyAllowedIfNoValidTiles": true
+        },
+        "SlimeBottom2": {
+          "TextureName": "SlimeTop2",
+          "Symmetry": "X",
+          "Weight": 1,
+          "Adapters": "B,T,F,T",
+          "FlipVertically": true,
+          "FlipHorizontally": true,
+          "EntropyWeights": "1,40,40,40",
+          "PlacementRule": "([Y] > [MaxY] / 2)",
+          "OnlyAllowedIfNoValidTiles": true
         }
       }
     }

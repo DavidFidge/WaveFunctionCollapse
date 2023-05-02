@@ -31,9 +31,6 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private readonly IGameTimeService _gameTimeService;
     private Panel _leftPanel;
     private Panel _mapPanel;
-
-
-
     private bool _playUntilComplete;
     private bool _playContinuously;
     private TimeSpan? _dateTimeFinished;
@@ -241,9 +238,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
     public Task<Unit> Handle(MewMapRequest request, CancellationToken cancellationToken)
     {
-        _playContinuously = false;
-        _playUntilComplete = false;
-        _dateTimeFinished = null;
+        ResetPlayContinuously();
 
         _viewModel.Reset();
 
