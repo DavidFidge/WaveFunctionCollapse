@@ -56,21 +56,21 @@
         },
         "DanceFloorHorizontal1": {
           "Symmetry": "X",
-          "Weight": 11,
+          "Weight": 12,
           "Adapters": "F,FB,A,BF",
           "FlipHorizontally": true,
           "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorHorizontal2": {
           "Symmetry": "X",
-          "Weight": 11,
+          "Weight": 12,
           "Adapters": "A,BF,F,FB",
           "FlipHorizontally": true,
           "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "DanceFloorVertical": {
           "Symmetry": "X",
-          "Weight": 11,
+          "Weight": 12,
           "Adapters": "AF,F,FA,B",
           "FlipHorizontally": true,
           "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
