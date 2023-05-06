@@ -19,7 +19,7 @@
       "Tiles": {
         "FloorInside": {
           "Symmetry": "X",
-          "Weight": 1,
+          "Weight": 200,
           "Adapters": "F,F,F,F",
           "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
@@ -34,14 +34,14 @@
           "Symmetry": "^",
           "Weight": 1,
           "Adapters": "O,O,OF,FO",
-          "EntropyWeights": "1,1,50,50",
+          "EntropyWeights": "1,1,20,20",
           "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "Wall": {
           "Symmetry": "^",
           "Weight": 20,
           "Adapters": "FO,O,OF,F",
-          "EntropyWeights": "50,1,50,1",
+          "EntropyWeights": "20,1,20,200",
           "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
         },
         "FloorOutside": {

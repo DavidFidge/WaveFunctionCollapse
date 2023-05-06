@@ -19,10 +19,11 @@ namespace WaveFunctionCollapse.Views;
 
 public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, WaveFunctionCollapseData>,
     IRequestHandler<NextStepRequest>,
-    IRequestHandler<MewMapRequest>,
+    IRequestHandler<NewMapRequest>,
     IRequestHandler<PlayContinuouslyRequest>,
     IRequestHandler<PlayUntilCompleteRequest>,
-    IRequestHandler<ChangeContentRequest>
+    IRequestHandler<ChangeContentRequest>,
+    IRequestHandler<ReloadJsonRequest>
 {
     private readonly IGameCamera _gameCamera;
     private readonly MapEntity _mapEntity;
@@ -88,11 +89,15 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         _tileSetDropDown.OnValueChange += e =>
         {
-            Mediator.Send(new ChangeContentRequest { Content = $"WaveFunctionCollapse/{((DropDown)e).SelectedValue}"});
+            Mediator.Send(new ChangeContentRequest { Content = GetSelectedContent(e)});
         };
 
         new Button("New Map")
-            .SendOnClick<MewMapRequest>(Mediator)
+            .SendOnClick<NewMapRequest>(Mediator)
+            .AddTo(_leftPanel);
+
+        new Button("Reload json")
+            .SendOnClick<ReloadJsonRequest>(Mediator)
             .AddTo(_leftPanel);
 
         new Button("Next Step")
@@ -118,6 +123,11 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         {
             _tileSetDropDown.SelectedValue = _startingTileSet;
         }
+    }
+
+    private static string GetSelectedContent(Entity e)
+    {
+        return $"WaveFunctionCollapse/{((DropDown)e).SelectedValue}";
     }
 
     private void ResetPlayContinuously()
@@ -236,7 +246,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         return Unit.Task;
     }
 
-    public Task<Unit> Handle(MewMapRequest request, CancellationToken cancellationToken)
+    public Task<Unit> Handle(NewMapRequest request, CancellationToken cancellationToken)
     {
         ResetPlayContinuously();
 
@@ -300,6 +310,14 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         _renderTarget = null;
         _viewModel.CreatePasses(GameProvider.Game.Content, request.Content);
         CreateRenderTarget();
+
+        return Unit.Task;
+    }
+
+    public Task<Unit> Handle(ReloadJsonRequest request, CancellationToken cancellationToken)
+    {
+        ResetPlayContinuously();
+        _viewModel.CreatePasses(GameProvider.Game.Content, GetSelectedContent(_tileSetDropDown));
 
         return Unit.Task;
     }

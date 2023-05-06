@@ -42,6 +42,10 @@ public class WaveFunctionCollapseGeneratorPasses
 
     public void CreatePasses(Rules rules, Dictionary<string, Texture2D> textures)
     {
+        _generatorsQueue.Clear();
+        _generators.Clear();
+        _currentGenerator = null;
+
         for (var index = 0; index < rules.Passes.Length; index++)
         {
             var layer = rules.Passes[index];

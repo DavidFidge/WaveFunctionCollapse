@@ -13,8 +13,8 @@ public class WaveFunctionCollapseViewKeyboardHandler : BaseGameViewKeyboardHandl
         if (ActionMap.ActionIs<NextStepRequest>(keyInFocus, keyboardModifier))
             Mediator.Send(new NextStepRequest());
 
-        if (ActionMap.ActionIs<MewMapRequest>(keyInFocus, keyboardModifier))
-            Mediator.Send(new MewMapRequest());
+        if (ActionMap.ActionIs<NewMapRequest>(keyInFocus, keyboardModifier))
+            Mediator.Send(new NewMapRequest());
 
         if (ActionMap.ActionIs<PlayUntilCompleteRequest>(keyInFocus, keyboardModifier))
             Mediator.Send(new PlayUntilCompleteRequest());

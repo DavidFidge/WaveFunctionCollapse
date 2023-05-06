@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace WaveFunctionCollapse.Messages;
 
-[ActionMap(Name = "New Map", DefaultKey = Keys.N)]
-public class NewMapRequest : IRequest
+[ActionMap(Name = "Reload Json", DefaultKey = Keys.R)]
+public class ReloadJsonRequest : IRequest
 {
 }
