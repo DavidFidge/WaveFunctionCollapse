@@ -348,11 +348,19 @@ public class WaveFunctionCollapseGenerator
             }
         }
 
-        foreach (var retryPoint in retryPoints)
-        {
-            var retryTile = Tiles[retryPoint.ToIndex(MapWidth)];
+        var recalculateEntropyRadius = _options.FallbackRadius + 1; // Need an extra unit to recalculate entropy for tiles adjacent to those rolled back
 
-            RecalculateEntropy(retryTile);
+        var recalculateEntropyPoints = chosenTile.Point
+            .NeighboursOutwardsFrom(recalculateEntropyRadius, 0, MapWidth - 1, 0, MapHeight - 1)
+            .OrderBy(p => (int)Distance.Manhattan.Calculate(p, chosenTile.Point))
+            .ToList();
+
+        foreach (var recalculateEntropyPoint in recalculateEntropyPoints)
+        {
+            var tile = Tiles[recalculateEntropyPoint.ToIndex(MapWidth)];
+
+            if (!tile.IsCollapsed && !tile.IsUnused)
+                RecalculateEntropy(tile);
         }
 
         RecalculateEntropy(chosenTile);

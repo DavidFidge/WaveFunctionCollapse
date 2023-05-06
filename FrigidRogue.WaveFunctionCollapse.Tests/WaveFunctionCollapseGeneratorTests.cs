@@ -874,7 +874,73 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(0, tileResults.Count);
     }
-    
+
+    [TestMethod]
+    public void Should_Recalculate_Entropy_On_Roll_Back()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+        var failingTexture = new Texture2D(GraphicsDevice, 3, 3);
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "FailingTexture", failingTexture }
+        };
+
+        var waveFunctionCollapseGeneratorOptions = new GeneratorOptions
+        {
+            FallbackAttempts = 1,
+            FallbackRadiusIncrement = 0,
+            FallbackRadius = 1,
+            RunFirstRules = new [] {"[X] == 1", "[X] == 0 && [Y] == 2"},
+            EntropyHeuristic = EntropyHeuristic.ReduceByMaxWeightOfNeighbours
+        };
+
+        var passOptions = new PassOptions
+        {
+            Options = waveFunctionCollapseGeneratorOptions,
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "FailingTexture", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 5,
+                        Adapters = "A,DEF,A,JKL",
+                        EntropyWeights = "10,11,12,100"
+                    }
+                }
+            }
+        };
+
+        var mapOptions = new MapOptions(3, 3);
+        waveFunctionCollapse.CreateTiles(textures, passOptions, mapOptions, GlobalRandom.DefaultRNG);
+        waveFunctionCollapse.Prepare(null);
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+        waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        var tileResults = waveFunctionCollapse.Tiles
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(1, tileResults.Count);
+
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(0, 0).ToIndex(mapOptions.MapWidth)].Entropy, -100);
+        Assert.IsTrue(waveFunctionCollapse.Tiles[new Point(1, 0).ToIndex(mapOptions.MapWidth)].IsCollapsed);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(2, 0).ToIndex(mapOptions.MapWidth)].Entropy, -11);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(0, 1).ToIndex(mapOptions.MapWidth)].Entropy, 0);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(1, 1).ToIndex(mapOptions.MapWidth)].Entropy, (-Int32.MaxValue / 2) - 12);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(2, 1).ToIndex(mapOptions.MapWidth)].Entropy, 0);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(0, 2).ToIndex(mapOptions.MapWidth)].Entropy, -Int32.MaxValue / 3);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(1, 2).ToIndex(mapOptions.MapWidth)].Entropy, -Int32.MaxValue / 2);
+        Assert.AreEqual(waveFunctionCollapse.Tiles[new Point(2, 2).ToIndex(mapOptions.MapWidth)].Entropy, 0);
+    }
+
     [TestMethod]
     public void Should_Increment_Radius_When_Roll_Back_Occurs()
     {
