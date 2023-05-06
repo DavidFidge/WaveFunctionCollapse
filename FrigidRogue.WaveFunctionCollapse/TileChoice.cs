@@ -13,17 +13,26 @@ public class TileChoice
     public Dictionary<Direction, Adapter> Adapters { get; }
     public Dictionary<Direction, ProhibitedEmptyNeighbourFlags> ProhibitedEmptyNeighbours { get; }
     public Dictionary<Direction, int> EntropyWeights { get; }
+    public Dictionary<Direction, bool> CanConnectToSelf { get; }
     public Adapter MandatoryAdapter { get; }
     public int Weight => TileTemplate.Attributes.Weight;
     public Texture2D Texture => TileTemplate.Texture;
 
-    public TileChoice(TileTemplate tileTemplate, Dictionary<Direction, Adapter> adapters, Dictionary<Direction, ProhibitedEmptyNeighbourFlags> prohibitedEmptyNeighbours, Dictionary<Direction, int> entropyWeights, SpriteEffects spriteEffects = SpriteEffects.None, float rotation = 0f)
+    public TileChoice(
+        TileTemplate tileTemplate,
+        Dictionary<Direction, Adapter> adapters,
+        Dictionary<Direction, ProhibitedEmptyNeighbourFlags> prohibitedEmptyNeighbours,
+        Dictionary<Direction, int> entropyWeights,
+        Dictionary<Direction, bool> canConnectToSelf,
+        SpriteEffects spriteEffects = SpriteEffects.None,
+        float rotation = 0f)
     {
         TileTemplate = tileTemplate;
         Adapters = adapters;
         SpriteEffects = spriteEffects;
         Rotation = rotation;
         EntropyWeights = entropyWeights;
+        CanConnectToSelf = canConnectToSelf;
 
         MandatoryAdapter = tileTemplate.Attributes.MandatoryAdapters;
 

@@ -53,6 +53,8 @@ public class TileTemplate
         while (entropyWeightsStrings.Count < 4)
             entropyWeightsStrings.Add(Attributes.Weight);
 
+        var canConnectToSelf = 
+
         var directions = new List<Direction>
         {
             Direction.Up,

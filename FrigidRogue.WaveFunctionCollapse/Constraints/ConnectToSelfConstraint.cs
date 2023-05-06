@@ -1,4 +1,6 @@
-﻿namespace FrigidRogue.WaveFunctionCollapse.Constraints;
+﻿using SadRogue.Primitives;
+
+namespace FrigidRogue.WaveFunctionCollapse.Constraints;
 
 public class ConnectToSelfConstraint : TileConstraint
 {
@@ -6,15 +8,14 @@ public class ConnectToSelfConstraint : TileConstraint
 
     public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices)
     {
-        if (tileToCheck.TileTemplate.Attributes.CanConnectToSelf)
-            return true;
-
         foreach (var neighbour in tile.Neighbours.Where(n => n.IsCollapsed))
         {
-            if (tileToCheck.TileTemplate.Name == neighbour.ChosenTile.TileTemplate.Name)
-            {
+            var direction = Direction.GetDirection(tile.Point, neighbour.Point);
+
+            var canConnectToSelf = tileToCheck.CanConnectToSelf[direction];
+
+            if (!canConnectToSelf && tileToCheck.TileTemplate.Name == neighbour.ChosenTile.TileTemplate.Name)
                 return false;
-            }
         }
 
         return true;
