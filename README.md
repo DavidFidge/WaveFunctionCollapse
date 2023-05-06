@@ -115,7 +115,7 @@ Adapters: The adapters define the allowed connection to other tiles.  Each direc
    ←AB
 ```
 
-MandatoryAdapters: A tile can only be placed if an existing collapsed neighbour in any direction matches against a mandatory adapter.  You use the pipe symbol to designate more than one mandatory adapters e.g. "A|B" will mean at least one of the neighbours must match against A or B.  Specific directions for the source tile are currently not supported.
+MandatoryAdapters: A tile can only be placed if an existing collapsed neighbour matches against a mandatory adapter.   You use the pipe symbol to designate more than one mandatory adapters e.g. "A|B" will mean at least one of the neighbours must match against A or B.  Per-directional Mandatory Adapters are currently not supported - the set provided are checked in all directions and only ONE of the mandatory adapters has to pass the rule in any direction.
 
 PlacementRule: An expression that is evaluated to determine if the tile can be placed at a given location (refer to the NCalc GitHub project).  The variables [X] and [Y] are the location of the tile being considered, [MapWidth] and [MapHeight] are the map width and height, [MaxX] and [MaxY] are the maximum X and Y values of the map (i.e. MapWidth-1, MapHeight-1).  The expression must return a boolean.
 
@@ -126,6 +126,10 @@ OnlyAllowedIfNoValidTilesConstraint: If true, this tile can only be placed if th
 ProhibitedEmptyNeighbourRules: Flags that define whether this tile can be placed if this tile is on the edge of the map or a neighbour is uncollapsed or unused.  Possible values are None|Uncollapsed|Unused|EdgeOfMap.  You can also use All which is the same as Uncollapsed|Unused|EdgeOfMap.  Each direction must be specified in the order of up, right, down, left (like adapters).  The rules are automatically translated for tiles that are flipped or have symmetrical copies.
 
 EntropyWeights: When using one of the "Weights" heuristics then instead of using the Weight value of the tile, use the weight specified in this list for the given direction. Each direction must be specified in the order of up, right, down, left (like adapters) in the form of a string e.g. "20,30,40,50".  The weights are automatically translated for tiles that are flipped or have symmetrical copies.  If no value is given to EntropyWeights then it uses the Weight value instead.
+
+Category: Designate a category for this tile.
+
+CanConnectToCategories: A list of categories that this tile can connect to.  If not defined then it can connect to any category.  Example: "CanConnectToCategories": ["X", "Y"]
 
 #### Code-defined configuration
 Code defined configuration mirrors the json-defined configuration - you pass in a dictionary of tile names to texture 2D objects and pass in a Rules object which contains all rules as defined above.
