@@ -737,6 +737,52 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
     }
 
     [TestMethod]
+    public void Should_Fail_When_CanConnectToSelf_Is_False()
+    {
+        // Arrange
+        var waveFunctionCollapse = new WaveFunctionCollapseGenerator();
+
+        var textures = new Dictionary<string, Texture2D>
+        {
+            { "Floor", _floorTexture }
+        };
+
+        var passOptionsWithInitialisation = new PassOptions
+        {
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
+            Tiles = new Dictionary<string, TileAttribute>
+            {
+                {
+                    "Floor", new TileAttribute
+                    {
+                        Symmetry = "X",
+                        Weight = 1,
+                        Adapters = "AAA,AAA,AAA,AAA",
+                        CanConnectToSelf = false
+                    }
+                }
+            }
+        };
+
+        waveFunctionCollapse.CreateTiles(textures, passOptionsWithInitialisation, new MapOptions(1, 2), GlobalRandom.DefaultRNG);
+        waveFunctionCollapse.Prepare(null);
+
+        // Act
+        waveFunctionCollapse.ExecuteNextStep();
+        var result = waveFunctionCollapse.ExecuteNextStep();
+
+        // Assert
+        Assert.IsFalse(result.IsComplete);
+        Assert.IsTrue(result.IsFailed);
+
+        var tileResults = waveFunctionCollapse.Tiles
+            .Where(c => c.IsCollapsed)
+            .ToList();
+
+        Assert.AreEqual(1, tileResults.Count);
+    }
+
+    [TestMethod]
     public void Should_Complete_After_All_Steps_Done()
     {
         // Arrange

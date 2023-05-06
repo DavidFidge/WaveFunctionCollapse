@@ -2,7 +2,7 @@
 
 public class CategoryConstraint : TileConstraint
 {
-    public override int Order => 4;
+    public override int Order => 6;
 
     public override bool Check(TileResult tile, TileChoice tileToCheck, HashSet<TileChoice> allChoices)
     {
