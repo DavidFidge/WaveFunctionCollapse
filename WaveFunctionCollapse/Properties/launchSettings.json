@@ -11,6 +11,10 @@
     "Pipes": {
       "commandName": "Project",
       "commandLineArgs": "--TileSet Pipes"
+    },
+    "MiningFacility": {
+      "commandName": "Project",
+      "commandLineArgs": "--TileSet MiningFacility"
     }
   }
 }

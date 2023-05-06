@@ -1,0 +1,55 @@
+{
+  "MapOptions":
+  {
+    "MapWidth": 20,
+    "MapHeight": 20,
+    "TileSizeMultiplier": 20
+  },
+  "Passes":
+  [
+    {
+      "Options": {
+        "FallbackAttempts": 99,
+        "FallbackRadius": 1,
+        "FallbackRadiusIncrement": 1,
+        "EntropyHeuristic": "ReduceByCountAndMaxWeightOfNeighbours",
+        "SuccessfullyPlacedTilesToReduceFallbackRadius": 20,
+        "RunFirstRules": ["([X] == 0 || [Y] == 0 || [X] == [MaxX] || [Y] == [MaxY])"]
+      },
+      "Tiles": {
+        "FloorInside": {
+          "Symmetry": "X",
+          "Weight": 1,
+          "Adapters": "F,F,F,F",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+        },
+        "ReverseCorner": {
+          "Symmetry": "^",
+          "Weight": 1,
+          "Adapters": "F,FO,OF,F",
+          "OnlyAllowedIfNoValidTiles": true,
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+        },
+        "Corner": {
+          "Symmetry": "^",
+          "Weight": 1,
+          "Adapters": "O,O,OF,FO",
+          "EntropyWeights": "1,1,50,50",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+        },
+        "Wall": {
+          "Symmetry": "^",
+          "Weight": 20,
+          "Adapters": "FO,O,OF,F",
+          "EntropyWeights": "50,1,50,1",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+        },
+        "FloorOutside": {
+          "Symmetry": "X",
+          "Weight": 1,
+          "Adapters": "O,O,O,O"
+        }
+      }
+    }
+  ]
+}
