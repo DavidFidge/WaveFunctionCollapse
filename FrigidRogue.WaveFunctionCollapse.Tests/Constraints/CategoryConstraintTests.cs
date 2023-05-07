@@ -62,11 +62,11 @@ public class CategoryConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null);
+        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -123,11 +123,11 @@ public class CategoryConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null);
+        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -184,11 +184,11 @@ public class CategoryConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null);
+        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;
@@ -245,11 +245,11 @@ public class CategoryConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null);
+        var tileToCheckUp = new TileChoice(directionToCheck == 1 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckDown = new TileChoice(directionToCheck == 2 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckLeft = new TileChoice(directionToCheck == 3 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckRight = new TileChoice(directionToCheck == 4 ? tileTemplate1 : tileTemplateOther, adapters, null, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adaptersMiddle, null, null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;

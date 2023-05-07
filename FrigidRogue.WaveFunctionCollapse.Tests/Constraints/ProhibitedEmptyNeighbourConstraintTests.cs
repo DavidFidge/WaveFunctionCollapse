@@ -67,7 +67,7 @@ public class ProhibitedEmptyNeighbourConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null, null);
 
         // Act
         var result = emptyPlacementConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
@@ -110,7 +110,7 @@ public class ProhibitedEmptyNeighbourConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null, null);
 
         // Act
         var result = emptyPlacementConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
@@ -147,7 +147,7 @@ public class ProhibitedEmptyNeighbourConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null, null);
 
         // Act
         var result = emptyPlacementConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
@@ -192,7 +192,7 @@ public class ProhibitedEmptyNeighbourConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate, adapters, CreateProhibitedEmptyNeighbourRules(prohibitedEmptyNeighbourRules), null, null);
 
         // Act
         var result = emptyPlacementConstraint.Check(tileResultMiddle, tileToCheckMiddle, new HashSet<TileChoice> { tileToCheckMiddle });
@@ -231,11 +231,11 @@ public class ProhibitedEmptyNeighbourConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheckUp = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckDown = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckLeft = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckRight = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckMiddle = new TileChoice(tileTemplate2, adapters, CreateProhibitedEmptyNeighbourRules("None,None,None,None"), null);
+        var tileToCheckUp = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckDown = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckLeft = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckRight = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckMiddle = new TileChoice(tileTemplate2, adapters, CreateProhibitedEmptyNeighbourRules("None,None,None,None"), null, null);
 
         tileResultUp.ChosenTile = tileToCheckUp;
         tileResultDown.ChosenTile = tileToCheckDown;

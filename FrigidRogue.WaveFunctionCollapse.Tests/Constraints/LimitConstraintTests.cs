@@ -38,8 +38,8 @@ public class LimitConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null, null);
 
         limitConstraint.Initialise(new List<TileTemplate> { tileTemplate1, tileTemplate2 }, new MapOptions(3, 3));
 
@@ -69,8 +69,8 @@ public class LimitConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null, null);
 
         limitConstraint.Initialise(new List<TileTemplate> { tileTemplate1, tileTemplate2 }, new MapOptions(3, 3));
 
@@ -100,8 +100,8 @@ public class LimitConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null, null);
 
         limitConstraint.Initialise(new List<TileTemplate> { tileTemplate1, tileTemplate2 }, new MapOptions(3, 3));
         limitConstraint.AfterChoice(tileToCheckLimit);
@@ -132,8 +132,8 @@ public class LimitConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null, null);
 
         limitConstraint.Initialise(new List<TileTemplate> { tileTemplate1, tileTemplate2 }, new MapOptions(3, 3));
         limitConstraint.AfterChoice(tileToCheckLimit);
@@ -165,8 +165,8 @@ public class LimitConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null, null);
 
         limitConstraint.Initialise(new List<TileTemplate> { tileTemplate1, tileTemplate2 }, new MapOptions(3, 3));
         limitConstraint.AfterChoice(tileToCheckLimit);
@@ -199,8 +199,8 @@ public class LimitConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null);
-        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null);
+        var tileToCheck = new TileChoice(tileTemplate1, adapters, null, null, null);
+        var tileToCheckLimit = new TileChoice(tileTemplate2, adapters, null, null, null);
 
         limitConstraint.Initialise(new List<TileTemplate> { tileTemplate1, tileTemplate2 }, new MapOptions(3, 3));
 

@@ -758,7 +758,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
                         Symmetry = "X",
                         Weight = 1,
                         Adapters = "AAA,AAA,AAA,AAA",
-                        CanConnectToSelf = false
+                        CanConnectToSelf = "false,false,false,false"
                     }
                 }
             }

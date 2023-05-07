@@ -43,10 +43,10 @@ public class ConnectToSelfConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileChoiceUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileChoiceUp = new TileChoice(tileTemplate, adapters, null, null, null);
         tileResultUp.ChosenTile = tileChoiceUp;
 
-        var tileChoiceMiddle = new TileChoice(tileTemplate, adapters, null, null);
+        var tileChoiceMiddle = new TileChoice(tileTemplate, adapters, null, null, null);
 
         // Act
         var result = emptyPlacementConstraint.Check(tileResultDown, tileChoiceMiddle,
@@ -62,7 +62,7 @@ public class ConnectToSelfConstraintTests : BaseGraphicsTest
         // Arrange
         var emptyPlacementConstraint = new ConnectToSelfConstraint();
 
-        var tileTemplate = new TileTemplate("Test", new TileAttribute { CanConnectToSelf = false}, _texture);
+        var tileTemplate = new TileTemplate("Test", new TileAttribute { CanConnectToSelf = "false,false,false,false" }, _texture);
 
         var tileResultUp = new TileResult(new Point(0, 0));
         var tileResultDown = new TileResult(new Point(0, 1));
@@ -80,10 +80,10 @@ public class ConnectToSelfConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileChoiceUp = new TileChoice(tileTemplate, adapters, null, null);
+        var tileChoiceUp = new TileChoice(tileTemplate, adapters, null, null, null);
         tileResultUp.ChosenTile = tileChoiceUp;
 
-        var tileChoiceMiddle = new TileChoice(tileTemplate, adapters, null, null);
+        var tileChoiceMiddle = new TileChoice(tileTemplate, adapters, null, null, null);
 
         // Act
         var result = emptyPlacementConstraint.Check(tileResultDown, tileChoiceMiddle, new HashSet<TileChoice> { tileChoiceMiddle });
@@ -98,8 +98,8 @@ public class ConnectToSelfConstraintTests : BaseGraphicsTest
         // Arrange
         var emptyPlacementConstraint = new ConnectToSelfConstraint();
 
-        var tileTemplate1 = new TileTemplate("Test1", new TileAttribute { CanConnectToSelf = false}, _texture);
-        var tileTemplate2 = new TileTemplate("Test2", new TileAttribute { CanConnectToSelf = false}, _texture);
+        var tileTemplate1 = new TileTemplate("Test1", new TileAttribute { CanConnectToSelf = "false,false,false,false"}, _texture);
+        var tileTemplate2 = new TileTemplate("Test2", new TileAttribute { CanConnectToSelf = "false,false,false,false"}, _texture);
 
         var tileResultUp = new TileResult(new Point(0, 0));
         var tileResultDown = new TileResult(new Point(0, 1));
@@ -117,10 +117,10 @@ public class ConnectToSelfConstraintTests : BaseGraphicsTest
             { Direction.Right, "A" }
         };
 
-        var tileChoiceUp = new TileChoice(tileTemplate1, adapters, null, null);
+        var tileChoiceUp = new TileChoice(tileTemplate1, adapters, null, null, null);
         tileResultUp.ChosenTile = tileChoiceUp;
 
-        var tileChoiceMiddle = new TileChoice(tileTemplate2, adapters, null, null);
+        var tileChoiceMiddle = new TileChoice(tileTemplate2, adapters, null, null, null);
 
         // Act
         var result = emptyPlacementConstraint.Check(tileResultDown, tileChoiceMiddle, new HashSet<TileChoice> { tileChoiceMiddle });

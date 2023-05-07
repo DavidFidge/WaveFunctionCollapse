@@ -45,16 +45,24 @@ public class TileTemplate
 
         var entropyWeights = Attributes.EntropyWeights ?? Attributes.Weight.ToString();
 
-        var entropyWeightsStrings = entropyWeights
+        var entropyWeightsParsed = entropyWeights
             .Split(",")
             .Select(a => int.Parse(a.Trim()))
             .ToList();
 
-        while (entropyWeightsStrings.Count < 4)
-            entropyWeightsStrings.Add(Attributes.Weight);
+        while (entropyWeightsParsed.Count < 4)
+            entropyWeightsParsed.Add(Attributes.Weight);
 
-        var canConnectToSelf = 
+        var canConnectToSelf = Attributes.CanConnectToSelf ?? "true,true,true,true";
+        
+        var canConnectToSelfParsed = canConnectToSelf
+            .Split(",")
+            .Select(a => bool.Parse(a.Trim()))
+            .ToList();
 
+        while (canConnectToSelfParsed.Count < 4)
+            canConnectToSelfParsed.Add(true);
+        
         var directions = new List<Direction>
         {
             Direction.Up,
@@ -75,9 +83,13 @@ public class TileTemplate
 
             var entropyWeightsDictionary = directions
                 .Select((d, index) => new { Direction = d, Index = index })
-                .ToDictionary(d => d.Direction, d => entropyWeightsStrings[d.Index]);
-
-            TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary));
+                .ToDictionary(d => d.Direction, d => entropyWeightsParsed[d.Index]);
+            
+            var canConnectToSelfDictionary = directions
+                .Select((d, index) => new { Direction = d, Index = index })
+                .ToDictionary(d => d.Direction, d => canConnectToSelfParsed[d.Index]);
+            
+            TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, canConnectToSelfDictionary));
         }
         else if (Attributes.Symmetry == "^")
         {
@@ -87,6 +99,7 @@ public class TileTemplate
                 var adapters = new Dictionary<Direction, Adapter>(4);
                 var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
                 var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
+                var canConnectToSelfDictionary = new Dictionary<Direction, bool>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
@@ -100,10 +113,13 @@ public class TileTemplate
                     var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
                     prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
 
-                    var entropyWeight = entropyWeightsStrings[index];
+                    var entropyWeight = entropyWeightsParsed[index];
                     entropyWeightsDictionary.Add(direction, entropyWeight);
+                    
+                    var canConnectToSelfItem = canConnectToSelfParsed[index];
+                    canConnectToSelfDictionary.Add(direction, canConnectToSelfItem);
                 }
-
+                
                 var rotation = i switch
                 {
                     1 => (float)Math.PI / 2,
@@ -112,7 +128,7 @@ public class TileTemplate
                     _ => 0f
                 };
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, canConnectToSelfDictionary, rotation: rotation));
             }
         }
         else if (Attributes.Symmetry == "I")
@@ -122,6 +138,7 @@ public class TileTemplate
                 var adapters = new Dictionary<Direction, Adapter>(4);
                 var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
                 var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
+                var canConnectToSelfDictionary = new Dictionary<Direction, bool>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
@@ -135,8 +152,11 @@ public class TileTemplate
                     var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
                     prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
 
-                    var entropyWeight = entropyWeightsStrings[index];
+                    var entropyWeight = entropyWeightsParsed[index];
                     entropyWeightsDictionary.Add(direction, entropyWeight);
+                    
+                    var canConnectToSelfItem = canConnectToSelfParsed[index];
+                    canConnectToSelfDictionary.Add(direction, canConnectToSelfItem);
                 }
 
                 var rotation = 0f;
@@ -144,7 +164,7 @@ public class TileTemplate
                 if (i == 1)
                     rotation = (float)Math.PI / 2f;
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, canConnectToSelfDictionary, rotation: rotation));
             }
         }
         else if (Attributes.Symmetry == "/")
@@ -154,6 +174,7 @@ public class TileTemplate
                 var adapters = new Dictionary<Direction, Adapter>(4);
                 var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
                 var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
+                var canConnectToSelfDictionary = new Dictionary<Direction, bool>(4);
 
                 for (var j = 0; j < 4; j++)
                 {
@@ -167,8 +188,11 @@ public class TileTemplate
                     var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
                     prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
 
-                    var entropyWeight = entropyWeightsStrings[index];
+                    var entropyWeight = entropyWeightsParsed[index];
                     entropyWeightsDictionary.Add(direction, entropyWeight);
+                    
+                    var canConnectToSelfItem = canConnectToSelfParsed[index];
+                    canConnectToSelfDictionary.Add(direction, canConnectToSelfItem);
                 }
 
                 var rotation = 0f;
@@ -176,7 +200,7 @@ public class TileTemplate
                 if (i == 1)
                     rotation = (float)Math.PI;
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, rotation: rotation));
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, canConnectToSelfDictionary, rotation: rotation));
             }
         }
 
@@ -199,7 +223,13 @@ public class TileTemplate
                 (entropyWeightDictionary[Direction.Up], entropyWeightDictionary[Direction.Down]) = (entropyWeightDictionary[Direction.Down], entropyWeightDictionary[Direction.Up]);
                 (entropyWeightDictionary[Direction.Left], entropyWeightDictionary[Direction.Right]) = (entropyWeightDictionary[Direction.Right], entropyWeightDictionary[Direction.Left]);
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
+                var canConnectToSelfDictionary = tile.CanConnectToSelf.ToDictionary(d => d.Key, d => d.Value);
+
+                (canConnectToSelfDictionary[Direction.Up], canConnectToSelfDictionary[Direction.Down]) = (canConnectToSelfDictionary[Direction.Down], canConnectToSelfDictionary[Direction.Up]);
+                (canConnectToSelfDictionary[Direction.Left], canConnectToSelfDictionary[Direction.Right]) = (canConnectToSelfDictionary[Direction.Right], canConnectToSelfDictionary[Direction.Left]);
+                
+                
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, canConnectToSelfDictionary, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
             }
             if (Attributes.FlipHorizontally)
             {
@@ -219,7 +249,11 @@ public class TileTemplate
 
                 (entropyWeightDictionary[Direction.Left], entropyWeightDictionary[Direction.Right]) = (entropyWeightDictionary[Direction.Right], entropyWeightDictionary[Direction.Left]);
 
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, SpriteEffects.FlipHorizontally));
+                var canConnectToSelfDictionary = tile.CanConnectToSelf.ToDictionary(d => d.Key, d => d.Value);
+
+                (canConnectToSelfDictionary[Direction.Left], canConnectToSelfDictionary[Direction.Right]) = (canConnectToSelfDictionary[Direction.Right], canConnectToSelfDictionary[Direction.Left]);
+
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, canConnectToSelfDictionary, SpriteEffects.FlipHorizontally));
             }
             if (Attributes.FlipVertically)
             {
@@ -237,8 +271,11 @@ public class TileTemplate
 
                 var entropyWeightDictionary = tile.EntropyWeights.ToDictionary(d => d.Key, d => d.Value);
                 (entropyWeightDictionary[Direction.Up], entropyWeightDictionary[Direction.Down]) = (entropyWeightDictionary[Direction.Down], entropyWeightDictionary[Direction.Up]);
-
-                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, SpriteEffects.FlipVertically));
+                
+                var canConnectToSelfDictionary = tile.CanConnectToSelf.ToDictionary(d => d.Key, d => d.Value);
+                (canConnectToSelfDictionary[Direction.Up], canConnectToSelfDictionary[Direction.Down]) = (canConnectToSelfDictionary[Direction.Down], canConnectToSelfDictionary[Direction.Up]);
+                
+                TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, canConnectToSelfDictionary, SpriteEffects.FlipVertically));
             }
         }
     }
