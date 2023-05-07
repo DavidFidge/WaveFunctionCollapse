@@ -43,7 +43,8 @@
           "Weight": 20,
           "Adapters": "FO,O,OF,F",
           "EntropyWeights": "20,1,20,200",
-          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])",
+          "CanConnectToSelf": "true,true,true,false"
         },
         "FloorOutside": {
           "Symmetry": "X",

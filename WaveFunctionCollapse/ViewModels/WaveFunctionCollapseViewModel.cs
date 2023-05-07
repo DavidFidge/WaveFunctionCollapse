@@ -2,6 +2,7 @@
 using FrigidRogue.WaveFunctionCollapse;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using WaveFunctionCollapse.Messages;
 
 namespace WaveFunctionCollapse.ViewModels;
 
@@ -22,10 +23,15 @@ public class WaveFunctionCollapseViewModel : BaseViewModel<WaveFunctionCollapseD
     public NextStepResult ExecuteNextStep() => _waveFunctionCollapsePasses.ExecuteNextStep();
     public NextStepResult Execute() => _waveFunctionCollapsePasses.Execute();
 
-    public void CreatePasses(ContentManager gameContent, string contentName)
+    public void LoadContent(ContentManager gameContent, string contentName)
     {
         _waveFunctionCollapsePasses = new WaveFunctionCollapseGeneratorPasses();
-        _waveFunctionCollapsePasses.CreatePasses(GameProvider.Game.Content, contentName);
+        _waveFunctionCollapsePasses.LoadContent(GameProvider.Game.Content, contentName);
+    }
+
+    public void CreatePasses()
+    {
+        _waveFunctionCollapsePasses.CreatePasses();
         Reset();
     }
 
@@ -35,5 +41,16 @@ public class WaveFunctionCollapseViewModel : BaseViewModel<WaveFunctionCollapseD
     public void Reset()
     {
         _waveFunctionCollapsePasses.Reset();
+    }
+
+    public void ChangeMapDimensions(int mapWidth, int mapHeight)
+    {
+        _waveFunctionCollapsePasses.MapOptions.MapWidth = mapWidth;
+        _waveFunctionCollapsePasses.MapOptions.MapHeight = mapHeight;
+
+        _waveFunctionCollapsePasses.CreatePasses();
+
+        Mediator.Send(new MapDimensionsChangedRequest());
+        Mediator.Send(new NewMapRequest());
     }
 }

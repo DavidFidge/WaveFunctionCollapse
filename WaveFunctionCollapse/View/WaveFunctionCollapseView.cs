@@ -23,7 +23,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     IRequestHandler<PlayContinuouslyRequest>,
     IRequestHandler<PlayUntilCompleteRequest>,
     IRequestHandler<ChangeContentRequest>,
-    IRequestHandler<ReloadJsonRequest>
+    IRequestHandler<ReloadJsonRequest>,
+    IRequestHandler<MapDimensionsChangedRequest>
 {
     private readonly IGameCamera _gameCamera;
     private readonly MapEntity _mapEntity;
@@ -40,6 +41,8 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private bool _hasUpdated;
     private DropDown _tileSetDropDown;
     private string _startingTileSet;
+    private TextInput _mapWidthTextInput;
+    private TextInput _mapHeightTextInput;
 
     public WaveFunctionCollapseView(
         WaveFunctionCollapseViewModel waveFunctionCollapseViewModel,
@@ -115,6 +118,34 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         new Button("Exit")
             .SendOnClick<QuitToDesktopRequest>(Mediator)
             .AddTo(_leftPanel);
+
+        _mapWidthTextInput = new TextInput()
+            .AddTo(_leftPanel);
+
+        new Label("Map Width")
+            .AddTo(_leftPanel);
+
+        _mapWidthTextInput.OnValueChange += e =>
+            {
+                if (int.TryParse(((TextInput)e).Value, out var width))
+                {
+                    _viewModel.ChangeMapDimensions(width, _viewModel.MapHeight);
+                }
+            };
+
+        _mapHeightTextInput = new TextInput()
+            .AddTo(_leftPanel);
+
+        new Label("Map Height")
+            .AddTo(_leftPanel);
+
+        _mapHeightTextInput.OnValueChange += e =>
+        {
+            if (int.TryParse(((TextInput)e).Value, out var height))
+            {
+                _viewModel.ChangeMapDimensions(_viewModel.MapWidth, height);
+            }
+        };
 
         RootPanel.AddChild(_leftPanel);
         RootPanel.AddChild(_mapPanel);
@@ -307,18 +338,30 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
     public Task<Unit> Handle(ChangeContentRequest request, CancellationToken cancellationToken)
     {
+        ResetPlayContinuously();
+
         _renderTarget = null;
-        _viewModel.CreatePasses(GameProvider.Game.Content, request.Content);
-        CreateRenderTarget();
+        _viewModel.LoadContent(GameProvider.Game.Content, request.Content);
+        _viewModel.CreatePasses();
+
+        Mediator.Send(new MapDimensionsChangedRequest());
 
         return Unit.Task;
     }
 
     public Task<Unit> Handle(ReloadJsonRequest request, CancellationToken cancellationToken)
     {
-        ResetPlayContinuously();
-        _viewModel.CreatePasses(GameProvider.Game.Content, GetSelectedContent(_tileSetDropDown));
+        Mediator.Send(new ChangeContentRequest { Content = GetSelectedContent(_tileSetDropDown) });
 
+        return Unit.Task;
+    }
+
+    public Task<Unit> Handle(MapDimensionsChangedRequest request, CancellationToken cancellationToken)
+    {
+        _mapWidthTextInput.ChangeValue(_viewModel.MapWidth.ToString(), false);
+        _mapHeightTextInput.ChangeValue(_viewModel.MapHeight.ToString(), false);
+
+        CreateRenderTarget();
         return Unit.Task;
     }
 }

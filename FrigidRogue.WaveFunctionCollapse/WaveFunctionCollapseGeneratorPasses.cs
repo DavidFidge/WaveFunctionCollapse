@@ -9,7 +9,11 @@ namespace FrigidRogue.WaveFunctionCollapse;
 
 public class WaveFunctionCollapseGeneratorPasses
 {
-    public MapOptions MapOptions => _rules.MapOptions;
+    public MapOptions MapOptions
+    {
+        get => _rules.MapOptions;
+        set => _rules.MapOptions = value;
+    }
 
     private List<WaveFunctionCollapseGenerator> _generators = new();
     private Rules _rules;
@@ -24,7 +28,7 @@ public class WaveFunctionCollapseGeneratorPasses
     public int MapWidth => MapOptions.MapWidth;
     public int MapHeight => MapOptions.MapHeight;
 
-    public void CreatePasses(ContentManager contentManager, string contentPath)
+    public void LoadContent(ContentManager contentManager, string contentPath)
     {
         _rules = contentManager.Load<Rules>($"{contentPath}/Rules.json",
             new JsonContentLoader());
@@ -37,6 +41,11 @@ public class WaveFunctionCollapseGeneratorPasses
                 a => a.Split("/").Last().Replace(".png", ""),
                 a => contentManager.Load<Texture2D>(a));
 
+        CreatePasses(_rules, _textures);
+    }
+
+    public void CreatePasses()
+    {
         CreatePasses(_rules, _textures);
     }
 
