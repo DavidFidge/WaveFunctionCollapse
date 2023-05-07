@@ -127,6 +127,8 @@ ProhibitedEmptyNeighbourRules: Flags that define whether this tile can be placed
 
 EntropyWeights: When using one of the "Weights" heuristics then instead of using the Weight value of the tile, use the weight specified in this list for the given direction. Each direction must be specified in the order of up, right, down, left (like adapters) in the form of a string e.g. "20,30,40,50".  The weights are automatically translated for tiles that are flipped or have symmetrical copies.  If no value is given to EntropyWeights then it uses the Weight value instead.
 
+CanConnectToSelf: Defines whether the tile can connect to itself in the given direction. Each direction must be specified in the order of up, right, down, left (like adapters) in the form of a string e.g. "true,true,false,false".
+
 Category: Designate a category for this tile.
 
 CanConnectToCategories: A list of categories that this tile can connect to.  If not defined then it can connect to any category.  Example: "CanConnectToCategories": ["X", "Y"]

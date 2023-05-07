@@ -73,22 +73,11 @@ public class TileTemplate
 
         if (Attributes.Symmetry == "X")
         {
-            var adapters = directions
-                .Select((d, index) => new { Direction = d, Index = index })
-                .ToDictionary(d => d.Direction, d => (Adapter)adapterStrings[d.Index]);
+            var adapters = ConvertDirectionalConstraints(directions, adapterStrings, v => (Adapter)v);
+            var prohibitedEmptyNeighbours = ConvertDirectionalConstraints(directions, prohibitedEmptyNeighboursStrings, v => Enum.Parse<ProhibitedEmptyNeighbourFlags>(v));
+            var entropyWeightsDictionary = ConvertDirectionalConstraints(directions, entropyWeightsParsed, v => v);
+            var canConnectToSelfDictionary = ConvertDirectionalConstraints(directions, canConnectToSelfParsed, v => v);
 
-            var prohibitedEmptyNeighbours = directions
-                .Select((d, index) => new { Direction = d, Index = index })
-                .ToDictionary(d => d.Direction, d => Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursStrings[d.Index]));
-
-            var entropyWeightsDictionary = directions
-                .Select((d, index) => new { Direction = d, Index = index })
-                .ToDictionary(d => d.Direction, d => entropyWeightsParsed[d.Index]);
-            
-            var canConnectToSelfDictionary = directions
-                .Select((d, index) => new { Direction = d, Index = index })
-                .ToDictionary(d => d.Direction, d => canConnectToSelfParsed[d.Index]);
-            
             TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightsDictionary, canConnectToSelfDictionary));
         }
         else if (Attributes.Symmetry == "^")
@@ -96,30 +85,13 @@ public class TileTemplate
             // Loop through the four rotations
             for (var i = 0; i < 4; i++)
             {
-                var adapters = new Dictionary<Direction, Adapter>(4);
-                var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
-                var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
-                var canConnectToSelfDictionary = new Dictionary<Direction, bool>(4);
+                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => GoRogue.MathHelpers.WrapAround(directionIndex - rotationIndex, directions.Count));
 
-                for (var j = 0; j < 4; j++)
-                {
-                    // Populate adapters for each rotation
-                    var direction = directions[j];
-                    var index = GoRogue.MathHelpers.WrapAround(j - i, directions.Count);
+                var adapters = RotateDirectionalConstraints(directions, adapterStrings, i, v => (Adapter)v, wrapAroundFunction);
+                var prohibitedEmptyNeighbours = RotateDirectionalConstraints(directions, prohibitedEmptyNeighboursStrings, i, v => Enum.Parse<ProhibitedEmptyNeighbourFlags>(v), wrapAroundFunction);
+                var entropyWeightsDictionary = RotateDirectionalConstraints(directions, entropyWeightsParsed, i, v => v, wrapAroundFunction);
+                var canConnectToSelfDictionary = RotateDirectionalConstraints(directions, canConnectToSelfParsed, i, v => v, wrapAroundFunction);   
 
-                    var adapterString = adapterStrings[index];
-                    adapters.Add(direction, adapterString);
-
-                    var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
-                    prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
-
-                    var entropyWeight = entropyWeightsParsed[index];
-                    entropyWeightsDictionary.Add(direction, entropyWeight);
-                    
-                    var canConnectToSelfItem = canConnectToSelfParsed[index];
-                    canConnectToSelfDictionary.Add(direction, canConnectToSelfItem);
-                }
-                
                 var rotation = i switch
                 {
                     1 => (float)Math.PI / 2,
@@ -135,29 +107,12 @@ public class TileTemplate
         {
             for (var i = 0; i < 2; i++)
             {
-                var adapters = new Dictionary<Direction, Adapter>(4);
-                var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
-                var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
-                var canConnectToSelfDictionary = new Dictionary<Direction, bool>(4);
+                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => GoRogue.MathHelpers.WrapAround(directionIndex - rotationIndex, directions.Count));
 
-                for (var j = 0; j < 4; j++)
-                {
-                    // Populate adapters for each rotation
-                    var direction = directions[j];
-                    var index = GoRogue.MathHelpers.WrapAround(j - i, directions.Count);
-
-                    var adapterString = adapterStrings[index];
-                    adapters.Add(direction, adapterString);
-
-                    var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
-                    prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
-
-                    var entropyWeight = entropyWeightsParsed[index];
-                    entropyWeightsDictionary.Add(direction, entropyWeight);
-                    
-                    var canConnectToSelfItem = canConnectToSelfParsed[index];
-                    canConnectToSelfDictionary.Add(direction, canConnectToSelfItem);
-                }
+                var adapters = RotateDirectionalConstraints(directions, adapterStrings, i, v => (Adapter)v, wrapAroundFunction);
+                var prohibitedEmptyNeighbours = RotateDirectionalConstraints(directions, prohibitedEmptyNeighboursStrings, i, v => Enum.Parse<ProhibitedEmptyNeighbourFlags>(v), wrapAroundFunction);
+                var entropyWeightsDictionary = RotateDirectionalConstraints(directions, entropyWeightsParsed, i, v => v, wrapAroundFunction);
+                var canConnectToSelfDictionary = RotateDirectionalConstraints(directions, canConnectToSelfParsed, i, v => v, wrapAroundFunction);   
 
                 var rotation = 0f;
 
@@ -171,29 +126,12 @@ public class TileTemplate
         {
             for (var i = 0; i < 2; i++)
             {
-                var adapters = new Dictionary<Direction, Adapter>(4);
-                var prohibitedEmptyNeighbours = new Dictionary<Direction, ProhibitedEmptyNeighbourFlags>(4);
-                var entropyWeightsDictionary = new Dictionary<Direction, int>(4);
-                var canConnectToSelfDictionary = new Dictionary<Direction, bool>(4);
+                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => GoRogue.MathHelpers.WrapAround(directionIndex - (rotationIndex * 2), directions.Count));
 
-                for (var j = 0; j < 4; j++)
-                {
-                    // Populate adapters for each rotation
-                    var direction = directions[j];
-                    var index = GoRogue.MathHelpers.WrapAround(j - (i * 2), directions.Count);
-                    
-                    var adapterString = adapterStrings[index];
-                    adapters.Add(direction, adapterString);
-
-                    var prohibitedEmptyNeighboursString = prohibitedEmptyNeighboursStrings[index];
-                    prohibitedEmptyNeighbours.Add(direction, Enum.Parse<ProhibitedEmptyNeighbourFlags>(prohibitedEmptyNeighboursString));
-
-                    var entropyWeight = entropyWeightsParsed[index];
-                    entropyWeightsDictionary.Add(direction, entropyWeight);
-                    
-                    var canConnectToSelfItem = canConnectToSelfParsed[index];
-                    canConnectToSelfDictionary.Add(direction, canConnectToSelfItem);
-                }
+                var adapters = RotateDirectionalConstraints(directions, adapterStrings, i, v => (Adapter)v, wrapAroundFunction);
+                var prohibitedEmptyNeighbours = RotateDirectionalConstraints(directions, prohibitedEmptyNeighboursStrings, i, v => Enum.Parse<ProhibitedEmptyNeighbourFlags>(v), wrapAroundFunction);
+                var entropyWeightsDictionary = RotateDirectionalConstraints(directions, entropyWeightsParsed, i, v => v, wrapAroundFunction);
+                var canConnectToSelfDictionary = RotateDirectionalConstraints(directions, canConnectToSelfParsed, i, v => v, wrapAroundFunction);   
 
                 var rotation = 0f;
 
@@ -227,8 +165,7 @@ public class TileTemplate
 
                 (canConnectToSelfDictionary[Direction.Up], canConnectToSelfDictionary[Direction.Down]) = (canConnectToSelfDictionary[Direction.Down], canConnectToSelfDictionary[Direction.Up]);
                 (canConnectToSelfDictionary[Direction.Left], canConnectToSelfDictionary[Direction.Right]) = (canConnectToSelfDictionary[Direction.Right], canConnectToSelfDictionary[Direction.Left]);
-                
-                
+
                 TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, canConnectToSelfDictionary, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically));
             }
             if (Attributes.FlipHorizontally)
@@ -246,11 +183,9 @@ public class TileTemplate
                 (prohibitedEmptyNeighbours[Direction.Left], prohibitedEmptyNeighbours[Direction.Right]) = (prohibitedEmptyNeighbours[Direction.Right], prohibitedEmptyNeighbours[Direction.Left]);
 
                 var entropyWeightDictionary = tile.EntropyWeights.ToDictionary(d => d.Key, d => d.Value);
-
                 (entropyWeightDictionary[Direction.Left], entropyWeightDictionary[Direction.Right]) = (entropyWeightDictionary[Direction.Right], entropyWeightDictionary[Direction.Left]);
 
                 var canConnectToSelfDictionary = tile.CanConnectToSelf.ToDictionary(d => d.Key, d => d.Value);
-
                 (canConnectToSelfDictionary[Direction.Left], canConnectToSelfDictionary[Direction.Right]) = (canConnectToSelfDictionary[Direction.Right], canConnectToSelfDictionary[Direction.Left]);
 
                 TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, canConnectToSelfDictionary, SpriteEffects.FlipHorizontally));
@@ -278,5 +213,26 @@ public class TileTemplate
                 TileChoices.Add(new TileChoice(this, adapters, prohibitedEmptyNeighbours, entropyWeightDictionary, canConnectToSelfDictionary, SpriteEffects.FlipVertically));
             }
         }
+    }
+
+    private Dictionary<Direction, TResult> ConvertDirectionalConstraints<TInput, TResult>(IList<Direction> directions, IList<TInput> directionalConstraints, Func<TInput, TResult> valueConverter)
+    {
+       return RotateDirectionalConstraints(directions, directionalConstraints, 0, valueConverter, (rotationIndex, j) => j);
+    }
+
+    private Dictionary<Direction, TResult> RotateDirectionalConstraints<TInput, TResult>(IList<Direction> directions,
+        IList<TInput> directionalConstraints, int rotationIndex, Func<TInput, TResult> valueConverter, Func<int, int, int> wrapAroundFunction)
+    {
+        var result = new Dictionary<Direction, TResult>(directions.Count);
+
+        for (var j = 0; j < directions.Count; j++)
+        {
+            var direction = directions[j];
+            var index = GoRogue.MathHelpers.WrapAround(wrapAroundFunction(rotationIndex, j), directions.Count);
+            var value = valueConverter(directionalConstraints[index]);
+            result.Add(direction, value);
+        }
+
+        return result;
     }
 }

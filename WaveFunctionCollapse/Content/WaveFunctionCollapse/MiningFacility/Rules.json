@@ -36,7 +36,7 @@
           "Adapters": "O,O,OF,FO",
           "EntropyWeights": "1,1,20,20",
           "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])",
-          "CanConnectToSelf": false
+          "CanConnectToSelf": "true,true,false,false"
         },
         "Wall": {
           "Symmetry": "^",
@@ -47,7 +47,7 @@
         },
         "FloorOutside": {
           "Symmetry": "X",
-          "Weight": 1,
+          "Weight": 3,
           "Adapters": "O,O,O,O"
         }
       }
