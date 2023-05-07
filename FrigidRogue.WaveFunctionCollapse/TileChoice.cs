@@ -32,7 +32,6 @@ public class TileChoice
         SpriteEffects = spriteEffects;
         Rotation = rotation;
         EntropyWeights = entropyWeights;
-        CanConnectToSelf = canConnectToSelf;
 
         MandatoryAdapter = tileTemplate.Attributes.MandatoryAdapters;
 
@@ -55,6 +54,16 @@ public class TileChoice
         }
 
         EntropyWeights = entropyWeights;
+
+        if (canConnectToSelf == null)
+        {
+            canConnectToSelf = new Dictionary<Direction, bool>
+            {
+                { Direction.Up, true }, { Direction.Right, true }, { Direction.Down, true }, { Direction.Left, true }
+            };
+        }
+
+        CanConnectToSelf = canConnectToSelf;
     }
 
     public bool CanConnectToCategory(Point point, TileResult neighbourTile)
