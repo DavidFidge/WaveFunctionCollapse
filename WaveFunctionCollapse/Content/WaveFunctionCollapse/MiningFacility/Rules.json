@@ -1,8 +1,8 @@
 {
   "MapOptions":
   {
-    "MapWidth": 20,
-    "MapHeight": 20,
+    "MapWidth": 30,
+    "MapHeight": 30,
     "TileSizeMultiplier": 20
   },
   "Passes":
@@ -50,6 +50,29 @@
           "Symmetry": "X",
           "Weight": 3,
           "Adapters": "O,O,O,O"
+        },
+        "Reserve": {
+          "Symmetry": "X",
+          "Weight": 50,
+          "Adapters": "R,R,R,R",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+        },
+        "ReserveCorner": {
+          "Symmetry": "^",
+          "Weight": 1,
+          "Adapters": "O,O,OR,RO",
+          "EntropyWeights": "1,1,40,40",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])",
+          "Limit": 8,
+          "CanConnectToSelf": "true,true,false,false"
+        },
+        "ReserveSide": {
+          "Symmetry": "^",
+          "Weight": 7,
+          "Adapters": "RO,O,OR,R",
+          "EntropyWeights": "40,1,40,200",
+          "PlacementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])",
+          "CanConnectToSelf": "true,true,true,false"
         }
       }
     }

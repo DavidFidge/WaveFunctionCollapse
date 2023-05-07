@@ -1795,6 +1795,18 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/MiningFacility/Wall.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/MiningFacility/Reserve.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/MiningFacility/ReserveCorner.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/MiningFacility/ReserveSide.png
+
 # The following section produces an asset named "Content" in the content manager
 # which can be retrieved via load:  var assetsList = contentManager.Load<string[]>("Content");
 # This gives you a list of all the assets in the content manager.
