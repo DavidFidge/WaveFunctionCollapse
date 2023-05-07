@@ -36,7 +36,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     private bool _playUntilComplete;
     private bool _playContinuously;
     private TimeSpan? _dateTimeFinished;
-    private TimeSpan _secondsForNextIteration = TimeSpan.FromSeconds(2);
+    private TimeSpan _secondsForNextIteration = TimeSpan.FromSeconds(3);
     private SpriteFont _mapFont;
     private bool _hasUpdated;
     private DropDown _tileSetDropDown;
@@ -119,6 +119,14 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
             .SendOnClick<QuitToDesktopRequest>(Mediator)
             .AddTo(_leftPanel);
 
+        var executeAllStepsCheckbox = new CheckBox("Execute All Steps")
+            .AddTo(_leftPanel);
+
+        executeAllStepsCheckbox.OnValueChange += e =>
+        {
+            _viewModel.ExecuteAllSteps = ((CheckBox)e).Checked;
+        };
+
         _mapWidthTextInput = new TextInput()
             .AddTo(_leftPanel);
 
@@ -184,6 +192,13 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         if (!_hasUpdated)
             return;
 
+        // Prevent 'flashing' of empty tiles if it is not playing step by step and map is not yet generated
+        if (_viewModel.ExecuteAllSteps && _playContinuously && !_dateTimeFinished.HasValue)
+        {
+            _mapEntity.Draw(_gameCamera.View, _gameCamera.Projection, _mapEntity.Transform.Transform);
+            return;
+        }
+
         _hasUpdated = false;
 
         if (_renderTarget == null)
@@ -195,6 +210,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
         var oldRenderTargets = Game.GraphicsDevice.GetRenderTargets();
 
         Game.GraphicsDevice.SetRenderTarget(_renderTarget);
+
         Game.GraphicsDevice.Clear(Color.DarkGray);
 
         _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
@@ -251,7 +267,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
     {
         ResetPlayContinuously();
 
-        _viewModel.ExecuteNextStep();
+        _viewModel.Execute();
         return Unit.Task;
     }
 
@@ -295,7 +311,7 @@ public class WaveFunctionCollapseView : BaseView<WaveFunctionCollapseViewModel, 
 
         if (!_dateTimeFinished.HasValue && (_playUntilComplete || _playContinuously))
         {
-            var result = _viewModel.ExecuteNextStep();
+            var result = _viewModel.Execute();
 
             if (result.IsComplete)
                 _playUntilComplete = false;

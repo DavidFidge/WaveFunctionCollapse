@@ -15,13 +15,19 @@ public class WaveFunctionCollapseViewModel : BaseViewModel<WaveFunctionCollapseD
     public int MapWidth => _waveFunctionCollapsePasses.MapWidth;
     public int MapHeight => _waveFunctionCollapsePasses.MapHeight;
     public Vector2 TileSize => new Vector2(TileWidth, TileHeight);
+    public bool ExecuteAllSteps { get; set; }
 
     public WaveFunctionCollapseViewModel()
     {
     }
 
-    public NextStepResult ExecuteNextStep() => _waveFunctionCollapsePasses.ExecuteNextStep();
-    public NextStepResult Execute() => _waveFunctionCollapsePasses.Execute();
+    public NextStepResult Execute()
+    {
+        if (ExecuteAllSteps)
+            return _waveFunctionCollapsePasses.Execute();
+
+        return _waveFunctionCollapsePasses.ExecuteNextStep();
+    }
 
     public void LoadContent(ContentManager gameContent, string contentName)
     {
