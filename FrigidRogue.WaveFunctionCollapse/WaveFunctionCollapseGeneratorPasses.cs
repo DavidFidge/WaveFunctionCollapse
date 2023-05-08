@@ -1,13 +1,13 @@
-﻿using FrigidRogue.WaveFunctionCollapse.Options;
+﻿using FrigidRogue.WaveFunctionCollapse.ContentLoaders;
+using FrigidRogue.WaveFunctionCollapse.Options;
+using FrigidRogue.WaveFunctionCollapse.Renderers;
 using GoRogue.Random;
-using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Content;
-using MonoGame.Extended.Serialization;
 
 namespace FrigidRogue.WaveFunctionCollapse;
 
-public class WaveFunctionCollapseGeneratorPasses
+public class WaveFunctionCollapseGeneratorPasses : IWaveFunctionCollapseGeneratorPasses
 {
     public MapOptions MapOptions
     {
@@ -22,24 +22,20 @@ public class WaveFunctionCollapseGeneratorPasses
     private WaveFunctionCollapseGenerator _currentGenerator;
     private Dictionary<string, Texture2D> _textures;
 
+    public Rectangle TileTextureSize => _textures.First().Value.Bounds;
+
     public int TileWidth => _textures.First().Value.Bounds.Width * MapOptions.TileSizeMultiplier;
+
     public int TileHeight => _textures.First().Value.Bounds.Height * MapOptions.TileSizeMultiplier;
 
     public int MapWidth => MapOptions.MapWidth;
     public int MapHeight => MapOptions.MapHeight;
 
-    public void LoadContent(ContentManager contentManager, string contentPath)
+    public void LoadContent(IWaveFunctionCollapseGeneratorPassesContentLoader contentLoader, string contentPath)
     {
-        _rules = contentManager.Load<Rules>($"{contentPath}/Rules.json",
-            new JsonContentLoader());
-
-        var assetsList = contentManager.Load<string[]>("Content");
-
-        _textures = assetsList
-            .Where(a => a.ToLower().StartsWith($"{contentPath.ToLower()}/") && !a.EndsWith(".json"))
-            .ToDictionary(
-                a => a.Split("/").Last().Replace(".png", ""),
-                a => contentManager.Load<Texture2D>(a));
+        contentLoader.LoadContent(contentPath);
+        _rules = contentLoader.Rules;
+        _textures = contentLoader.Textures;
 
         CreatePasses(_rules, _textures);
     }
@@ -102,6 +98,18 @@ public class WaveFunctionCollapseGeneratorPasses
         return result;
     }
 
+    public NextStepResult ExecuteUntilSuccess()
+    {
+        var nextStepResult = NextStepResult.Continue();
+
+        while (!nextStepResult.IsComplete)
+        {
+            nextStepResult = Execute();
+        }
+
+        return nextStepResult;
+    }
+
     public NextStepResult ExecuteNextStep()
     {
         if (_currentGenerator == null)
@@ -131,5 +139,10 @@ public class WaveFunctionCollapseGeneratorPasses
     public IEnumerable<TileResult> GetCurrentTiles()
     {
         return _currentGenerator?.Tiles ?? Array.Empty<TileResult>();
+    }
+
+    public Texture2D RenderToTexture2D(IWaveFunctionCollapseGeneratorPassesRenderer renderer)
+    {
+        return renderer.RenderToTexture2D(GetAllTiles().ToArray(), MapOptions, TileTextureSize);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FrigidRogue.MonoGame.Core.UserInterface;
 using FrigidRogue.WaveFunctionCollapse;
+using FrigidRogue.WaveFunctionCollapse.ContentLoaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using WaveFunctionCollapse.Messages;
@@ -17,10 +18,6 @@ public class WaveFunctionCollapseViewModel : BaseViewModel<WaveFunctionCollapseD
     public Vector2 TileSize => new Vector2(TileWidth, TileHeight);
     public bool ExecuteAllSteps { get; set; }
 
-    public WaveFunctionCollapseViewModel()
-    {
-    }
-
     public NextStepResult Execute()
     {
         if (ExecuteAllSteps)
@@ -32,7 +29,9 @@ public class WaveFunctionCollapseViewModel : BaseViewModel<WaveFunctionCollapseD
     public void LoadContent(ContentManager gameContent, string contentName)
     {
         _waveFunctionCollapsePasses = new WaveFunctionCollapseGeneratorPasses();
-        _waveFunctionCollapsePasses.LoadContent(GameProvider.Game.Content, contentName);
+        var contentLoader =
+            new WaveFunctionCollapseGeneratorPassesContentLoader(gameContent);
+        _waveFunctionCollapsePasses.LoadContent(contentLoader, contentName);
     }
 
     public void CreatePasses()
