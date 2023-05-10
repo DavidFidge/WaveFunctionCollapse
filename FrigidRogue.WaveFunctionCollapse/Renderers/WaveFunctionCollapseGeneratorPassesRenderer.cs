@@ -53,7 +53,7 @@ public class WaveFunctionCollapseGeneratorPassesRenderer : IWaveFunctionCollapse
             {
                 var offset = _tileTextureSizeVector2 * new Vector2(tile.Point.X, tile.Point.Y);
                 var rotateOrigin = _tileTextureSizeVector2 / 2f;
-                var position = (_tileTextureSizeVector2) + offset;
+                var position = rotateOrigin + offset;
 
                 _spriteBatch.Draw(tile.ChosenTile.Texture,
                     position,
