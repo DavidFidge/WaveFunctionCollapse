@@ -13,7 +13,7 @@ public class WaveFunctionCollapseGeneratorPassesRenderer : IWaveFunctionCollapse
     private Vector2 _tileTextureSizeVector2 => _tileTextureSize.Size.ToVector2();
     private MapOptions _mapOptions;
 
-    private Rectangle _mapTextureSize => new Rectangle(0, 0, _mapWidth * _tileTextureSize.Size.X,
+    private Rectangle _mapTextureSize => new(0, 0, _mapWidth * _tileTextureSize.Size.X,
         _mapHeight * _tileTextureSize.Size.Y);
 
     private int _mapWidth => _mapOptions.MapWidth;
@@ -26,13 +26,18 @@ public class WaveFunctionCollapseGeneratorPassesRenderer : IWaveFunctionCollapse
     {
         _graphicsDevice = graphicsDevice;
         _spriteBatch = spriteBatch ?? new SpriteBatch(graphicsDevice);
-        _renderTarget = renderTarget ?? new RenderTarget2D(graphicsDevice, _mapTextureSize.Width, _mapTextureSize.Height);
+        _renderTarget = renderTarget;
     }
 
     public Texture2D RenderToTexture2D(TileResult[] tiles, MapOptions mapOptions, Rectangle tileTextureSize)
     {
         _mapOptions = mapOptions;
         _tileTextureSize = tileTextureSize;
+        
+        if (_renderTarget == null || _renderTarget.Width != _mapTextureSize.Width || _renderTarget.Height != _mapTextureSize.Height)
+        {
+            _renderTarget = new RenderTarget2D(_graphicsDevice, _mapTextureSize.Width, _mapTextureSize.Height);
+        }
 
         var oldRenderTargets = _graphicsDevice.GetRenderTargets();
 

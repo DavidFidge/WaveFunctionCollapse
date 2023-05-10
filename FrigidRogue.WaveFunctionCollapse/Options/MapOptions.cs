@@ -2,9 +2,9 @@
 
 public class MapOptions
 {
-    public int MapWidth { get; set; } = 30;
-    public int MapHeight { get; set; } = 30;
-    public int TileSizeMultiplier { get; set; } = 4;
+    public int MapWidth { get; set; }
+    public int MapHeight { get; set; }
+    public int TileSizeMultiplier { get; set; } = 1;
 
     public MapOptions(int mapWidth, int mapHeight)
     {
