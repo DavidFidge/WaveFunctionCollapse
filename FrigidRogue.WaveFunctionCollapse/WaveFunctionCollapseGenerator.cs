@@ -4,7 +4,6 @@ using FrigidRogue.WaveFunctionCollapse.Options;
 using Microsoft.Xna.Framework.Graphics;
 using SadRogue.Primitives;
 using ShaiRandom.Generators;
-
 using Point = SadRogue.Primitives.Point;
 
 namespace FrigidRogue.WaveFunctionCollapse;

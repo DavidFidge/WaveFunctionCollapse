@@ -288,7 +288,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0 },
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -335,7 +335,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0 },
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -422,7 +422,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -476,7 +476,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours },
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -529,7 +529,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours },
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -693,7 +693,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptionsWithInitialisation = new PassOptions
         {
-            Options = new GeneratorOptions() { RunFirstRules = new []{ "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])" }},
+            Options = new GeneratorOptions { RunFirstRules = new []{ "([X] == 0 || [X] == [MaxX] || [Y] == 0 || [Y] == [MaxY])" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1342,7 +1342,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptionsWithInitialisation = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0 },
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1390,7 +1390,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptionsWithInitialisation = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0 },
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1451,7 +1451,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptionsWithInitialisation = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 1 },
+            Options = new GeneratorOptions { FallbackAttempts = 1 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1547,7 +1547,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0 },
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1864,7 +1864,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0, RunFirstRules = new []{ "[X] == 0" }},
+            Options = new GeneratorOptions { FallbackAttempts = 0, RunFirstRules = new []{ "[X] == 0" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1923,7 +1923,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0, RunFirstRules = new []{ "[X] == 0", "[X] == 2" }},
+            Options = new GeneratorOptions { FallbackAttempts = 0, RunFirstRules = new []{ "[X] == 0", "[X] == 2" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -1991,7 +1991,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfNeighbours},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -2032,7 +2032,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByWeightOfNeighbours},
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByWeightOfNeighbours},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -2074,7 +2074,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByWeightOfNeighbours, RunFirstRules = new []{"[X] == 1 && [Y] == 1"}},
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByWeightOfNeighbours, RunFirstRules = new []{"[X] == 1 && [Y] == 1"}},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -2122,7 +2122,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountAndWeightOfNeighbours},
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountAndWeightOfNeighbours},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -2164,7 +2164,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions()
+            Options = new GeneratorOptions
                 { EntropyHeuristic = EntropyHeuristic.ReduceByCountAndMaxWeightOfNeighbours, RunFirstRules = new[] {"[X] == 0 || [Y] == 0"}},
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -2217,7 +2217,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions()
+            Options = new GeneratorOptions
                 { EntropyHeuristic = EntropyHeuristic.ReduceByMaxWeightOfNeighbours, RunFirstRules = new[] {"[X] == 0 || [Y] == 0"}},
             Tiles = new Dictionary<string, TileAttribute>
             {
@@ -2270,7 +2270,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles, RunFirstRules = new []{ "[Y] == 0" }},
+            Options = new GeneratorOptions { EntropyHeuristic = EntropyHeuristic.ReduceByCountOfAllTilesMinusPossibleTiles, RunFirstRules = new []{ "[Y] == 0" }},
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -2342,7 +2342,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture);
         AssertTile(tiles[1], "CBA,LKJ,IHG,FED", "None,All,All,None", _floorTexture, SpriteEffects.FlipHorizontally);
     }
 
@@ -2383,7 +2383,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(2, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture);
         AssertTile(tiles[1], "IHG,FED,CBA,LKJ", "All,None,None,All", _floorTexture, SpriteEffects.FlipVertically);
     }
 
@@ -2425,7 +2425,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         Assert.AreEqual(4, tiles.Count);
 
-        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture, SpriteEffects.None);
+        AssertTile(tiles[0], "ABC,DEF,GHI,JKL", "None,None,All,All", _floorTexture);
         AssertTile(tiles[1], "GHI,JKL,ABC,DEF", "All,All,None,None", _floorTexture, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically);
         AssertTile(tiles[2], "CBA,LKJ,IHG,FED", "None,All,All,None", _floorTexture, SpriteEffects.FlipHorizontally);
         AssertTile(tiles[3], "IHG,FED,CBA,LKJ", "All,None,None,All", _floorTexture, SpriteEffects.FlipVertically);
@@ -2444,7 +2444,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0 },
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {
@@ -2491,7 +2491,7 @@ public class WaveFunctionCollapseGeneratorTests : BaseGraphicsTest
 
         var passOptions = new PassOptions
         {
-            Options = new GeneratorOptions() { FallbackAttempts = 0 },
+            Options = new GeneratorOptions { FallbackAttempts = 0 },
             Tiles = new Dictionary<string, TileAttribute>
             {
                 {

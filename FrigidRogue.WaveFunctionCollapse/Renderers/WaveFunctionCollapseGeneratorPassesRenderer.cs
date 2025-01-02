@@ -45,7 +45,7 @@ public class WaveFunctionCollapseGeneratorPassesRenderer : IWaveFunctionCollapse
 
         _graphicsDevice.Clear(Color.Transparent);
 
-        _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
+        _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 
         foreach (var tile in tiles)
         {

@@ -36,8 +36,6 @@ public class ProhibitedEmptyNeighbourConstraint : TileConstraint
             {
                 if (direction.Value.HasFlag(ProhibitedEmptyNeighbourFlags.Uncollapsed))
                     return false;
-
-                continue;
             }
         }
 

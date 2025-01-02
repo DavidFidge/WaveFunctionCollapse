@@ -31,7 +31,7 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
         var mandatoryAdapterConstraint = new MandatoryAdapterConstraint();
 
         var tileTemplate1 = new TileTemplate("Test", new TileAttribute(), _texture);
-        var tileTemplate2 = new TileTemplate("Test2", new TileAttribute() { MandatoryAdapters = "A"}, _texture);
+        var tileTemplate2 = new TileTemplate("Test2", new TileAttribute { MandatoryAdapters = "A"}, _texture);
 
         var tileResultUp = new TileResult(new Point(1, 0));
         var tileResultDown = new TileResult(new Point(1, 2));
@@ -102,7 +102,7 @@ public class MandatoryAdapterConstraintTests : BaseGraphicsTest
         var mandatoryAdapterConstraint = new MandatoryAdapterConstraint();
 
         var tileTemplate1 = new TileTemplate("Test", new TileAttribute(), _texture);
-        var tileTemplate2 = new TileTemplate("Test2", new TileAttribute() { MandatoryAdapters = "A|B"}, _texture);
+        var tileTemplate2 = new TileTemplate("Test2", new TileAttribute { MandatoryAdapters = "A|B"}, _texture);
 
         var tileResultUp = new TileResult(new Point(1, 0));
         var tileResultDown = new TileResult(new Point(1, 2));

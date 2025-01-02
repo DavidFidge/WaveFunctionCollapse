@@ -1,6 +1,7 @@
 ﻿using FrigidRogue.WaveFunctionCollapse.Options;
 using Microsoft.Xna.Framework.Graphics;
 using SadRogue.Primitives;
+using MathHelpers = GoRogue.MathHelpers;
 
 namespace FrigidRogue.WaveFunctionCollapse;
 
@@ -85,7 +86,7 @@ public class TileTemplate
             // Loop through the four rotations
             for (var i = 0; i < 4; i++)
             {
-                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => GoRogue.MathHelpers.WrapAround(directionIndex - rotationIndex, directions.Count));
+                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => MathHelpers.WrapAround(directionIndex - rotationIndex, directions.Count));
 
                 var adapters = RotateDirectionalConstraints(directions, adapterStrings, i, v => (Adapter)v, wrapAroundFunction);
                 var prohibitedEmptyNeighbours = RotateDirectionalConstraints(directions, prohibitedEmptyNeighboursStrings, i, v => Enum.Parse<ProhibitedEmptyNeighbourFlags>(v), wrapAroundFunction);
@@ -107,7 +108,7 @@ public class TileTemplate
         {
             for (var i = 0; i < 2; i++)
             {
-                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => GoRogue.MathHelpers.WrapAround(directionIndex - rotationIndex, directions.Count));
+                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => MathHelpers.WrapAround(directionIndex - rotationIndex, directions.Count));
 
                 var adapters = RotateDirectionalConstraints(directions, adapterStrings, i, v => (Adapter)v, wrapAroundFunction);
                 var prohibitedEmptyNeighbours = RotateDirectionalConstraints(directions, prohibitedEmptyNeighboursStrings, i, v => Enum.Parse<ProhibitedEmptyNeighbourFlags>(v), wrapAroundFunction);
@@ -126,7 +127,7 @@ public class TileTemplate
         {
             for (var i = 0; i < 2; i++)
             {
-                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => GoRogue.MathHelpers.WrapAround(directionIndex - (rotationIndex * 2), directions.Count));
+                var wrapAroundFunction = new Func<int, int, int>((rotationIndex, directionIndex) => MathHelpers.WrapAround(directionIndex - (rotationIndex * 2), directions.Count));
 
                 var adapters = RotateDirectionalConstraints(directions, adapterStrings, i, v => (Adapter)v, wrapAroundFunction);
                 var prohibitedEmptyNeighbours = RotateDirectionalConstraints(directions, prohibitedEmptyNeighboursStrings, i, v => Enum.Parse<ProhibitedEmptyNeighbourFlags>(v), wrapAroundFunction);
@@ -228,7 +229,7 @@ public class TileTemplate
         for (var j = 0; j < directions.Count; j++)
         {
             var direction = directions[j];
-            var index = GoRogue.MathHelpers.WrapAround(wrapAroundFunction(rotationIndex, j), directions.Count);
+            var index = MathHelpers.WrapAround(wrapAroundFunction(rotationIndex, j), directions.Count);
             var value = valueConverter(directionalConstraints[index]);
             result.Add(direction, value);
         }
