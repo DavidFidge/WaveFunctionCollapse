@@ -1,0 +1,54 @@
+{
+  "mapOptions":
+  {
+  },
+  "passes":
+  [
+    {
+      "options": {
+        "fallbackAttempts": 99,
+        "fallbackRadius": 1,
+        "fallbackRadiusIncrement": 1,
+        "entropyHeuristic": "ReduceByCountAndMaxweightOfNeighbours",
+        "successfullyPlacedTilesToReduceFallbackRadius": 20,
+        "runFirstRules": ["([X] == 0 || [Y] == 0 || [X] == [MaxX] || [Y] == [MaxY])"]
+      },
+      "tiles": {
+        "FloorInside": {
+          "symmetry": "X",
+          "weight": 200,
+          "adapters": "F,F,F,F",
+          "placementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+        },
+        "ReverseCorner": {
+          "symmetry": "^",
+          "weight": 1,
+          "adapters": "F,FO,OF,F",
+          "OnlyAllowedIfNoValidTiles": true,
+          "placementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])"
+        },
+        "Corner": {
+          "symmetry": "^",
+          "weight": 1,
+          "adapters": "O,O,OF,FO",
+          "entropyWeights": "1,1,20,20",
+          "placementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])",
+          "canConnectToSelf": "true,true,false,false"
+        },
+        "Wall": {
+          "symmetry": "^",
+          "weight": 20,
+          "adapters": "FO,O,OF,F",
+          "entropyWeights": "20,1,20,200",
+          "placementRule": "([X] != 0 && [Y] != 0 && [X] != [MaxX] && [Y] != [MaxY])",
+          "canConnectToSelf": "true,true,true,false"
+        },
+        "FloorOutside": {
+          "symmetry": "X",
+          "weight": 3,
+          "adapters": "O,O,O,O"
+        }
+      }
+    }
+  ]
+}

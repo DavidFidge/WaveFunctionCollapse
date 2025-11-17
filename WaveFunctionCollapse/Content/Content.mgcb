@@ -1807,6 +1807,38 @@
 /processor:TextureProcessor
 /build:WaveFunctionCollapse/MiningFacility/ReserveSide.png
 
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/Corner.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/FloorInside.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/FloorOutside.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/ReverseCorner.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/Wall.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/Reserve.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/ReserveCorner.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:WaveFunctionCollapse/Canteen/ReserveSide.png
+
 # The following section produces an asset named "Content" in the content manager
 # which can be retrieved via load:  var assetsList = contentManager.Load<string[]>("Content");
 # This gives you a list of all the assets in the content manager.
